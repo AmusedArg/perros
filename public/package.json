@@ -1,0 +1,31 @@
+{
+  "name": "perros_prod",
+  "version": "1.0.0",
+  "description": "Aplicacion para manejo de perros encontrados y perdidos",
+  "main": "index.php",
+  "dependencies": {
+    "angular": "^1.5.8",
+    "angular-animate": "^1.5.8",
+    "angular-aria": "^1.5.8",
+    "angular-material": "^1.1.3",
+    "angular-route": "^1.6.3",
+    "moment": "^2.16.0"
+  },
+  "devDependencies": {
+    "gulp": "^3.9.1",
+    "gulp-concat": "^2.6.0",
+    "gulp-filter": "^4.0.0",
+    "gulp-jshint": "^2.0.2",
+    "gulp-rename": "^1.2.2",
+    "gulp-sass": "^2.3.2",
+    "gulp-uglify": "^2.0.0",
+    "gulp-uglifycss": "^1.0.6",
+    "jshint": "^2.9.4",
+    "merge-stream": "^1.0.0"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Eduardo Pereyra",
+  "license": "ISC"
+}

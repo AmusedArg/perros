@@ -1,0 +1,15 @@
+# exclude files in folder
+/public/public_fotos/*
+/public/dist/*
+
+#exclude index.html with real api_key
+/public/index.html
+
+# exception to the rule
+!/public/public_fotos/.gitkeep 
+!/public/dist/.gitkeep 
+
+
+/config.properties
+node_modules/
+
