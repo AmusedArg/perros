@@ -4,4 +4,7 @@
 Ejecutar el script SQL del archivo: schema.sql
 
 ## Archivo config.properties
-Renombrar archivo config.properties.dist -> config.properties
+Copiar y reenombrar config.properties.dist -> config.properties
+
+## Archivo index.html
+Copiar y reenombrar public/index.html.dist -> public/index.html
