@@ -1,0 +1,33 @@
+<md-button aria-label="Borrar" class="md-icon-button" ng-click="borrarPerro($event,perro)">
+    <md-icon>delete</md-icon>
+    <md-tooltip md-direction="bottom">Borrar</md-tooltip>
+</md-button>
+<md-button aria-label="Favoritos" class="md-icon-button" ng-click="toggleFavorite(perro)">
+    <md-icon ng-class="{favorito: perro.isFavorito()}">favorite</md-icon>
+    <md-tooltip md-direction="bottom">Agregar a Favorito</md-tooltip>
+</md-button>
+<md-button aria-label="Editar" class="md-icon-button" ng-click="editarPerro($event, perro)">
+    <md-icon>edit</md-icon>
+    <md-tooltip md-direction="bottom">Editar</md-tooltip>
+</md-button>
+<md-button aria-label="Mapa" class="md-icon-button" ng-click="verMapa($event, perro)" ng-disabled="!perro.lugar">
+    <md-icon>map</md-icon>
+    <md-tooltip md-direction="bottom">Ver Mapa</md-tooltip>
+</md-button>
+<md-menu>
+    <md-button aria-label="Abrir opciones de busqueda" class="md-icon-button" ng-click="openMenuBuscar($mdOpenMenu, $event)">
+        <md-icon>search</md-icon>
+        <md-tooltip md-direction="bottom">Buscar en</md-tooltip>
+    </md-button>
+    <md-menu-content width="4">
+        <md-menu-item>
+            <md-button ng-click="buscarPerroAvanzado($event, perro, 0)">Perdidos</md-button>
+        </md-menu-item>
+        <md-menu-item>
+            <md-button ng-click="buscarPerroAvanzado($event, perro, 1)">Encontrados</md-button>
+        </md-menu-item>
+        <md-menu-item>
+            <md-button ng-click="buscarPerroAvanzado($event, perro, 2)">Avistados</md-button>
+        </md-menu-item>
+    </md-menu-content>
+</md-menu>

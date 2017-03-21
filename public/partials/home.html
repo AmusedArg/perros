@@ -1,486 +1,174 @@
-<div ng-cloak class="tabsDemoDynamicHeight" ng-controller="HomeCtrl as ctrl">
-    <md-button style="position:fixed !important;" ng-class="{ visible: selectedTab==0 }" class="btn-agregar-perro md-fab md-fab-bottom-right"  aria-label="Subir" ng-click="showNuevoPerro($event, TIPO_PERDIDO)">
-      <md-icon>add</md-icon>
+<div class="tabsDemoDynamicHeight" ng-cloak ng-controller="HomeCtrl as ctrl">
+    <md-button aria-label="Subir" class="btn-agregar-perro md-fab md-fab-bottom-right" ng-class="{ visible: selectedTab==0 }" ng-click="showNuevoPerro($event, TIPO_PERDIDO)" style="position:fixed !important;">
+        <md-icon>add</md-icon>
     </md-button>
-    <md-button style="position:fixed !important;" ng-class="{ visible: selectedTab==1 }" class="btn-agregar-perro md-fab md-primary md-fab-bottom-right"  aria-label="Subir" ng-click="showNuevoPerro($event, TIPO_ENCONTRADO)">
-      <md-icon>add</md-icon>
+    <md-button aria-label="Subir" class="btn-agregar-perro md-fab md-primary md-fab-bottom-right" ng-class="{ visible: selectedTab==1 }" ng-click="showNuevoPerro($event, TIPO_ENCONTRADO)" style="position:fixed !important;">
+        <md-icon>add</md-icon>
     </md-button>
-    <md-button style="position:fixed !important;" ng-class="{ visible: selectedTab==2 }" class="btn-agregar-perro md-fab md-fab-bottom-right"  aria-label="Subir" ng-click="showNuevoPerro($event, TIPO_AVISTADO)" md-theme="avistados">
-      <md-icon>add</md-icon>
+    <md-button aria-label="Subir" class="btn-agregar-perro md-fab md-fab-bottom-right" md-theme="avistados" ng-class="{ visible: selectedTab==2 }" ng-click="showNuevoPerro($event, TIPO_AVISTADO)" style="position:fixed !important;">
+        <md-icon>add</md-icon>
     </md-button>
-  <div style="height: 5px; width: 100%" id="loading-bar" class="la-anim-1"></div>
-  <md-content id="main-content">
-    <md-toolbar id="search-toolbar" ng-show="selectedTab!==3 && selectedTab!==4" hide show-gt-sm>
-      <div class="md-toolbar-tools">
-        <form name="userForm" ng-cloak>
-          <div layout-gt-xs="row">
-            <md-input-container md-no-float class="md-block" flex="25">
-              <md-icon>pets</md-icon>
-              <input ng-model="searchModel.nombre" placeholder="Nombre">
-            </md-input-container>
-            <md-input-container md-no-float class="md-block" flex="25">
-              <md-icon>wc</md-icon>
-              <md-select ng-model="searchModel.sexo" placeholder="Sexo">
-                <md-option value="">Ambos</md-option>
-                <md-option value="Macho">Macho</md-option>
-                <md-option value="Hembra">Hembra</md-option>
-              </md-select>
-            </md-input-container>
-            <md-input-container md-no-float class="md-block" flex="35">
-              <md-icon>local_offer</md-icon>
-              <md-select ng-model="searchModel.raza" placeholder="Raza">
-                <md-option value="">Todas</md-option>
-                <md-option ng-repeat="raza in razas" value="{{raza}}">
-                  {{raza | capitalize}}
-                </md-option>
-              </md-select>
-            </md-input-container>
-            <md-autocomplete
-                  ng-disabled="ctrl.isDisabled"
-                  md-no-cache="ctrl.noCache"
-                  md-selected-item="searchModel.lugar"
-                  md-search-text-change="ctrl.searchTextChange(ctrl.searchTextFilter)"
-                  md-search-text="ctrl.searchTextFilter"
-                  md-selected-item-change="ctrl.selectedItemChange(item)"
-                  md-items="item in ctrl.querySearch(ctrl.searchTextFilter)"
-                  md-item-text="item.display"
-                  md-min-length="0"
-                  placeholder="Encontrado en"
-                  style="width: 400px; margin-top:10px; margin-left: 10px">
-                <md-item-template>
-                  <span md-highlight-text="ctrl.searchText" md-highlight-flags="^i">{{item.display}}</span>
-                </md-item-template>
-                <md-not-found>
-                  Ese lugar no existe.
-                </md-not-found>
-              </md-autocomplete>
-              <md-input-container md-no-float class="md-block toolbar-search-btn" flex="35">
-              <md-button class="md-raised md-primary" ng-click="buscarPerro(searchModel)">Buscar</md-button>
-              </md-input-container>          
-          </div>
-        </form> 
-      </div>
-    </md-toolbar>
-    <md-tabs md-no-ink md-dynamic-height md-border-bottom md-selected="selectedTab" class="main-tabs">
-      <md-tab label="Perros Perdidos ({{perrosList.registros[TIPO_PERDIDO]}})" ng-model="searchModel.tipo" ng-click="searchModel = null;searchModel.tipo = TIPO_PERDIDO" ng-init="searchModel.tipo = TIPO_PERDIDO">
-        <md-content class="md-padding" layout-xs="column" layout="column"> 
-          <div layout="row" class="paginator" style="margin-top:-10px">
-            <md-button md-no-ink class="paginator-link md-raised" ng-click="goToPage(perrosPaginator.getPaginaActual(TIPO_PERDIDO)-1, LIMIT, TIPO_PERDIDO);perrosPaginator.paginaAnterior(TIPO_PERDIDO)" ng-if="perrosPaginator.getPaginaActual(TIPO_PERDIDO)-1 >= 0"><md-icon>keyboard_arrow_left</md-icon> Atrás</md-button>
-            <md-select ng-model="a" placeholder="P&aacute;gina: {{perrosPaginator.getPaginaActual(TIPO_PERDIDO)--1}}" class="pagina-select">
-              <md-option ng-repeat="i in calculatePages(perrosList.registros[TIPO_PERDIDO])" ng-click="perrosPaginator.setPaginaActual($index, TIPO_PERDIDO);goToPage($index, LIMIT, TIPO_PERDIDO)" ng-init="perrosPaginator.setPaginaActual(0, TIPO_PERDIDO)">{{$index+1}}</md-option>
-            </md-select>
-            <md-button md-no-ink class="paginator-link md-raised" ng-click="goToPage(perrosPaginator.getPaginaActual(TIPO_PERDIDO)+1, LIMIT, TIPO_PERDIDO);perrosPaginator.paginaSiguiente(TIPO_PERDIDO)" ng-if="(perrosPaginator.getPaginaActual(TIPO_PERDIDO)+1)*LIMIT < perrosList.registros[TIPO_PERDIDO]">Siguiente <md-icon>keyboard_arrow_right</md-icon></md-button>
-          </div>
-          <div layout="row" layout-wrap layout-align="center center" >
-            <md-card class="lost-card" ng-repeat="perro in perrosList.getPerrosListByTipo(TIPO_PERDIDO) | orderBy:'-real_date' track by perro.id" data-id="{{perro.id}}">
-              <img data-ng-src="{{perro.foto}}" class="md-card-image" alt="Foto Perro">
-               <md-card-content>
-                <p>Perdido el {{perro.fecha}} <md-icon style="padding-right: 11px;float:right" ng-class="{macho: perro.sexo=='Macho', hembra: perro.sexo=='Hembra'}">person</md-icon></p>
-                <p style="text-transform: capitalize;">Lugar: {{perro.lugar}} 
-                    <md-icon md-svg-src="img/icons/facebook.svg" style="padding-right: 11px;float:right;cursor: pointer" ng-show="perro.link_sitio != null && perro.link_sitio.indexOf('facebook') != -1" ng-click="verPublicacion(perro.link_sitio)"></md-icon>
-                    <md-icon style="color: #ffc107; padding-right: 11px;float:right;cursor: pointer" ng-show="perro.link_sitio != null && perro.link_sitio.indexOf('redmascotera') != -1" ng-click="verPublicacion(perro.link_sitio)">pets</md-icon>
-                    <md-icon style="padding-right: 11px;float:right;cursor: pointer" ng-show="perro.link_sitio != null && perro.link_sitio.indexOf('redmascotera') == -1 && perro.link_sitio.indexOf('facebook') == -1" ng-click="verPublicacion(perro.link_sitio)">link</md-icon>
-                </p>
-              </md-card-content>
-              <md-card-actions layout="row" layout-align="start center">
-                <md-card-icon-actions>
-                  <md-button class="md-icon-button" aria-label="Borrar" ng-click="borrarPerro($event,perro)">
-                    <md-icon>delete</md-icon>
-                    <md-tooltip md-direction="bottom">
-                      Borrar
-                    </md-tooltip>
-                  </md-button>
-                  <md-button class="md-icon-button" aria-label="Favoritos" ng-click="toggleFavorite(perro)">
-                    <md-icon ng-class="{favorito: perro.favorito==1}">favorite</md-icon>
-                    <md-tooltip md-direction="bottom">
-                      Agregar a Favorito
-                    </md-tooltip>
-                  </md-button>
-                  <md-button class="md-icon-button" aria-label="Editar" ng-click="editarPerro($event, perro)">
-                    <md-icon>edit</md-icon>
-                    <md-tooltip md-direction="bottom">
-                      Editar
-                    </md-tooltip>
-                  </md-button>
-                  <md-button class="md-icon-button" aria-label="Mapa" ng-click="verMapa($event, perro)" ng-disabled="!perro.lugar">
-                    <md-icon>map</md-icon>
-                    <md-tooltip md-direction="bottom">
-                      Ver Mapa
-                    </md-tooltip>
-                  </md-button>
-                 <md-menu>
-                  <md-button aria-label="Abrir opciones de busqueda" class="md-icon-button" ng-click="openMenuBuscar($mdOpenMenu, $event)">
-                    <md-icon>search</md-icon>
-                    <md-tooltip md-direction="bottom">
-                      Buscar en
-                    </md-tooltip>
-                  </md-button>
-                  <md-menu-content width="4">
-                    <md-menu-item>
-                      <md-button ng-click="buscarPerroAvanzado($event, perro, 0)">
-                        Perdidos
-                      </md-button>
-                    </md-menu-item>
-                    <md-menu-item>
-                      <md-button ng-click="buscarPerroAvanzado($event, perro, 1)">
-                        Encontrados
-                      </md-button>
-                    </md-menu-item>
-                    <md-menu-item>
-                      <md-button ng-click="buscarPerroAvanzado($event, perro, 2)">
-                        Avistados
-                      </md-button>
-                    </md-menu-item>
-                  </md-menu-content>
-                </md-menu>
-                </md-card-icon-actions>
-              </md-card-actions>
-              <div class="name-tag" ng-if="perro.nombre" ng-class="{'tag-hembra': perro.sexo=='Hembra', 'tag-macho': perro.raza=='Macho'}">{{perro.nombre}}</div>
-            </md-card>
-          </div>
-          <div layout="row" class="paginator" ng-show="perrosList.getPerrosListByTipo(TIPO_PERDIDO).length > 0">
-            <md-button md-no-ink class="paginator-link md-raised" ng-click="goToPage(perrosPaginator.getPaginaActual(TIPO_PERDIDO)-1, LIMIT, TIPO_PERDIDO);perrosPaginator.paginaAnterior(TIPO_PERDIDO)" ng-if="perrosPaginator.getPaginaActual(TIPO_PERDIDO)-1 >= 0"><md-icon>keyboard_arrow_left</md-icon> Atrás</md-button>
-            <md-select ng-model="a" placeholder="P&aacute;gina: {{perrosPaginator.getPaginaActual(TIPO_PERDIDO)--1}}" class="pagina-select">
-              <md-option ng-repeat="i in calculatePages(perrosList.registros[TIPO_PERDIDO])" ng-click="perrosPaginator.setPaginaActual($index, TIPO_PERDIDO);goToPage($index, LIMIT, TIPO_PERDIDO)" ng-init="perrosPaginator.setPaginaActual(0, TIPO_PERDIDO)">{{$index+1}}</md-option>
-            </md-select>
-            <md-button md-no-ink class="paginator-link md-raised" ng-click="goToPage(perrosPaginator.getPaginaActual(TIPO_PERDIDO)+1, LIMIT, TIPO_PERDIDO);perrosPaginator.paginaSiguiente(TIPO_PERDIDO)" ng-if="(perrosPaginator.getPaginaActual(TIPO_PERDIDO)+1)*LIMIT < perrosList.registros[TIPO_PERDIDO]">Siguiente <md-icon>keyboard_arrow_right</md-icon></md-button>
-          </div>
-        </md-content>
-      </md-tab>
-      <md-tab label="Perros Encontrados ({{perrosList.registros[TIPO_ENCONTRADO]}})" ng-model="searchModel.tipo" ng-click="searchModel = null;searchModel.tipo = TIPO_ENCONTRADO">
-        <md-content class="md-padding" layout-xs="column" layout="column">
-          <div layout="row" class="paginator" style="margin-top:-10px">
-           <md-button md-no-ink class="paginator-link md-raised" ng-click="goToPage(perrosPaginator.getPaginaActual(TIPO_ENCONTRADO)-1, LIMIT, TIPO_ENCONTRADO);perrosPaginator.paginaAnterior(TIPO_ENCONTRADO)" ng-if="perrosPaginator.getPaginaActual(TIPO_ENCONTRADO)-1 >= 0"><md-icon>keyboard_arrow_left</md-icon> Atrás</md-button>
-            <md-select ng-model="a" placeholder="P&aacute;gina: {{perrosPaginator.getPaginaActual(TIPO_ENCONTRADO)--1}}" class="pagina-select">
-              <md-option ng-repeat="i in calculatePages(perrosList.registros[TIPO_ENCONTRADO])" ng-click="perrosPaginator.setPaginaActual($index, TIPO_ENCONTRADO);goToPage($index, LIMIT, TIPO_ENCONTRADO)" ng-init="perrosPaginator.setPaginaActual(0, TIPO_ENCONTRADO)">{{$index+1}}</md-option>
-            </md-select>
-            <md-button md-no-ink class="paginator-link md-raised" ng-click="goToPage(perrosPaginator.getPaginaActual(TIPO_ENCONTRADO)+1, LIMIT, TIPO_ENCONTRADO);perrosPaginator.paginaSiguiente(TIPO_ENCONTRADO)" ng-if="(perrosPaginator.getPaginaActual(TIPO_ENCONTRADO)+1)*LIMIT < perrosList.registros[TIPO_ENCONTRADO]">Siguiente <md-icon>keyboard_arrow_right</md-icon></md-button>
-          </div>
-          <div layout="row" layout-wrap>
-             <md-card class="lost-card" ng-repeat="perro in perrosList.getPerrosListByTipo(TIPO_ENCONTRADO) | orderBy:'-real_date' track by perro.id" data-id="{{perro.id}}">
-              <img data-ng-src="{{perro.foto}}" class="md-card-image" alt="Foto Perro">
-               <md-card-content>
-                <p>Encontrado el {{perro.fecha}} <md-icon style="padding-right: 11px;float:right" ng-class="{macho: perro.sexo=='Macho', hembra: perro.sexo=='Hembra'}">person</md-icon></p>
-                <p style="text-transform: capitalize;">Lugar: {{perro.lugar}} 
-                    <md-icon md-svg-src="img/icons/facebook.svg" style="padding-right: 11px;float:right;cursor: pointer" ng-show="perro.link_sitio != null && perro.link_sitio.indexOf('facebook') != -1" ng-click="verPublicacion(perro.link_sitio)"></md-icon>
-                    <md-icon style="color: #ffc107; padding-right: 11px;float:right;cursor: pointer" ng-show="perro.link_sitio != null && perro.link_sitio.indexOf('redmascotera') != -1" ng-click="verPublicacion(perro.link_sitio)">pets</md-icon>
-                    <md-icon style="padding-right: 11px;float:right;cursor: pointer" ng-show="perro.link_sitio != null && perro.link_sitio.indexOf('redmascotera') == -1 && perro.link_sitio.indexOf('facebook') == -1" ng-click="verPublicacion(perro.link_sitio)">link</md-icon>
-                </p>
-              </md-card-content>
-              <md-card-actions layout="row" layout-align="start center">
-                <md-card-icon-actions>
-                  <md-button class="md-icon-button" aria-label="Borrar" ng-click="borrarPerro($event,perro)">
-                    <md-icon>delete</md-icon>
-                    <md-tooltip md-direction="bottom">
-                      Borrar
-                    </md-tooltip>
-                  </md-button>
-                  <md-button class="md-icon-button" aria-label="Favoritos" ng-click="toggleFavorite(perro)">
-                    <md-icon ng-class="{favorito: perro.favorito==1}">favorite</md-icon>
-                    <md-tooltip md-direction="bottom">
-                      Agregar a Favorito
-                    </md-tooltip>
-                  </md-button>
-                  <md-button class="md-icon-button" aria-label="Editar" ng-click="editarPerro($event, perro)">
-                    <md-icon>edit</md-icon>
-                    <md-tooltip md-direction="bottom">
-                      Editar
-                    </md-tooltip>
-                  </md-button>
-                  <md-button class="md-icon-button" aria-label="Mapa" ng-click="verMapa($event, perro)" ng-disabled="!perro.lugar">
-                    <md-icon>map</md-icon>
-                    <md-tooltip md-direction="bottom">
-                      Ver Mapa
-                    </md-tooltip>
-                  </md-button>
-                 <md-menu>
-                  <md-button aria-label="Abrir opciones de busqueda" class="md-icon-button" ng-click="openMenuBuscar($mdOpenMenu, $event)">
-                    <md-icon>search</md-icon>
-                    <md-tooltip md-direction="bottom">
-                      Buscar en
-                    </md-tooltip>
-                  </md-button>
-                  <md-menu-content width="4">
-                    <md-menu-item>
-                      <md-button ng-click="buscarPerroAvanzado($event, perro, 0)">
-                        Perdidos
-                      </md-button>
-                    </md-menu-item>
-                    <md-menu-item>
-                      <md-button ng-click="buscarPerroAvanzado($event, perro, 1)">
-                        Encontrados
-                      </md-button>
-                    </md-menu-item>
-                    <md-menu-item>
-                      <md-button ng-click="buscarPerroAvanzado($event, perro, 2)">
-                        Avistados
-                      </md-button>
-                    </md-menu-item>
-                  </md-menu-content>
-                </md-menu>
-                </md-card-icon-actions>
-              </md-card-actions>
-              <div class="name-tag" ng-if="perro.nombre" ng-class="{'tag-hembra': perro.sexo=='Hembra', 'tag-macho': perro.raza=='Macho'}">{{perro.nombre}}</div>
-            </md-card>
-          </div>
-           <div layout="row" class="paginator" ng-show="perrosList.getPerrosListByTipo(TIPO_ENCONTRADO).length > 0">
-            <md-button md-no-ink class="paginator-link md-raised" ng-click="goToPage(perrosPaginator.getPaginaActual(TIPO_ENCONTRADO)-1, LIMIT, TIPO_ENCONTRADO);perrosPaginator.paginaAnterior(TIPO_ENCONTRADO)" ng-if="perrosPaginator.getPaginaActual(TIPO_ENCONTRADO)-1 >= 0"><md-icon>keyboard_arrow_left</md-icon> Atrás</md-button>
-            <md-select ng-model="a" placeholder="P&aacute;gina: {{perrosPaginator.getPaginaActual(TIPO_ENCONTRADO)--1}}" class="pagina-select">
-              <md-option ng-repeat="i in calculatePages(perrosList.registros[TIPO_ENCONTRADO])" ng-click="perrosPaginator.setPaginaActual($index, TIPO_ENCONTRADO);goToPage($index, LIMIT, TIPO_ENCONTRADO)" ng-init="perrosPaginator.setPaginaActual(0, TIPO_ENCONTRADO)">{{$index+1}}</md-option>
-            </md-select>
-            <md-button md-no-ink class="paginator-link md-raised" ng-click="goToPage(perrosPaginator.getPaginaActual(TIPO_ENCONTRADO)+1, LIMIT, TIPO_ENCONTRADO);perrosPaginator.paginaSiguiente(TIPO_ENCONTRADO)" ng-if="(perrosPaginator.getPaginaActual(TIPO_ENCONTRADO)+1)*LIMIT < perrosList.registros[TIPO_ENCONTRADO]">Siguiente <md-icon>keyboard_arrow_right</md-icon></md-button>
-          </div>
-        </md-content>
-      </md-tab>
-      <md-tab label="Perros Avistados ({{perrosList.registros[TIPO_AVISTADO]}})" ng-model="searchModel.tipo" ng-click="searchModel = null;searchModel.tipo = TIPO_AVISTADO">
-        <md-content class="md-padding" layout-xs="column" layout="column">
-          <div layout="row" class="paginator" style="margin-top:-10px">
-            <md-button md-no-ink class="paginator-link md-raised" ng-click="goToPage(perrosPaginator.getPaginaActual(TIPO_AVISTADO)-1, LIMIT, TIPO_AVISTADO);perrosPaginator.paginaAnterior(TIPO_AVISTADO)" ng-if="perrosPaginator.getPaginaActual(TIPO_AVISTADO)-1 >= 0"><md-icon>keyboard_arrow_left</md-icon> Atrás</md-button>
-            <md-select ng-model="a" placeholder="P&aacute;gina: {{perrosPaginator.getPaginaActual(TIPO_AVISTADO)--1}}" class="pagina-select">
-              <md-option ng-repeat="i in calculatePages(perrosList.registros[TIPO_AVISTADO])" ng-click="perrosPaginator.setPaginaActual($index, TIPO_AVISTADO);goToPage($index, LIMIT, TIPO_AVISTADO)" ng-init="perrosPaginator.setPaginaActual(0, TIPO_AVISTADO)">{{$index+1}}</md-option>
-            </md-select>
-            <md-button md-no-ink class="paginator-link md-raised" ng-click="goToPage(perrosPaginator.getPaginaActual(TIPO_AVISTADO)+1, LIMIT, TIPO_AVISTADO);perrosPaginator.paginaSiguiente(TIPO_AVISTADO)" ng-if="(perrosPaginator.getPaginaActual(TIPO_AVISTADO)+1)*LIMIT < perrosList.registros[TIPO_AVISTADO]">Siguiente <md-icon>keyboard_arrow_right</md-icon></md-button>
-          </div>
-          <div layout="row" layout-wrap>
-             <md-card class="lost-card" ng-repeat="perro in perrosList.getPerrosListByTipo(TIPO_AVISTADO) | orderBy:'-real_date'" data-id="{{perro.id}}">
-              <img data-ng-src="{{perro.foto}}" class="md-card-image" alt="Foto Perro">
-               <md-card-content>
-                <p>Visto el {{perro.fecha}} <md-icon style="padding-right: 11px;float:right" ng-class="{macho: perro.sexo=='Macho', hembra: perro.sexo=='Hembra'}">person</md-icon></p>
-                <p style="text-transform: capitalize;">Lugar: {{perro.lugar}} 
-                    <md-icon md-svg-src="img/icons/facebook.svg" style="padding-right: 11px;float:right;cursor: pointer" ng-show="perro.link_sitio != null && perro.link_sitio.indexOf('facebook') != -1" ng-click="verPublicacion(perro.link_sitio)"></md-icon>
-                    <md-icon style="color: #ffc107; padding-right: 11px;float:right;cursor: pointer" ng-show="perro.link_sitio != null && perro.link_sitio.indexOf('redmascotera') != -1" ng-click="verPublicacion(perro.link_sitio)">pets</md-icon>
-                    <md-icon style="padding-right: 11px;float:right;cursor: pointer" ng-show="perro.link_sitio != null && perro.link_sitio.indexOf('redmascotera') == -1 && perro.link_sitio.indexOf('facebook') == -1" ng-click="verPublicacion(perro.link_sitio)">link</md-icon>
-                </p>
-              </md-card-content>
-              <md-card-actions layout="row" layout-align="start center">
-                <md-card-icon-actions>
-                  <md-button class="md-icon-button" aria-label="Borrar" ng-click="borrarPerro($event,perro)">
-                    <md-icon>delete</md-icon>
-                    <md-tooltip md-direction="bottom">
-                      Borrar
-                    </md-tooltip>
-                  </md-button>
-                  <md-button class="md-icon-button" aria-label="Favoritos" ng-click="toggleFavorite(perro)">
-                    <md-icon ng-class="{favorito: perro.favorito==1}">favorite</md-icon>
-                    <md-tooltip md-direction="bottom">
-                      Agregar a Favorito
-                    </md-tooltip>
-                  </md-button>
-                  <md-button class="md-icon-button" aria-label="Editar" ng-click="editarPerro($event, perro)">
-                    <md-icon>edit</md-icon>
-                    <md-tooltip md-direction="bottom">
-                      Editar
-                    </md-tooltip>
-                  </md-button>
-                  <md-button class="md-icon-button" aria-label="Mapa" ng-click="verMapa($event, perro)" ng-disabled="!perro.lugar">
-                    <md-icon>map</md-icon>
-                    <md-tooltip md-direction="bottom">
-                      Ver Mapa
-                    </md-tooltip>
-                  </md-button>
-                 <md-menu>
-                  <md-button aria-label="Abrir opciones de busqueda" class="md-icon-button" ng-click="openMenuBuscar($mdOpenMenu, $event)">
-                    <md-icon>search</md-icon>
-                    <md-tooltip md-direction="bottom">
-                      Buscar en
-                    </md-tooltip>
-                  </md-button>
-                  <md-menu-content width="4">
-                    <md-menu-item>
-                      <md-button ng-click="buscarPerroAvanzado($event, perro, 0)">
-                        Perdidos
-                      </md-button>
-                    </md-menu-item>
-                    <md-menu-item>
-                      <md-button ng-click="buscarPerroAvanzado($event, perro, 1)">
-                        Encontrados
-                      </md-button>
-                    </md-menu-item>
-                    <md-menu-item>
-                      <md-button ng-click="buscarPerroAvanzado($event, perro, 2)">
-                        Avistados
-                      </md-button>
-                    </md-menu-item>
-                  </md-menu-content>
-                </md-menu>
-                </md-card-icon-actions>
-              </md-card-actions>
-              <div class="name-tag" ng-if="perro.nombre" ng-class="{'tag-hembra': perro.sexo=='Hembra', 'tag-macho': perro.raza=='Macho'}">{{perro.nombre}}</div>
-            </md-card>
-          </div>
-           <div layout="row" class="paginator" ng-show="perrosList.getPerrosListByTipo(TIPO_AVISTADO).length > 0">
-            <md-button md-no-ink class="paginator-link md-raised" ng-click="goToPage(perrosPaginator.getPaginaActual(TIPO_AVISTADO)-1, LIMIT, TIPO_AVISTADO);perrosPaginator.paginaAnterior(TIPO_AVISTADO)" ng-if="perrosPaginator.getPaginaActual(TIPO_AVISTADO)-1 >= 0"><md-icon>keyboard_arrow_left</md-icon> Atrás</md-button>
-            <md-select ng-model="a" placeholder="P&aacute;gina: {{perrosPaginator.getPaginaActual(TIPO_AVISTADO)--1}}" class="pagina-select">
-              <md-option ng-repeat="i in calculatePages(perrosList.registros[TIPO_AVISTADO])" ng-click="perrosPaginator.setPaginaActual($index, TIPO_AVISTADO);goToPage($index, LIMIT, TIPO_AVISTADO)" ng-init="perrosPaginator.setPaginaActual(0, TIPO_AVISTADO)">{{$index+1}}</md-option>
-            </md-select>
-            <md-button md-no-ink class="paginator-link md-raised" ng-click="goToPage(perrosPaginator.getPaginaActual(TIPO_AVISTADO)+1, LIMIT, TIPO_AVISTADO);perrosPaginator.paginaSiguiente(TIPO_AVISTADO)" ng-if="(perrosPaginator.getPaginaActual(TIPO_AVISTADO)+1)*LIMIT < perrosList.registros[TIPO_AVISTADO]">Siguiente <md-icon>keyboard_arrow_right</md-icon></md-button>
-          </div>
-        </md-content>
-      </md-tab>
-      <md-tab label="perros favoritos">
-        <md-content class="md-padding" layout-xs="column" layout="row">
-          <div layout="row" layout-wrap>
-             <md-card class="lost-card" ng-repeat="perro in perrosList.getFavoritos() | orderBy:'-real_date'" data-id="{{perro.id}}">
-              <img data-ng-src="{{perro.foto}}" class="md-card-image" alt="Foto Perro">
-               <md-card-content>
-                <p>{{perro.tipo.substring(0, perro.tipo.length - 1) | capitalize}} el {{perro.fecha}} <md-icon style="padding-right: 11px;float:right" ng-class="{macho: perro.sexo=='Macho', hembra: perro.sexo=='Hembra'}">person</md-icon></p>
-                <p style="text-transform: capitalize;">Lugar: {{perro.lugar}} 
-                    <md-icon md-svg-src="img/icons/facebook.svg" style="padding-right: 11px;float:right;cursor: pointer" ng-show="perro.link_sitio != null && perro.link_sitio.indexOf('facebook') != -1" ng-click="verPublicacion(perro.link_sitio)"></md-icon>
-                    <md-icon style="color: #ffc107; padding-right: 11px;float:right;cursor: pointer" ng-show="perro.link_sitio != null && perro.link_sitio.indexOf('redmascotera') != -1" ng-click="verPublicacion(perro.link_sitio)">pets</md-icon>
-                    <md-icon style="padding-right: 11px;float:right;cursor: pointer" ng-show="perro.link_sitio != null && perro.link_sitio.indexOf('redmascotera') == -1 && perro.link_sitio.indexOf('facebook') == -1" ng-click="verPublicacion(perro.link_sitio)">link</md-icon>
-                </p>
-              </md-card-content>
-              <md-card-actions layout="row" layout-align="start center">
-                <md-card-icon-actions>
-                  <md-button class="md-icon-button" aria-label="Borrar" ng-click="borrarPerro($event,perro)">
-                    <md-icon>delete</md-icon>
-                    <md-tooltip md-direction="bottom">
-                      Borrar
-                    </md-tooltip>
-                  </md-button>
-                  <md-button class="md-icon-button" aria-label="Favoritos" ng-click="toggleFavorite(perro)">
-                    <md-icon ng-class="{favorito: perro.favorito==1}">favorite</md-icon>
-                    <md-tooltip md-direction="bottom">
-                      Agregar a Favorito
-                    </md-tooltip>
-                  </md-button>
-                  <md-button class="md-icon-button" aria-label="Editar" ng-click="editarPerro($event, perro)">
-                    <md-icon>edit</md-icon>
-                    <md-tooltip md-direction="bottom">
-                      Editar
-                    </md-tooltip>
-                  </md-button>
-                  <md-button class="md-icon-button" aria-label="Mapa" ng-click="verMapa($event, perro)" ng-disabled="!perro.lugar">
-                    <md-icon>map</md-icon>
-                    <md-tooltip md-direction="bottom">
-                      Ver Mapa
-                    </md-tooltip>
-                  </md-button>
-                 <md-menu>
-                  <md-button aria-label="Abrir opciones de busqueda" class="md-icon-button" ng-click="openMenuBuscar($mdOpenMenu, $event)">
-                    <md-icon>search</md-icon>
-                    <md-tooltip md-direction="bottom">
-                      Buscar en
-                    </md-tooltip>
-                  </md-button>
-                  <md-menu-content width="4">
-                    <md-menu-item>
-                      <md-button ng-click="buscarPerroAvanzado($event, perro, 0)">
-                        Perdidos
-                      </md-button>
-                    </md-menu-item>
-                    <md-menu-item>
-                      <md-button ng-click="buscarPerroAvanzado($event, perro, 1)">
-                        Encontrados
-                      </md-button>
-                    </md-menu-item>
-                    <md-menu-item>
-                      <md-button ng-click="buscarPerroAvanzado($event, perro, 2)">
-                        Avistados
-                      </md-button>
-                    </md-menu-item>
-                  </md-menu-content>
-                </md-menu>
-                </md-card-icon-actions>
-              </md-card-actions>
-              <div class="name-tag" ng-if="perro.nombre" ng-class="{'tag-hembra': perro.sexo=='Hembra', 'tag-macho': perro.raza=='Macho'}">{{perro.nombre}}</div>
-            </md-card>
-          </div>
-        </md-content>
-      </md-tab>
-      <md-tab label="busqueda avanzada">
-        <div layout="column" class="search-form-container">
-          <form id='search-box'>
-            <div id='search-form' >
-              <md-chips
-                ng-model="tagsSearch"
-                md-separator-keys="chipSeparators"
-                placeholder="Buscar" id="chips-container">
-                </md-chips>
-              <br/>
-              <button id='search-button' ng-click="busquedaAvanzada(tagsSearch)">                     
-              <span>Buscar</span>
-              </button>
-            </div> 
-          </form>
+
+    <div class="la-anim-1" id="loading-bar" style="height: 5px; width: 100%"></div>
+
+    <md-content id="main-content">
+        <div ng-include="'/partials/templates/toolbar.tmpl.html'"></div>
+        <md-tabs class="main-tabs" md-border-bottom md-dynamic-height md-no-ink md-selected="selectedTab">
+            <md-tab label="Perros Perdidos ({{perrosList.registros[TIPO_PERDIDO]}})" ng-click="searchModel = null;searchModel.tipo = TIPO_PERDIDO" ng-init="searchModel.tipo = TIPO_PERDIDO" ng-model="searchModel.tipo">
+                <md-content class="md-padding" layout="column" layout-xs="column">
+                    <div class="paginator" layout="row" style="margin-top:-10px">
+                        <md-button class="paginator-link md-raised" md-no-ink ng-click="goToPage(perrosPaginator.getPaginaActual(TIPO_PERDIDO)-1, LIMIT, TIPO_PERDIDO);perrosPaginator.paginaAnterior(TIPO_PERDIDO)" ng-if="perrosPaginator.getPaginaActual(TIPO_PERDIDO)-1 >= 0">
+                            <md-icon>keyboard_arrow_left</md-icon>Atrás
+                        </md-button>
+                        <md-select class="pagina-select" ng-model="a" placeholder="Página: {{perrosPaginator.getPaginaActual(TIPO_PERDIDO)--1}}">
+                            <md-option ng-click="perrosPaginator.setPaginaActual($index, TIPO_PERDIDO);goToPage($index, LIMIT, TIPO_PERDIDO)" ng-init="perrosPaginator.setPaginaActual(0, TIPO_PERDIDO)" ng-repeat="i in calculatePages(perrosList.registros[TIPO_PERDIDO])">{{$index+1}}</md-option>
+                        </md-select>
+                        <md-button class="paginator-link md-raised" md-no-ink ng-click="goToPage(perrosPaginator.getPaginaActual(TIPO_PERDIDO)+1, LIMIT, TIPO_PERDIDO);perrosPaginator.paginaSiguiente(TIPO_PERDIDO)" ng-if="(perrosPaginator.getPaginaActual(TIPO_PERDIDO)+1)*LIMIT < perrosList.registros[TIPO_PERDIDO]">
+                            Siguiente <md-icon>keyboard_arrow_right</md-icon>
+                        </md-button>
+                    </div>
+                    <div layout="row" layout-align="center center" layout-wrap>
+                        <md-card class="lost-card" data-id="{{::perro.id}}" ng-repeat="perro in perrosList.getPerrosListByTipo(TIPO_PERDIDO) | orderBy:'-real_date' track by perro.id">
+                            <div class="name-tag" ng-class="{'tag-hembra': perro.isHembra(), 'tag-macho': perro.isMacho()}" ng-if="perro.nombre">{{perro.nombre}}</div>
+                            <img alt="Foto Perro" class="md-card-image" data-ng-src="{{perro.foto}}" />
+                            <md-card-content ng-include="'/partials/templates/card-content.tmpl.html'"></md-card-content>
+                            <md-card-actions layout="row" layout-align="start center">
+                                <md-card-icon-actions ng-include="'/partials/templates/card-actions.tmpl.html'"></md-card-icon-actions>
+                            </md-card-actions>
+                        </md-card>
+                    </div>
+                    <div class="paginator" layout="row" ng-show="perrosList.getPerrosListByTipo(TIPO_PERDIDO).length > 0">
+                        <md-button class="paginator-link md-raised" md-no-ink ng-click="goToPage(perrosPaginator.getPaginaActual(TIPO_PERDIDO)-1, LIMIT, TIPO_PERDIDO);perrosPaginator.paginaAnterior(TIPO_PERDIDO)" ng-if="perrosPaginator.getPaginaActual(TIPO_PERDIDO)-1 >= 0">
+                            <md-icon>keyboard_arrow_left</md-icon>Atrás
+                        </md-button>
+                        <md-select class="pagina-select" ng-model="a" placeholder="Página: {{perrosPaginator.getPaginaActual(TIPO_PERDIDO)--1}}">
+                            <md-option ng-click="perrosPaginator.setPaginaActual($index, TIPO_PERDIDO);goToPage($index, LIMIT, TIPO_PERDIDO)" ng-init="perrosPaginator.setPaginaActual(0, TIPO_PERDIDO)" ng-repeat="i in calculatePages(perrosList.registros[TIPO_PERDIDO])">{{$index+1}}</md-option>
+                        </md-select>
+                        <md-button class="paginator-link md-raised" md-no-ink ng-click="goToPage(perrosPaginator.getPaginaActual(TIPO_PERDIDO)+1, LIMIT, TIPO_PERDIDO);perrosPaginator.paginaSiguiente(TIPO_PERDIDO)" ng-if="(perrosPaginator.getPaginaActual(TIPO_PERDIDO)+1)*LIMIT < perrosList.registros[TIPO_PERDIDO]">
+                            Siguiente <md-icon>keyboard_arrow_right</md-icon>
+                        </md-button>
+                    </div>
+                </md-content>
+            </md-tab>
+            <md-tab label="Perros Encontrados ({{perrosList.registros[TIPO_ENCONTRADO]}})" ng-click="searchModel = null;searchModel.tipo = TIPO_ENCONTRADO" ng-model="searchModel.tipo">
+                <md-content class="md-padding" layout="column" layout-xs="column">
+                    <div class="paginator" layout="row" style="margin-top:-10px">
+                        <md-button class="paginator-link md-raised" md-no-ink ng-click="goToPage(perrosPaginator.getPaginaActual(TIPO_ENCONTRADO)-1, LIMIT, TIPO_ENCONTRADO);perrosPaginator.paginaAnterior(TIPO_ENCONTRADO)" ng-if="perrosPaginator.getPaginaActual(TIPO_ENCONTRADO)-1 >= 0">
+                            <md-icon>keyboard_arrow_left</md-icon>Atrás
+                        </md-button>
+                        <md-select class="pagina-select" ng-model="a" placeholder="Página: {{perrosPaginator.getPaginaActual(TIPO_ENCONTRADO)--1}}">
+                            <md-option ng-click="perrosPaginator.setPaginaActual($index, TIPO_ENCONTRADO);goToPage($index, LIMIT, TIPO_ENCONTRADO)" ng-init="perrosPaginator.setPaginaActual(0, TIPO_ENCONTRADO)" ng-repeat="i in calculatePages(perrosList.registros[TIPO_ENCONTRADO])">{{$index+1}}</md-option>
+                        </md-select>
+                        <md-button class="paginator-link md-raised" md-no-ink ng-click="goToPage(perrosPaginator.getPaginaActual(TIPO_ENCONTRADO)+1, LIMIT, TIPO_ENCONTRADO);perrosPaginator.paginaSiguiente(TIPO_ENCONTRADO)" ng-if="(perrosPaginator.getPaginaActual(TIPO_ENCONTRADO)+1)*LIMIT < perrosList.registros[TIPO_ENCONTRADO]">
+                            Siguiente <md-icon>keyboard_arrow_right</md-icon>
+                        </md-button>
+                    </div>
+                    <div layout="row" layout-wrap>
+                        <md-card class="lost-card" data-id="{{::perro.id}}" ng-repeat="perro in perrosList.getPerrosListByTipo(TIPO_ENCONTRADO) | orderBy:'-real_date' track by perro.id">
+                            <img alt="Foto Perro" class="md-card-image" data-ng-src="{{perro.foto}}" />
+                            <md-card-content ng-include="'/partials/templates/card-content.tmpl.html'">
+                            <div class="name-tag" ng-class="{'tag-hembra': perro.isHembra(), 'tag-macho': perro.isMacho()}" ng-if="perro.nombre">{{perro.nombre}}</div>
+                            </md-card-content>
+                            <md-card-actions layout="row" layout-align="start center">
+                                <md-card-icon-actions ng-include="'/partials/templates/card-actions.tmpl.html'">
+                                </md-card-icon-actions>
+                            </md-card-actions>
+                        </md-card>
+                    </div>
+                    <div class="paginator" layout="row" ng-show="perrosList.getPerrosListByTipo(TIPO_ENCONTRADO).length > 0">
+                        <md-button class="paginator-link md-raised" md-no-ink ng-click="goToPage(perrosPaginator.getPaginaActual(TIPO_ENCONTRADO)-1, LIMIT, TIPO_ENCONTRADO);perrosPaginator.paginaAnterior(TIPO_ENCONTRADO)" ng-if="perrosPaginator.getPaginaActual(TIPO_ENCONTRADO)-1 >= 0">
+                            <md-icon>keyboard_arrow_left</md-icon>Atrás
+                        </md-button>
+                        <md-select class="pagina-select" ng-model="a" placeholder="Página: {{perrosPaginator.getPaginaActual(TIPO_ENCONTRADO)--1}}">
+                            <md-option ng-click="perrosPaginator.setPaginaActual($index, TIPO_ENCONTRADO);goToPage($index, LIMIT, TIPO_ENCONTRADO)" ng-init="perrosPaginator.setPaginaActual(0, TIPO_ENCONTRADO)" ng-repeat="i in calculatePages(perrosList.registros[TIPO_ENCONTRADO])">{{$index+1}}</md-option>
+                        </md-select>
+                        <md-button class="paginator-link md-raised" md-no-ink ng-click="goToPage(perrosPaginator.getPaginaActual(TIPO_ENCONTRADO)+1, LIMIT, TIPO_ENCONTRADO);perrosPaginator.paginaSiguiente(TIPO_ENCONTRADO)" ng-if="(perrosPaginator.getPaginaActual(TIPO_ENCONTRADO)+1)*LIMIT < perrosList.registros[TIPO_ENCONTRADO]">
+                            Siguiente <md-icon>keyboard_arrow_right</md-icon>
+                        </md-button>
+                    </div>
+                </md-content>
+            </md-tab>
+            <md-tab label="Perros Avistados ({{perrosList.registros[TIPO_AVISTADO]}})" ng-click="searchModel = null;searchModel.tipo = TIPO_AVISTADO" ng-model="searchModel.tipo">
+                <md-content class="md-padding" layout="column" layout-xs="column">
+                    <div class="paginator" layout="row" style="margin-top:-10px">
+                        <md-button class="paginator-link md-raised" md-no-ink ng-click="goToPage(perrosPaginator.getPaginaActual(TIPO_AVISTADO)-1, LIMIT, TIPO_AVISTADO);perrosPaginator.paginaAnterior(TIPO_AVISTADO)" ng-if="perrosPaginator.getPaginaActual(TIPO_AVISTADO)-1 >= 0">
+                            <md-icon>keyboard_arrow_left</md-icon>Atrás
+                        </md-button>
+                        <md-select class="pagina-select" ng-model="a" placeholder="Página: {{perrosPaginator.getPaginaActual(TIPO_AVISTADO)--1}}">
+                            <md-option ng-click="perrosPaginator.setPaginaActual($index, TIPO_AVISTADO);goToPage($index, LIMIT, TIPO_AVISTADO)" ng-init="perrosPaginator.setPaginaActual(0, TIPO_AVISTADO)" ng-repeat="i in calculatePages(perrosList.registros[TIPO_AVISTADO])">{{$index+1}}</md-option>
+                        </md-select>
+                        <md-button class="paginator-link md-raised" md-no-ink ng-click="goToPage(perrosPaginator.getPaginaActual(TIPO_AVISTADO)+1, LIMIT, TIPO_AVISTADO);perrosPaginator.paginaSiguiente(TIPO_AVISTADO)" ng-if="(perrosPaginator.getPaginaActual(TIPO_AVISTADO)+1)*LIMIT < perrosList.registros[TIPO_AVISTADO]">
+                            Siguiente <md-icon>keyboard_arrow_right</md-icon>
+                        </md-button>
+                    </div>
+                    <div layout="row" layout-wrap>
+                        <md-card class="lost-card" data-id="{{::perro.id}}" ng-repeat="perro in perrosList.getPerrosListByTipo(TIPO_AVISTADO) | orderBy:'-real_date'">
+                            <div class="name-tag" ng-class="{'tag-hembra': perro.isHembra(), 'tag-macho': perro.isMacho()}" ng-if="perro.nombre">{{perro.nombre}}</div>
+                            <img alt="Foto Perro" class="md-card-image" data-ng-src="{{perro.foto}}"/>
+                            <md-card-content ng-include="'/partials/templates/card-content.tmpl.html'"></md-card-content>
+                            <md-card-actions layout="row" layout-align="start center">
+                                <md-card-icon-actions ng-include="'/partials/templates/card-actions.tmpl.html'"></md-card-icon-actions>
+                            </md-card-actions>
+                        </md-card>
+                    </div>
+                    <div class="paginator" layout="row" ng-show="perrosList.getPerrosListByTipo(TIPO_AVISTADO).length > 0">
+                        <md-button class="paginator-link md-raised" md-no-ink ng-click="goToPage(perrosPaginator.getPaginaActual(TIPO_AVISTADO)-1, LIMIT, TIPO_AVISTADO);perrosPaginator.paginaAnterior(TIPO_AVISTADO)" ng-if="perrosPaginator.getPaginaActual(TIPO_AVISTADO)-1 >= 0">
+                            <md-icon>keyboard_arrow_left</md-icon>Atrás
+                        </md-button>
+                        <md-select class="pagina-select" ng-model="a" placeholder="Página: {{perrosPaginator.getPaginaActual(TIPO_AVISTADO)--1}}">
+                            <md-option ng-click="perrosPaginator.setPaginaActual($index, TIPO_AVISTADO);goToPage($index, LIMIT, TIPO_AVISTADO)" ng-init="perrosPaginator.setPaginaActual(0, TIPO_AVISTADO)" ng-repeat="i in calculatePages(perrosList.registros[TIPO_AVISTADO])">{{$index+1}}</md-option>
+                        </md-select>
+                        <md-button class="paginator-link md-raised" md-no-ink ng-click="goToPage(perrosPaginator.getPaginaActual(TIPO_AVISTADO)+1, LIMIT, TIPO_AVISTADO);perrosPaginator.paginaSiguiente(TIPO_AVISTADO)" ng-if="(perrosPaginator.getPaginaActual(TIPO_AVISTADO)+1)*LIMIT < perrosList.registros[TIPO_AVISTADO]">
+                            Siguiente <md-icon>keyboard_arrow_right</md-icon>
+                        </md-button>
+                    </div>
+                </md-content>
+            </md-tab>
+            <md-tab label="perros favoritos">
+                <md-content class="md-padding" layout="row" layout-xs="column">
+                    <div layout="row" layout-wrap>
+                        <md-card class="lost-card" data-id="{{::perro.id}}" ng-repeat="perro in perrosList.getFavoritos() | orderBy:'-real_date'">
+                            <img alt="Foto Perro" class="md-card-image" data-ng-src="{{perro.foto}}"/>
+                            <md-card-content ng-include="'/partials/templates/card-content.tmpl.html'">
+                            <div class="name-tag" ng-class="{'tag-hembra': perro.isHembra(), 'tag-macho': perro.isMacho()}" ng-if="perro.nombre">{{perro.nombre}}</div>
+                            </md-card-content>
+                            <md-card-actions layout="row" layout-align="start center">
+                                <md-card-icon-actions ng-include="'/partials/templates/card-actions.tmpl.html'">
+                                </md-card-icon-actions>
+                            </md-card-actions>
+                        </md-card>
+                    </div>
+                </md-content>
+            </md-tab>
+            <md-tab label="busqueda avanzada">
+                <div class="search-form-container" layout="column">
+                    <form id="search-box">
+                        <div id="search-form">
+                            <md-chips id="chips-container" md-separator-keys="chipSeparators" ng-model="tagsSearch" placeholder="Buscar"></md-chips>
+                            <br/>
+                            <button id="search-button" ng-click="busquedaAvanzada(tagsSearch)"><span>Buscar</span></button>
+                        </div>
+                    </form>
+                </div>
+                <md-content class="md-padding" layout="row" layout-xs="column">
+                    <div layout="row" layout-wrap>
+                        <md-card class="lost-card" data-id="{{::perro.id}}" ng-repeat="perro in perrosList.getPerrosBusquedaAvanzada() | orderBy:'-real_date'">
+                                <div class="name-tag" ng-class="{'tag-hembra': perro.isHembra(), 'tag-macho': perro.isMacho()}" ng-if="perro.nombre">{{perro.nombre}}</div>
+                            <img alt="Foto Perro" class="md-card-image" data-ng-src="{{perro.foto}}">
+                                <md-card-content ng-include="'/partials/templates/card-content.tmpl.html'"></md-card-content>
+                                <md-card-actions layout="row" layout-align="start center">
+                                    <md-card-icon-actions ng-include="'/partials/templates/card-actions.tmpl.html'"></md-card-icon-actions>
+                                </md-card-actions>
+                            </img>
+                        </md-card>
+                    </div>
+                </md-content>
+            </md-tab>
+        </md-tabs>
+    </md-content>
+    <div style="visibility: hidden">
+        <div class="md-dialog-container" id="dialogMapa">
+            <md-dialog aria-label="Mapa" layout-padding><div class="md-dialog-content" id="map"></div></md-dialog>
         </div>
-        <md-content class="md-padding" layout-xs="column" layout="row">
-          <div layout="row" layout-wrap>
-             <md-card class="lost-card" ng-repeat="perro in perrosList.getPerrosBusquedaAvanzada() | orderBy:'-real_date'" data-id="{{perro.id}}">
-              <img data-ng-src="{{perro.foto}}" class="md-card-image" alt="Foto Perro">
-               <md-card-content>
-                <p>{{perro.tipo.substring(0, perro.tipo.length - 1) | capitalize}} el {{perro.fecha}} <md-icon style="padding-right: 11px;float:right" ng-class="{macho: perro.sexo=='Macho', hembra: perro.sexo=='Hembra'}">person</md-icon></p>
-                <p style="text-transform: capitalize;">Lugar: {{perro.lugar}} 
-                    <md-icon md-svg-src="img/icons/facebook.svg" style="padding-right: 11px;float:right;cursor: pointer" ng-show="perro.link_sitio != null && perro.link_sitio.indexOf('facebook') != -1" ng-click="verPublicacion(perro.link_sitio)"></md-icon>
-                    <md-icon style="color: #ffc107; padding-right: 11px;float:right;cursor: pointer" ng-show="perro.link_sitio != null && perro.link_sitio.indexOf('redmascotera') != -1" ng-click="verPublicacion(perro.link_sitio)">pets</md-icon>
-                    <md-icon style="padding-right: 11px;float:right;cursor: pointer" ng-show="perro.link_sitio != null && perro.link_sitio.indexOf('redmascotera') == -1 && perro.link_sitio.indexOf('facebook') == -1" ng-click="verPublicacion(perro.link_sitio)">link</md-icon>
-                </p>
-              </md-card-content>
-              <md-card-actions layout="row" layout-align="start center">
-                <md-card-icon-actions>
-                  <md-button class="md-icon-button" aria-label="Borrar" ng-click="borrarPerro($event,perro)">
-                    <md-icon>delete</md-icon>
-                    <md-tooltip md-direction="bottom">
-                      Borrar
-                    </md-tooltip>
-                  </md-button>
-                  <md-button class="md-icon-button" aria-label="Favoritos" ng-click="toggleFavorite(perro)">
-                    <md-icon ng-class="{favorito: perro.favorito==1}">favorite</md-icon>
-                    <md-tooltip md-direction="bottom">
-                      Agregar a Favorito
-                    </md-tooltip>
-                  </md-button>
-                  <md-button class="md-icon-button" aria-label="Editar" ng-click="editarPerro($event, perro)">
-                    <md-icon>edit</md-icon>
-                    <md-tooltip md-direction="bottom">
-                      Editar
-                    </md-tooltip>
-                  </md-button>
-                  <md-button class="md-icon-button" aria-label="Mapa" ng-click="verMapa($event, perro)" ng-disabled="!perro.lugar">
-                    <md-icon>map</md-icon>
-                    <md-tooltip md-direction="bottom">
-                      Ver Mapa
-                    </md-tooltip>
-                  </md-button>
-                 <md-menu>
-                  <md-button aria-label="Abrir opciones de busqueda" class="md-icon-button" ng-click="openMenuBuscar($mdOpenMenu, $event)">
-                    <md-icon>search</md-icon>
-                    <md-tooltip md-direction="bottom">
-                      Buscar en
-                    </md-tooltip>
-                  </md-button>
-                  <md-menu-content width="4">
-                    <md-menu-item>
-                      <md-button ng-click="buscarPerroAvanzado($event, perro, 0)">
-                        Perdidos
-                      </md-button>
-                    </md-menu-item>
-                    <md-menu-item>
-                      <md-button ng-click="buscarPerroAvanzado($event, perro, 1)">
-                        Encontrados
-                      </md-button>
-                    </md-menu-item>
-                    <md-menu-item>
-                      <md-button ng-click="buscarPerroAvanzado($event, perro, 2)">
-                        Avistados
-                      </md-button>
-                    </md-menu-item>
-                  </md-menu-content>
-                </md-menu>
-                </md-card-icon-actions>
-              </md-card-actions>
-              <div class="name-tag" ng-if="perro.nombre" ng-class="{'tag-hembra': perro.sexo=='Hembra', 'tag-macho': perro.raza=='Macho'}">{{perro.nombre}}</div>
-            </md-card>
-          </div>
-        </md-content>
-      </md-tab>
-    </md-tabs>
-  </md-content>
-  <div style="visibility: hidden">
-    <div class="md-dialog-container" id="dialogMapa" >
-      <md-dialog layout-padding aria-label="Mapa">
-        <div class="md-dialog-content" id="map"></div>
-      </md-dialog>
     </div>
-  </div>
 </div>

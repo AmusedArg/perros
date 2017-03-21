@@ -70,5 +70,5 @@ app.use(methodOverride());
 app.use(router);
 app.use('/', express.static(__dirname + '/' + publicFolderName));
 app.listen(8888, function() {  
-	console.log("Ejecutando aplicacion en http://localhost:8080");
+	console.log("Ejecutando aplicacion en http://localhost:8888");
 });

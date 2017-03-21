@@ -1,9 +1,10 @@
 angular.module('perrosApp.factories', []).
 	factory('PerroFactory', function(){
 
-		var _templatesFolder = '/partials/templates/';
+		var _dialogsTemplatesFolder = '/partials/templates/dialogs/';
 
 		var Perro = function(tipo, template){
+			self = this;
 			this.id = null;
 			this.nombre = null;
 			this.telefono = null;
@@ -15,21 +16,39 @@ angular.module('perrosApp.factories', []).
 			this.template = template;
 			this.tags = null;
 			this.link_sitio = null;
+			this.hasFacebookLink = function(){
+				return (this.link_sitio && this.link_sitio.indexOf('facebook') != -1);
+			};
+			this.hasRedMascoteraLink = function(){
+				return (this.link_sitio && this.link_sitio.indexOf('redmascotera') != -1);
+			};
+			this.hasOtherLink = function(){
+				return (this.link_sitio && !this.hasFacebookLink() && !this.hasRedMascoteraLink());
+			};
+			this.isFavorito = function(){
+				return (this.favorito==1);
+			};
+			this.isHembra = function(){
+				return (this.sexo=='Hembra');
+			};
+			this.isMacho = function(){
+				return (this.sexo=='Macho');
+			}
 		};
 
 		var PerroFactory = {
 			getPerro: function(tipo){
 				switch(tipo){
 					case 'perdidos':
-						var template = _templatesFolder + 'dialogNuevoPerdido.tmpl.html';
+						var template = _dialogsTemplatesFolder + 'dialogNuevoPerdido.tmpl.html';
 						return new Perro(tipo, template);
 						break;
 					case 'encontrados': 
-						var template = _templatesFolder + 'dialogNuevoEncontrado.tmpl.html';
+						var template = _dialogsTemplatesFolder + 'dialogNuevoEncontrado.tmpl.html';
 						return new Perro(tipo, template);
 						break;
 					case 'avistados':
-						var template = _templatesFolder + 'dialogNuevoAvistado.tmpl.html';
+						var template = _dialogsTemplatesFolder + 'dialogNuevoAvistado.tmpl.html';
 						return new Perro(tipo, template);
 				}
 			}

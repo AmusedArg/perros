@@ -61,6 +61,15 @@ div[file-dropzone] {
     font-family: 'Roboto';
 }
 
+.icon-right{
+  padding-right: 11px;
+  float:right;
+}
+
+.cursor-pointer{
+  cursor: pointer;
+}
+
 #dialogMapa > md-dialog{
   height: 90%;
   width: 80%;

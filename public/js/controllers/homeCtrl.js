@@ -90,7 +90,7 @@ angular.module('perrosApp.controllers', []).
   			$scope.perroEdicion.fecha = $scope.perroEdicion.real_date; // para que lo levante el input debe ser un Date
 		    $mdDialog.show({
 		      	scope: $scope.$new(),
-		      	templateUrl: 'partials/templates/dialogEditarPerro.tmpl.html',
+		      	templateUrl: 'partials/templates/dialogs/dialogEditarPerro.tmpl.html',
 		      	parent: angular.element(document.body),
 		      	targetEvent: ev,
 		      	clickOutsideToClose:true
@@ -302,7 +302,6 @@ angular.module('perrosApp.controllers', []).
 	  		for (var i = data.length - 1; i >= 0; i--) {
    				var perro = data[i];
    				var newPerro = PerroFactory.getPerro(tipo);
-
    				newPerro.id = perro.id;
    				newPerro.nombre = perro.nombre;
    				newPerro.telefono = perro.tel_contacto;

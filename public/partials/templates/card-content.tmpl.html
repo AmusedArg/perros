@@ -1,0 +1,9 @@
+<p>
+	{{perro.tipo.substring(0, perro.tipo.length - 1) | capitalize}} el {{perro.fecha}} 
+	<md-icon class="icon-right" ng-class="{macho: perro.isMacho(), hembra: perro.isHembra()}">person</md-icon>
+</p>
+<p style="text-transform: capitalize;">Lugar: {{perro.lugar}} 
+    <md-icon md-svg-src="img/icons/facebook.svg" class="icon-right cursor-pointer" ng-show="perro.hasFacebookLink();" ng-click="verPublicacion(perro.link_sitio)"></md-icon>
+    <md-icon style="color: #ffc107;" class="icon-right cursor-pointer" ng-show="perro.hasRedMascoteraLink();" ng-click="verPublicacion(perro.link_sitio)">pets</md-icon>
+    <md-icon class="icon-right cursor-pointer" ng-show="perro.hasOtherLink();" ng-click="verPublicacion(perro.link_sitio)">link</md-icon>
+</p>
