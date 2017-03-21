@@ -90,7 +90,7 @@ angular.module('perrosApp.controllers', []).
   			$scope.perroEdicion.fecha = $scope.perroEdicion.real_date; // para que lo levante el input debe ser un Date
 		    $mdDialog.show({
 		      	scope: $scope.$new(),
-		      	templateUrl: 'dialogEditarPerro.tmpl.html',
+		      	templateUrl: 'partials/templates/dialogEditarPerro.tmpl.html',
 		      	parent: angular.element(document.body),
 		      	targetEvent: ev,
 		      	clickOutsideToClose:true

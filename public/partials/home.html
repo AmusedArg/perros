@@ -61,7 +61,7 @@
         </form> 
       </div>
     </md-toolbar>
-    <md-tabs md-dynamic-height md-border-bottom md-selected="selectedTab" class="main-tabs">
+    <md-tabs md-no-ink md-dynamic-height md-border-bottom md-selected="selectedTab" class="main-tabs">
       <md-tab label="Perros Perdidos ({{perrosList.registros[TIPO_PERDIDO]}})" ng-model="searchModel.tipo" ng-click="searchModel = null;searchModel.tipo = TIPO_PERDIDO" ng-init="searchModel.tipo = TIPO_PERDIDO">
         <md-content class="md-padding" layout-xs="column" layout="column"> 
           <div layout="row" class="paginator" style="margin-top:-10px">
@@ -72,14 +72,14 @@
             <md-button md-no-ink class="paginator-link md-raised" ng-click="goToPage(perrosPaginator.getPaginaActual(TIPO_PERDIDO)+1, LIMIT, TIPO_PERDIDO);perrosPaginator.paginaSiguiente(TIPO_PERDIDO)" ng-if="(perrosPaginator.getPaginaActual(TIPO_PERDIDO)+1)*LIMIT < perrosList.registros[TIPO_PERDIDO]">Siguiente <md-icon>keyboard_arrow_right</md-icon></md-button>
           </div>
           <div layout="row" layout-wrap layout-align="center center" >
-            <md-card class="lost-card" ng-repeat="perro in perrosList.getPerrosListByTipo(TIPO_PERDIDO) | orderBy:'-real_date'" data-id="{{perro.id}}">
+            <md-card class="lost-card" ng-repeat="perro in perrosList.getPerrosListByTipo(TIPO_PERDIDO) | orderBy:'-real_date' track by perro.id" data-id="{{perro.id}}">
               <img data-ng-src="{{perro.foto}}" class="md-card-image" alt="Foto Perro">
                <md-card-content>
                 <p>Perdido el {{perro.fecha}} <md-icon style="padding-right: 11px;float:right" ng-class="{macho: perro.sexo=='Macho', hembra: perro.sexo=='Hembra'}">person</md-icon></p>
                 <p style="text-transform: capitalize;">Lugar: {{perro.lugar}} 
                     <md-icon md-svg-src="img/icons/facebook.svg" style="padding-right: 11px;float:right;cursor: pointer" ng-show="perro.link_sitio != null && perro.link_sitio.indexOf('facebook') != -1" ng-click="verPublicacion(perro.link_sitio)"></md-icon>
                     <md-icon style="color: #ffc107; padding-right: 11px;float:right;cursor: pointer" ng-show="perro.link_sitio != null && perro.link_sitio.indexOf('redmascotera') != -1" ng-click="verPublicacion(perro.link_sitio)">pets</md-icon>
-                    <md-icon style="padding-right: 11px;float:right;cursor: pointer" ng-show="perro.link_sitio != null && perro.link_sitio.indexOf('redmascotera') != -1 && perro.link_sitio.indexOf('facebook') != -1" ng-click="verPublicacion(perro.link_sitio)">link</md-icon>
+                    <md-icon style="padding-right: 11px;float:right;cursor: pointer" ng-show="perro.link_sitio != null && perro.link_sitio.indexOf('redmascotera') == -1 && perro.link_sitio.indexOf('facebook') == -1" ng-click="verPublicacion(perro.link_sitio)">link</md-icon>
                 </p>
               </md-card-content>
               <md-card-actions layout="row" layout-align="start center">
@@ -157,14 +157,14 @@
             <md-button md-no-ink class="paginator-link md-raised" ng-click="goToPage(perrosPaginator.getPaginaActual(TIPO_ENCONTRADO)+1, LIMIT, TIPO_ENCONTRADO);perrosPaginator.paginaSiguiente(TIPO_ENCONTRADO)" ng-if="(perrosPaginator.getPaginaActual(TIPO_ENCONTRADO)+1)*LIMIT < perrosList.registros[TIPO_ENCONTRADO]">Siguiente <md-icon>keyboard_arrow_right</md-icon></md-button>
           </div>
           <div layout="row" layout-wrap>
-             <md-card class="lost-card" ng-repeat="perro in perrosList.getPerrosListByTipo(TIPO_ENCONTRADO) | orderBy:'-real_date'" data-id="{{perro.id}}">
+             <md-card class="lost-card" ng-repeat="perro in perrosList.getPerrosListByTipo(TIPO_ENCONTRADO) | orderBy:'-real_date' track by perro.id" data-id="{{perro.id}}">
               <img data-ng-src="{{perro.foto}}" class="md-card-image" alt="Foto Perro">
                <md-card-content>
                 <p>Encontrado el {{perro.fecha}} <md-icon style="padding-right: 11px;float:right" ng-class="{macho: perro.sexo=='Macho', hembra: perro.sexo=='Hembra'}">person</md-icon></p>
                 <p style="text-transform: capitalize;">Lugar: {{perro.lugar}} 
                     <md-icon md-svg-src="img/icons/facebook.svg" style="padding-right: 11px;float:right;cursor: pointer" ng-show="perro.link_sitio != null && perro.link_sitio.indexOf('facebook') != -1" ng-click="verPublicacion(perro.link_sitio)"></md-icon>
                     <md-icon style="color: #ffc107; padding-right: 11px;float:right;cursor: pointer" ng-show="perro.link_sitio != null && perro.link_sitio.indexOf('redmascotera') != -1" ng-click="verPublicacion(perro.link_sitio)">pets</md-icon>
-                    <md-icon style="padding-right: 11px;float:right;cursor: pointer" ng-show="perro.link_sitio != null && perro.link_sitio.indexOf('redmascotera') != -1 && perro.link_sitio.indexOf('facebook') != -1" ng-click="verPublicacion(perro.link_sitio)">link</md-icon>
+                    <md-icon style="padding-right: 11px;float:right;cursor: pointer" ng-show="perro.link_sitio != null && perro.link_sitio.indexOf('redmascotera') == -1 && perro.link_sitio.indexOf('facebook') == -1" ng-click="verPublicacion(perro.link_sitio)">link</md-icon>
                 </p>
               </md-card-content>
               <md-card-actions layout="row" layout-align="start center">
@@ -249,7 +249,7 @@
                 <p style="text-transform: capitalize;">Lugar: {{perro.lugar}} 
                     <md-icon md-svg-src="img/icons/facebook.svg" style="padding-right: 11px;float:right;cursor: pointer" ng-show="perro.link_sitio != null && perro.link_sitio.indexOf('facebook') != -1" ng-click="verPublicacion(perro.link_sitio)"></md-icon>
                     <md-icon style="color: #ffc107; padding-right: 11px;float:right;cursor: pointer" ng-show="perro.link_sitio != null && perro.link_sitio.indexOf('redmascotera') != -1" ng-click="verPublicacion(perro.link_sitio)">pets</md-icon>
-                    <md-icon style="padding-right: 11px;float:right;cursor: pointer" ng-show="perro.link_sitio != null && perro.link_sitio.indexOf('redmascotera') != -1 && perro.link_sitio.indexOf('facebook') != -1" ng-click="verPublicacion(perro.link_sitio)">link</md-icon>
+                    <md-icon style="padding-right: 11px;float:right;cursor: pointer" ng-show="perro.link_sitio != null && perro.link_sitio.indexOf('redmascotera') == -1 && perro.link_sitio.indexOf('facebook') == -1" ng-click="verPublicacion(perro.link_sitio)">link</md-icon>
                 </p>
               </md-card-content>
               <md-card-actions layout="row" layout-align="start center">
@@ -327,7 +327,7 @@
                 <p style="text-transform: capitalize;">Lugar: {{perro.lugar}} 
                     <md-icon md-svg-src="img/icons/facebook.svg" style="padding-right: 11px;float:right;cursor: pointer" ng-show="perro.link_sitio != null && perro.link_sitio.indexOf('facebook') != -1" ng-click="verPublicacion(perro.link_sitio)"></md-icon>
                     <md-icon style="color: #ffc107; padding-right: 11px;float:right;cursor: pointer" ng-show="perro.link_sitio != null && perro.link_sitio.indexOf('redmascotera') != -1" ng-click="verPublicacion(perro.link_sitio)">pets</md-icon>
-                    <md-icon style="padding-right: 11px;float:right;cursor: pointer" ng-show="perro.link_sitio != null && perro.link_sitio.indexOf('redmascotera') != -1 && perro.link_sitio.indexOf('facebook') != -1" ng-click="verPublicacion(perro.link_sitio)">link</md-icon>
+                    <md-icon style="padding-right: 11px;float:right;cursor: pointer" ng-show="perro.link_sitio != null && perro.link_sitio.indexOf('redmascotera') == -1 && perro.link_sitio.indexOf('facebook') == -1" ng-click="verPublicacion(perro.link_sitio)">link</md-icon>
                 </p>
               </md-card-content>
               <md-card-actions layout="row" layout-align="start center">
@@ -413,7 +413,7 @@
                 <p style="text-transform: capitalize;">Lugar: {{perro.lugar}} 
                     <md-icon md-svg-src="img/icons/facebook.svg" style="padding-right: 11px;float:right;cursor: pointer" ng-show="perro.link_sitio != null && perro.link_sitio.indexOf('facebook') != -1" ng-click="verPublicacion(perro.link_sitio)"></md-icon>
                     <md-icon style="color: #ffc107; padding-right: 11px;float:right;cursor: pointer" ng-show="perro.link_sitio != null && perro.link_sitio.indexOf('redmascotera') != -1" ng-click="verPublicacion(perro.link_sitio)">pets</md-icon>
-                    <md-icon style="padding-right: 11px;float:right;cursor: pointer" ng-show="perro.link_sitio != null && perro.link_sitio.indexOf('redmascotera') != -1 && perro.link_sitio.indexOf('facebook') != -1" ng-click="verPublicacion(perro.link_sitio)">link</md-icon>
+                    <md-icon style="padding-right: 11px;float:right;cursor: pointer" ng-show="perro.link_sitio != null && perro.link_sitio.indexOf('redmascotera') == -1 && perro.link_sitio.indexOf('facebook') == -1" ng-click="verPublicacion(perro.link_sitio)">link</md-icon>
                 </p>
               </md-card-content>
               <md-card-actions layout="row" layout-align="start center">
