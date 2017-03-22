@@ -143,22 +143,22 @@ function _getPerros(nombre, sexo, raza, lugar, tipo, start, end, callback){
 	var parameters = [];
 
 	if(nombre){
-		filtros += " AND nombre LIKE %?%";
-		parameters.push(nombre);
+		filtros += " AND nombre LIKE ?";
+		parameters.push('%'+nombre+'%');
 	}
 
 	if(sexo){
-		filtros += " AND sexo LIKE %?%";
-		parameters.push(sexo);
+		filtros += " AND sexo LIKE ?";
+		parameters.push('%'+sexo+'%');
 	}
 
 	if(raza){
-		filtros += " AND raza LIKE %?%";
-		parameters.push(raza);
+		filtros += " AND raza LIKE ?";
+		parameters.push('%'+raza+'%');
 	}
 	if(lugar){
-		filtros += " AND lugar LIKE %?%";
-		parameters.push(lugar);
+		filtros += " AND lugar LIKE ?";
+		parameters.push('%'+lugar+'%');
 	}
 	
 	tipo = _normalizeTipo(tipo);
@@ -190,22 +190,22 @@ function _getCantidadPerros(nombre, sexo, raza, lugar, tipo, callback) {
 	var parameters = [];
 
 	if(nombre){
-		filtros += " AND nombre LIKE %?%";
-		parameters.push(nombre);
+		filtros += " AND nombre LIKE ?";
+		parameters.push('%'+nombre+'%');
 	}
 
 	if(sexo){
-		filtros += " AND sexo LIKE %?%";
-		parameters.push(sexo);
+		filtros += " AND sexo LIKE ?";
+		parameters.push('%'+sexo+'%');
 	}
 
 	if(raza){
-		filtros += " AND raza LIKE %?%";
-		parameters.push(raza);
+		filtros += " AND raza LIKE ?";
+		parameters.push('%'+raza+'%');
 	}
 	if(lugar){
-		filtros += " AND lugar LIKE %?%";
-		parameters.push(lugar);
+		filtros += " AND lugar LIKE ?";
+		parameters.push('%'+lugar+'%');
 	}
 
 	tipo = _normalizeTipo(tipo);

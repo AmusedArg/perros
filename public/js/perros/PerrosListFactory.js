@@ -12,8 +12,8 @@ angular.module('perrosApp.factories').
 			}
 
 			this.deletePerro = function(perro){
-				self.perrosList = $filter('filter')(self.perrosList, function(value, index) {return value.id !== perro.id && value.tipo === perro.tipo;}); 	
-				self.perrosBusquedaAvanzada = $filter('filter')(self.perrosBusquedaAvanzada, function(value, index) {return value.id !== perro.id && value.tipo === perro.tipo;}); 	
+				self.perrosList = $filter('filter')(self.perrosList, function(value, index) {return value.id !== perro.id;}); 	
+				self.perrosBusquedaAvanzada = $filter('filter')(self.perrosBusquedaAvanzada, function(value, index) {return value.id !== perro.id;}); 	
 			}
 
 			this.deletePerrosByTipo = function(tipo){
@@ -23,7 +23,7 @@ angular.module('perrosApp.factories').
 			this.buscarPerro = function(perro){
 				var i=0, len=self.perrosList.length;
 		    	for (; i<len; i++) {
-		      		if (+self.perrosList[i].id == +perro.id && self.perrosList[i].tipo === perro.tipo) {
+		      		if (+self.perrosList[i].id == +perro.id) {
 		        		return self.perrosList[i];
 		      		}
 		    	}

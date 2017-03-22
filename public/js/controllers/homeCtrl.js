@@ -90,7 +90,7 @@ angular.module('perrosApp.controllers', []).
   			$scope.perroEdicion.fecha = $scope.perroEdicion.real_date; // para que lo levante el input debe ser un Date
 		    $mdDialog.show({
 		      	scope: $scope.$new(),
-		      	templateUrl: 'partials/templates/dialogs/dialogEditarPerro.tmpl.html',
+		      	templateUrl: '/partials/templates/dialogs/dialogEditarPerro.tmpl.html',
 		      	parent: angular.element(document.body),
 		      	targetEvent: ev,
 		      	clickOutsideToClose:true
@@ -104,20 +104,25 @@ angular.module('perrosApp.controllers', []).
 		          .targetEvent(ev)
 		          .ok('Borrar')
 		          .cancel('Cancelar');
-		    $mdDialog.show(confirm).then(function() {
-		      	perrosService.borrarPerro(perro.id, perro.tipo).then(function(){
-	  			 	$scope.perrosList.deletePerro(perro);
-		  		});
-		    });
+		    $mdDialog.show(confirm).then(
+		    	function() { // click on ok
+		  			$mdDialog.hide();
+			      	perrosService.borrarPerro(perro.id, perro.tipo).then(function(){
+		  			 	$scope.perrosList.deletePerro(perro);
+			  		});
+		    	}, 
+		    	function(){ // click on cancel
+		    		$mdDialog.cancel();
+		    	}
+		    );
 	  	};
 
 	  	$scope.openMenuBuscar = function($mdOpenMenu, ev, perro) {
-  	      $mdOpenMenu(ev);
+     		$mdOpenMenu(ev);
 	    };
 
 	    $scope.buscarPerroAvanzado = function(event, perro, tab){
 	    	$scope.searchModel.sexo = perro.sexo;
-	    	// $scope.searchModel.raza = perro.raza;
 	    	$scope.searchModel.lugar = perro.lugar;
 	    	
 	    	switch(tab){
