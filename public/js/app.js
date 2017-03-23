@@ -5,13 +5,53 @@ angular.module('perrosApp', [
 	'perrosApp.controllers',
 	'perrosApp.services',
   'perrosApp.factories',
-  'angular.backtop'
+  'angular.backtop',
+  'bw.paging',
+  'ui.router'
 ]).
-config(['$routeProvider', function($routeProvider) {
-  $routeProvider.
-	when("/home", {templateUrl: "partials/home.html"}).
-	when("/drivers/:id", {templateUrl: "partials/driver.html", controller: "driverController"}).
-	otherwise({redirectTo: '/home'});
+config(['$stateProvider', '$urlRouterProvider' , function($stateProvider, $urlRouterProvider) {
+  $urlRouterProvider.when('/','/perdidos');
+
+  var perdidosState = {
+    name: 'perdidos',
+    url: '/perdidos',
+    templateUrl: "partials/perdidos.html",
+  }
+
+  var encontradosState = {
+    name: 'encontrados',
+    url: '/encontrados',
+    templateUrl: "partials/encontrados.html",
+  }
+
+  var avistadosState = {
+    name: 'avistados',
+    url: '/avistados',
+    templateUrl: "partials/avistados.html",
+  }
+
+  var favoritosState = {
+    name: 'favoritos',
+    url: '/favoritos',
+    templateUrl: "partials/favoritos.html",
+  }
+
+  $stateProvider.state(perdidosState);
+  $stateProvider.state(encontradosState);
+  $stateProvider.state(avistadosState);
+  $stateProvider.state(favoritosState);
+  // $routeProvider.
+  //   when("/home", {templateUrl: "partials/home.html"}).
+  //   when("/perdidos", {templateUrl: "partials/perdidos.html"}).
+  //   when("/encontrados", {templateUrl: "partials/encontrados.html"}).
+  //   when("/avistados", {templateUrl: "partials/avistados.html"}).
+  //   when("/favoritos", {templateUrl: "partials/favoritos.html"}).
+  // 	otherwise({redirectTo: '/home'});
+}])
+.config(['$compileProvider', function ($compileProvider) {
+  $compileProvider.debugInfoEnabled(false); // change to true for dev
+  $compileProvider.commentDirectivesEnabled(false);
+  $compileProvider.cssClassDirectivesEnabled(false);
 }])
 .config(['$mdDateLocaleProvider', function($mdDateLocaleProvider) {
     $mdDateLocaleProvider.formatDate = function(date) {

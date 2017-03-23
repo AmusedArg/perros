@@ -233,7 +233,7 @@ function _guardarPerro(perro, callback) {
 
 function _editarPerro(perro, callback) {
 	connection.query("UPDATE perros SET nombre=?, tel_contacto=?, fecha=?, foto=?, lugar=?, raza=?, sexo=?, duenio=?, link_sitio=? WHERE id=?",[perro.nombre, perro.telefono, perro.fecha, perro.foto, perro.lugar, perro.raza, perro.sexo, perro.duenio, perro.link_sitio, perro.id], function(err, result) {
-		if (err) throw err;
+		if (err) {console.log(err); throw err; };
 		callback();
 	});
 }

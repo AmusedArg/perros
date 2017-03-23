@@ -1,0 +1,18 @@
+<md-content id="main-content">
+    <div ng-include="'/partials/templates/toolbar.tmpl.html'"></div>
+    <div ng-include="'/partials/templates/navbar.tmpl.html'"></div>
+    <md-content class="md-padding" layout="row" layout-xs="column">
+        <div layout="row" layout-align="center center" layout-wrap>
+            <md-card class="lost-card" data-id="{{::perro.id}}" ng-repeat="perro in perrosList.getFavoritos() | orderBy:'-real_date'">
+                <img alt="Foto Perro" class="md-card-image" data-ng-src="{{perro.foto}}"/>
+                <md-card-content ng-include="'/partials/templates/card-content.tmpl.html'">
+                <div class="name-tag" ng-class="{'tag-hembra': perro.isHembra(), 'tag-macho': perro.isMacho()}" ng-if="perro.nombre">{{perro.nombre}}</div>
+                </md-card-content>
+                <md-card-actions layout="row" layout-align="start center">
+                    <md-card-icon-actions ng-include="'/partials/templates/card-actions.tmpl.html'">
+                    </md-card-icon-actions>
+                </md-card-actions>
+            </md-card>
+        </div>
+    </md-content>
+</md-content>

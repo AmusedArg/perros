@@ -4,7 +4,6 @@ angular.module('perrosApp.factories', []).
 		var _dialogsTemplatesFolder = '/partials/templates/dialogs/';
 
 		var Perro = function(tipo, template){
-			self = this;
 			this.id = null;
 			this.nombre = null;
 			this.telefono = null;

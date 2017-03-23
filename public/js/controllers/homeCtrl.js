@@ -10,6 +10,8 @@ angular.module('perrosApp.controllers', []).
    		$scope.uploadingPerdido = false;
    		$scope.uploadingEncontrado = false;
    		$scope.uploadingAvistado = false;
+
+   		$scope.navActiveItem = 'perdidos'; // active item por defecto
    		
    		cargarPerros(0, $scope.LIMIT, $scope.TIPO_PERDIDO);
    		cargarPerros(0, $scope.LIMIT, $scope.TIPO_ENCONTRADO);
@@ -346,7 +348,7 @@ angular.module('perrosApp.controllers', []).
 	  	}
 
 	  	$scope.goToPage = function(start, limit, tipo){
-	  		cargarPerros(start*$scope.LIMIT, limit, tipo);
+	  		cargarPerros((start-1)*$scope.LIMIT, limit, tipo);
 	  	};
 
 	  	function formattedDate(date) {

@@ -4,12 +4,16 @@ var express = require("express"),
     appRoot = require('app-root-path'),
     PropertiesReader = require('properties-reader'),
     endpoints = require('app-endpoints'),
+    compression = require('compression'),
     methodOverride = require("method-override");
 
 var properties = PropertiesReader(appRoot+'/config.properties');
 const publicFolderName = properties.get('publicFolder');
 
 var router = express.Router();
+
+// compress responses
+app.use(compression());
 
 router.post('/search', function(req, res) {  
 	var perro = req.body;

@@ -1,0 +1,23 @@
+<md-content id="main-content">
+    <md-content class="md-padding" layout="column" layout-xs="column">
+        <div class="paginator" layout="row" style="margin-top:-10px">
+            <div paging page="pagActualEncontrados" page-size="LIMIT" total="perrosList.registros[TIPO_ENCONTRADO]" paging-action="goToPage(page, LIMIT, TIPO_ENCONTRADO)" text-next="Siguiente" text-prev="Anterior" show-prev-next="true" hide-if-empty="true"></div> 
+        </div>
+        <div layout="row" layout-align="center center" layout-wrap>
+            <md-card class="lost-card" data-id="{{::perro.id}}" ng-repeat="perro in perrosList.getPerrosListByTipo(TIPO_ENCONTRADO) | orderBy:'-real_date' track by perro.id">
+                <div class="name-tag" ng-class="{'tag-hembra': perro.isHembra(), 'tag-macho': perro.isMacho()}" ng-if="perro.nombre">{{perro.nombre}}</div>
+                <img alt="Foto Perro" class="md-card-image" data-ng-src="{{perro.foto}}" />
+                <md-card-content ng-include="'/partials/templates/card-content.tmpl.html'"></md-card-content>
+                <md-card-actions layout="row" layout-align="start center">
+                    <md-card-icon-actions ng-include="'/partials/templates/card-actions.tmpl.html'"></md-card-icon-actions>
+                </md-card-actions>
+            </md-card>
+        </div>
+        <div class="paginator" layout="row" ng-show="perrosList.getPerrosListByTipo(TIPO_ENCONTRADO).length > 0">
+            <div paging page="pagActualEncontrados" page-size="LIMIT" total="perrosList.registros[TIPO_ENCONTRADO]" paging-action="goToPage(page, LIMIT, TIPO_ENCONTRADO)" text-next="Siguiente" text-prev="Anterior" show-prev-next="true" hide-if-empty="true"></div> 
+        </div>
+        <md-button aria-label="Subir" class="btn-agregar-perro md-fab md-primary md-fab-bottom-right visible" ng-click="showNuevoPerro($event, TIPO_ENCONTRADO)" style="position:fixed !important;">
+            <md-icon>add</md-icon>
+        </md-button>
+    </md-content>
+</md-content>
