@@ -1,6 +1,6 @@
-<md-nav-bar nav-bar-aria-label="links perros" md-selected-nav-item="navActiveItem">
-    <md-nav-item md-nav-sref="perdidos" name="perdidos">Perros Perdidos ({{perrosList.registros[TIPO_PERDIDO]}})</md-nav-item>
-    <md-nav-item md-nav-sref="encontrados" name="encontrados">Perros Encontrados ({{perrosList.registros[TIPO_ENCONTRADO]}})</md-nav-item>
-    <md-nav-item md-nav-sref="avistados" name="avistados">Perros Avistados ({{perrosList.registros[TIPO_AVISTADO]}})</md-nav-item>
+<md-nav-bar nav-bar-aria-label="links perros" md-selected-nav-item="navActiveItem" md-no-ink>
+    <md-nav-item md-nav-sref="perdidos" name="perdidos" ng-click="changeActiveItem(navActiveItem);">Perros Perdidos ({{perrosList.registros[TIPO_PERDIDO]}})</md-nav-item>
+    <md-nav-item md-nav-sref="encontrados" name="encontrados" ng-click="changeActiveItem(navActiveItem);">Perros Encontrados ({{perrosList.registros[TIPO_ENCONTRADO]}})</md-nav-item>
+    <md-nav-item md-nav-sref="avistados" name="avistados" ng-click="changeActiveItem(navActiveItem);">Perros Avistados ({{perrosList.registros[TIPO_AVISTADO]}})</md-nav-item>
     <md-nav-item md-nav-sref="favoritos" name="favoritos">Perros Favoritos</md-nav-item>
 </md-nav-bar>

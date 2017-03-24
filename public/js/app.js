@@ -40,13 +40,6 @@ config(['$stateProvider', '$urlRouterProvider' , function($stateProvider, $urlRo
   $stateProvider.state(encontradosState);
   $stateProvider.state(avistadosState);
   $stateProvider.state(favoritosState);
-  // $routeProvider.
-  //   when("/home", {templateUrl: "partials/home.html"}).
-  //   when("/perdidos", {templateUrl: "partials/perdidos.html"}).
-  //   when("/encontrados", {templateUrl: "partials/encontrados.html"}).
-  //   when("/avistados", {templateUrl: "partials/avistados.html"}).
-  //   when("/favoritos", {templateUrl: "partials/favoritos.html"}).
-  // 	otherwise({redirectTo: '/home'});
 }])
 .config(['$compileProvider', function ($compileProvider) {
   $compileProvider.debugInfoEnabled(false); // change to true for dev

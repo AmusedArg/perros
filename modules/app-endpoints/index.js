@@ -212,7 +212,7 @@ function _getCantidadPerros(nombre, sexo, raza, lugar, tipo, callback) {
 
 	parameters.push(parseInt(tipo, 10));
 
-	connection.query("SELECT count(id) as total FROM perros WHERE eliminado=0 and tipo_perro_id = ?"+filtros, parameters, function(err, rows, fields) {
+	connection.query("SELECT count(id) as total FROM perros WHERE eliminado=0 "+filtros+" AND tipo_perro_id = ?", parameters, function(err, rows, fields) {
 		if (!err){
 	  		if(rows.length > 0){
 	  			callback(rows[0].total);

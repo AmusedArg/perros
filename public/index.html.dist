@@ -9,7 +9,7 @@
     <link rel="stylesheet" type="text/css" href="dist/all.min.css">
 </head>
     <body ng-app="perrosApp">
-    <ng-view></ng-view>
+    <div ng-include="'partials/home.html'"></div>
     <back-top></back-top>
     <script src="dist/all.min.js"></script> 
     <script src="https://maps.googleapis.com/maps/api/js?key=API_KEY" async defer></script>

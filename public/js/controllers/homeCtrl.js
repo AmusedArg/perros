@@ -24,6 +24,9 @@ angular.module('perrosApp.controllers', []).
    		$scope.tagsSearch = [];
    		$scope.chipSeparators = [$mdConstant.KEY_CODE.COMMA, $mdConstant.KEY_CODE.SPACE, $mdConstant.KEY_CODE.ENTER];
 
+   		$scope.changeActiveItem = function(navItem){
+   			$scope.navActiveItem = navItem;
+   		}
 
    		$scope.showNuevoPerro = function(ev, tipo) {
    			$scope.nuevoPerro = PerroFactory.getPerro(tipo);
@@ -144,6 +147,7 @@ angular.module('perrosApp.controllers', []).
 	    };
 
 	  	$scope.buscarPerro = function (perro) {
+			perro.tipo = $scope.navActiveItem;
 	  		angular.element(document.querySelector('#loading-bar')).toggleClass('la-animate');
 	  		perrosService.filtrarPerros(perro).then(function (response) {
 	  			angular.element(document.querySelector('#loading-bar')).toggleClass('la-animate');
