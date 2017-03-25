@@ -15,11 +15,11 @@ angular.module('perrosApp.factories').
 
 			this.paginaSiguiente = function(tipo){
 				self.paginas[tipo]++;
-			}
+			};
 
 			this.paginaAnterior = function(tipo){
 				self.paginas[tipo]--;
-			}
+			};
 		};
 
 		return PerrosPaginator;

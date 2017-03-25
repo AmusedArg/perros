@@ -66,10 +66,10 @@ gulp.task('watch', function() {
 
 // Lint Task
 gulp.task('lint', function() {
-    return gulp.src('js/*.js')
+    return gulp.src(['js/controllers/*.js','js/perros/*.js','js/services/*.js','js/app.js'])
         .pipe(jshint())
         .pipe(jshint.reporter('default'));
 });
 
 // Default Task
-gulp.task('default', ['minify-js', 'minify-css']);
+gulp.task('default', ['lint', 'minify-js', 'minify-css']);

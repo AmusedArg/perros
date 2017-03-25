@@ -16,25 +16,25 @@ config(['$stateProvider', '$urlRouterProvider' , function($stateProvider, $urlRo
     name: 'perdidos',
     url: '/perdidos',
     templateUrl: "partials/perdidos.html",
-  }
+  };
 
   var encontradosState = {
     name: 'encontrados',
     url: '/encontrados',
     templateUrl: "partials/encontrados.html",
-  }
+  };
 
   var avistadosState = {
     name: 'avistados',
     url: '/avistados',
     templateUrl: "partials/avistados.html",
-  }
+  };
 
   var favoritosState = {
     name: 'favoritos',
     url: '/favoritos',
     templateUrl: "partials/favoritos.html",
-  }
+  };
 
   $stateProvider.state(perdidosState);
   $stateProvider.state(encontradosState);

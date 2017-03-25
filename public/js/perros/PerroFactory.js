@@ -32,26 +32,25 @@ angular.module('perrosApp.factories', []).
 			};
 			this.isMacho = function(){
 				return (this.sexo=='Macho');
-			}
+			};
 		};
 
 		var PerroFactory = {
 			getPerro: function(tipo){
+				var template;
 				switch(tipo){
 					case 'perdidos':
-						var template = _dialogsTemplatesFolder + 'dialogNuevoPerdido.tmpl.html';
+						template = _dialogsTemplatesFolder + 'dialogNuevoPerdido.tmpl.html';
 						return new Perro(tipo, template);
-						break;
 					case 'encontrados': 
-						var template = _dialogsTemplatesFolder + 'dialogNuevoEncontrado.tmpl.html';
+						template = _dialogsTemplatesFolder + 'dialogNuevoEncontrado.tmpl.html';
 						return new Perro(tipo, template);
-						break;
 					case 'avistados':
-						var template = _dialogsTemplatesFolder + 'dialogNuevoAvistado.tmpl.html';
+						template = _dialogsTemplatesFolder + 'dialogNuevoAvistado.tmpl.html';
 						return new Perro(tipo, template);
 				}
 			}
-		}
+		};
 
 		return PerroFactory;
 	});
