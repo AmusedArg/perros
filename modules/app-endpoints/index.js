@@ -173,10 +173,9 @@ function _getPerros(nombre, sexo, raza, lugar, tipo, start, end, callback){
 	}
 	
 	tipo = _normalizeTipo(tipo);
-
-	parameters.push(parseInt(tipo, 10));
-	parameters.push(parseInt(start,10));
-	parameters.push(parseInt(end,10));
+	parameters.push(getIntegerValue(tipo));
+	parameters.push(getIntegerValue(start));
+	parameters.push(getIntegerValue(end));
 
 	pool.getConnection(function(err, connection) {
 		if(err){ log.error(err); return; }
@@ -225,7 +224,7 @@ function _getCantidadPerros(nombre, sexo, raza, lugar, tipo, callback) {
 
 	tipo = _normalizeTipo(tipo);
 
-	parameters.push(parseInt(tipo, 10));
+	parameters.push(getIntegerValue(tipo));
 
 	pool.getConnection(function(err, connection) {
 		if(err){log.error(err); return; }
@@ -249,7 +248,7 @@ function _guardarPerro(perro, callback) {
 		connection.query("INSERT INTO perros (nombre, tel_contacto, fecha, foto, lugar, raza, sexo, duenio, link_sitio, tipo_perro_id) VALUES (?,?,?,?,?,?,?,?,?,?)",[perro.nombre, perro.telefono, perro.fecha, perro.foto, perro.lugar, perro.raza, perro.sexo, perro.duenio, perro.link_sitio, tipo], function(err, result) {
 			callback(result.insertId);
 			connection.release();
-			if (err) throw err;
+			if (err) {log.error(err); throw err; };
 		});
 	});
 }
@@ -419,5 +418,15 @@ function _normalizeTipo(tipo){
 		}
 	}else{
 		return tipo;
+	}
+}
+
+function getIntegerValue(val){
+	if(isNaN(val)){
+		throw "Expected numeric value for: "+val+" !";
+	}else if (val < 0 ){
+		throw val + " can't be negative.";
+	}else{
+		return parseInt(val,10);
 	}
 }
