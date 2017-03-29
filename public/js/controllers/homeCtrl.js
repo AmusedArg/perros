@@ -11,25 +11,23 @@ angular.module('perrosApp.controllers', []).
    		$scope.uploadingEncontrado = false;
    		$scope.uploadingAvistado = false;
 
-   		$scope.navActiveItem = $location.path().substring(1, $location.path().length); // active item por defecto
-   		
-   		cargarPerros(0, $scope.LIMIT, $scope.TIPO_PERDIDO);
-   		cargarPerros(0, $scope.LIMIT, $scope.TIPO_ENCONTRADO);
-   		cargarPerros(0, $scope.LIMIT, $scope.TIPO_AVISTADO);
+   		getPerros(0, $scope.LIMIT, $scope.TIPO_PERDIDO);
+   		getPerros(0, $scope.LIMIT, $scope.TIPO_ENCONTRADO);
+   		getPerros(0, $scope.LIMIT, $scope.TIPO_AVISTADO);
 
    		$scope.perrosPaginator = new PerrosPaginator();
    		$scope.perrosList = new PerrosList();
    		$scope.searchModelFactory = new SearchModelFactory();
 
-   		$scope.searchModel = {};
+   		$scope.navActiveItem = $location.path().substring(1, $location.path().length); // active item por defecto
+   		$scope.searchModel = $scope.searchModelFactory.getSearchModel($scope.navActiveItem);
 
    		// modelos busqueda avanzada
    		$scope.tagsSearch = [];
    		$scope.chipSeparators = [$mdConstant.KEY_CODE.COMMA, $mdConstant.KEY_CODE.SPACE, $mdConstant.KEY_CODE.ENTER];
 
-   		$scope.changeActiveItem = function(navItem){
-   			$scope.navActiveItem = navItem;
-			$scope.searchModel = $scope.searchModelFactory.getSearchModel(navItem);
+   		$scope.changeSearchModel = function(){
+			$scope.searchModel = $scope.searchModelFactory.getSearchModel($scope.navActiveItem);
    		};
 
    		$scope.showNuevoPerro = function(ev, tipo) {
@@ -126,8 +124,8 @@ angular.module('perrosApp.controllers', []).
 		    );
 	  	};
 
-	  	$scope.openMenuBuscar = function($mdOpenMenu, ev, perro) {
-     		$mdOpenMenu(ev);
+	  	$scope.openMenuBuscar = function($mdMenu, ev, perro) {
+     		$mdMenu.open(ev);
 	    };
 
 	    $scope.buscarPerroAvanzado = function(event, perro, tipo){
@@ -139,8 +137,8 @@ angular.module('perrosApp.controllers', []).
 	    	$scope.searchModel.tipo = tipo;	   
 	    	
 	    	$scope.navActiveItem = tipo;
+	    	$state.go($scope.navActiveItem);
 	    	$scope.buscarPerro($scope.searchModel);
-	    	$state.go(tipo);
 	    };
 
 	  	$scope.buscarPerro = function (perro) {
@@ -149,7 +147,7 @@ angular.module('perrosApp.controllers', []).
 	  		perrosService.filtrarPerros(perro).then(function (response) {
 	  			angular.element(document.querySelector('#loading-bar')).toggleClass('la-animate');
 	  			$scope.perrosList.deletePerrosByTipo(perro.tipo);
-	  			cargarArregloPerros(response.data[0], response.data[1], perro.tipo);
+	  			cargarArregloPerros(response.data.perros, response.data.total, perro.tipo);
 	  		});
 	  	};
 
@@ -276,29 +274,18 @@ angular.module('perrosApp.controllers', []).
 	    };
 	    
 	  	$scope.toggleFavorite = function(perro){
-	  		var id = perro.id;
 	  		var favorito = (perro.favorito==1) ? 0 : 1;
 	  		perro.favorito = favorito;
   			perrosService.toggleFavorite(perro);
 	  	};
 
-	  	$scope.calculatePages = function(cant){
-	  		var pages = [];
-	  		for (var i = 0; i < cant; i++) {
-	  			if(i % $scope.LIMIT === 0){
-	  				pages.push(i);
-	  			}
-	  		}
-	  		return pages;
-	  	};
-
-	  	function cargarPerros(start, limit, tipo) {
+	  	function getPerros(start, limit, tipo) {
 	  		angular.element(document.querySelector('#loading-bar')).toggleClass('la-animate');
 	  		var searchModel = $scope.searchModel;
 	  		perrosService.getPerros(start, limit, tipo, searchModel).then(function (response) {
 	  			angular.element(document.querySelector('#loading-bar')).toggleClass('la-animate');
 	  			$scope.perrosList.deletePerrosByTipo(tipo);
-	   			cargarArregloPerros(response.data[0], response.data[1], tipo);
+	   			cargarArregloPerros(response.data.perros, response.data.total, tipo);
 	   		});
 	  	}
 
@@ -349,7 +336,7 @@ angular.module('perrosApp.controllers', []).
 	  	}
 
 	  	$scope.goToPage = function(start, limit, tipo){
-	  		cargarPerros((start-1)*$scope.LIMIT, limit, tipo);
+	  		getPerros((start-1)*$scope.LIMIT, limit, tipo);
 	  	};
 
 	  	function formattedDate(date) {
@@ -436,50 +423,6 @@ angular.module('perrosApp.controllers', []).
 	        }
 	    };
 	}])
-	.directive('fileDropzone', function() {
-	    return {
-	        restrict: 'A',
-	        scope: {
-	            file: '=',
-	            fileName: '='
-	        },
-	        link: function(scope, element, attrs) {
-	            var checkSize, isTypeValid, processDragOverOrEnter, validMimeTypes;
-	            processDragOverOrEnter = function(event) {
-	                if (event !== null) {
-	                    event.preventDefault();
-	                }
-	                event.dataTransfer.effectAllowed = 'copy';
-	                return false;
-	            };
-	            element.bind('dragover', processDragOverOrEnter);
-	            element.bind('dragenter', processDragOverOrEnter);
-	            return element.bind('drop', function(event) {
-	                var file, name, reader, size, type;
-	                if (event !== null) {
-	                    event.preventDefault();
-	                }
-	                reader = new FileReader();
-	                reader.onload = function(evt) {
-	                    if (checkSize(size) && isTypeValid(type)) {
-	                        return scope.$apply(function() {
-	                            scope.file = evt.target.result;
-	                            if (angular.isString(scope.fileName)) {
-	                                return (scope.fileName = name);
-	                            }
-	                        });
-	                    }
-	                };
-	                file = event.dataTransfer.files[0];
-	                name = file.name;
-	                type = file.type;
-	                size = file.size;
-	                reader.readAsDataURL(file);
-	                return false;
-	            });
-	        }
-	    };
-	}) 
 	.filter('capitalize', function() {
 	    return function(input) {
 	      	return (!!input) ? input.charAt(0).toUpperCase() + input.substr(1).toLowerCase() : '';

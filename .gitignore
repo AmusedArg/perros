@@ -1,15 +1,18 @@
-# exclude files in folder
+# exclude files but keep the root folder
 /public/public_fotos/*
 /public/dist/*
+/logs/*
+
+# exception to the rule, KEEP THIS FILES so the folder won't get deleted
+!/public/public_fotos/.gitkeep
+!/public/dist/.gitkeep
+!/logs/.gitkeep
+
+#exclude all node_modules folders
+node_modules/
 
 #exclude index.html with real api_key
 /public/index.html
 
-# exception to the rule
-!/public/public_fotos/.gitkeep 
-!/public/dist/.gitkeep 
-
-
+#exclude real properties file with sensitive data
 /config.properties
-node_modules/
-

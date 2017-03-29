@@ -2,22 +2,26 @@ var Connection = require('database-connection'),
 	crypto = require("crypto"),
 	appRoot = require('app-root-path'),
 	fs = require("fs"),
+	logger = require('logging'),
 	PropertiesReader = require('properties-reader'),
 	moment = require("moment");
-	
-Connection.connect();
+
+var log = logger();
 
 var properties = PropertiesReader(appRoot+'/config.properties');
 const publicFolderName = properties.get('publicFolder');
-const connection = Connection.getConnection();
+
+// get pool connection fro mdatabase
+var pool = Connection.getPool();
 
 
 /** START PUBLIC METHODS DIFINITION **/
 
 function buscarPerro(perro, callback){
-	var result = [];
-	result[0] = Array();
-	result[1] = '';
+	var result = {
+		perros: null,
+		total: null
+	};
 	
 	if(perro.lugar && perro.lugar.value){
 		perro.lugar = perro.lugar.value;
@@ -25,9 +29,8 @@ function buscarPerro(perro, callback){
 
 	_getPerros(perro.nombre, perro.sexo, perro.raza, perro.lugar, perro.tipo, 0, 40, function(perros, total){
 		_getCantidadPerros(perro.nombre, perro.sexo, perro.raza, perro.lugar, perro.tipo, function(total){
-			var result = [];
-			result[0] = perros;
-			result[1] = total;
+			result.perros = perros;
+			result.total = total;
 			callback(JSON.stringify(result));
 		});
 	});
@@ -95,32 +98,41 @@ function guardarPerro(perro, callback){
 }
 
 function getPerros(perro, tipo, callback){
-	var result = [];
-	result[0] = Array();
-	result[1] = '';
+	var result = {
+		perros: null,
+		total: null
+	};
+	
 	_getPerros(perro.nombre, perro.sexo, perro.raza, perro.lugar, tipo, perro.start, perro.end, function(perros){
 		_getCantidadPerros(perro.nombre, perro.sexo, perro.raza, perro.lugar, tipo, function(total){
-			var result = [];
-			result[0] = perros;
-			result[1] = total;
+			result.perros = perros;
+			result.total = total;
 			callback(JSON.stringify(result));
 		});
 	});
 }
 
 function borrarPerro(id){
-	connection.query("UPDATE perros SET eliminado=1 WHERE id=?",[id], function(err, rows, fields) {
-		if (err){
-	  		console.log(err);
-	  	}
+	pool.getConnection(function(err, connection) {
+		if(err){log.error(err); return; }
+		connection.query("UPDATE perros SET eliminado=1 WHERE id=?",[id], function(err, rows, fields) {
+			connection.release();
+			if (err){
+		  		log.error(err);
+		  	}
+		});
 	});
 }
 
 function toggleFavorite(id, favorito){
-	connection.query("UPDATE perros SET favorito=? WHERE id=?",[favorito, id], function(err, rows, fields) {
-		if (err){
-	  		console.log(err);
-	  	}
+	pool.getConnection(function(err, connection) {
+		if(err){log.error(err); return; }
+		connection.query("UPDATE perros SET favorito=? WHERE id=?",[favorito, id], function(err, rows, fields) {
+			connection.release();
+			if (err){
+		  		log.error(err);
+		  	}
+		});
 	});
 }
 
@@ -135,10 +147,9 @@ module.exports = {
 	toggleFavorite: toggleFavorite
 }
 
-function _getPerros(nombre, sexo, raza, lugar, tipo, start, end, callback){
-	var result = [];
-	result[0] = Array();
+/** PRIVATE METHODS DEFINITION **/
 
+function _getPerros(nombre, sexo, raza, lugar, tipo, start, end, callback){
 	var filtros = '';
 	var parameters = [];
 
@@ -167,22 +178,26 @@ function _getPerros(nombre, sexo, raza, lugar, tipo, start, end, callback){
 	parameters.push(parseInt(start,10));
 	parameters.push(parseInt(end,10));
 
-	connection.query(
-		"SELECT * FROM perros WHERE eliminado=0 "+filtros+" AND tipo_perro_id = ? order by fecha desc LIMIT ?,?", parameters, 
-		function(err, rows, fields) {
-		  	if (!err){
-		  		var result = [];
-		  		for (var i = 0; i < rows.length; i++) {
-		  			var row = rows[i];
-		  			row.fecha = moment(row.fecha).format('DD/MM/YYYY');
-		  			result.push(row);
-		  		}
-				callback(result, rows.length);
-		  	}else{
-		  		console.log(err);
-		  	}
-		}
-	);
+	pool.getConnection(function(err, connection) {
+		if(err){ log.error(err); return; }
+		connection.query(
+			"SELECT * FROM perros WHERE eliminado=0 "+filtros+" AND tipo_perro_id = ? order by fecha desc LIMIT ?,?", parameters, 
+			function(err, rows, fields) {
+			  	if (!err){
+			  		var result = [];
+			  		for (var i = 0; i < rows.length; i++) {
+			  			var row = rows[i];
+			  			row.fecha = moment(row.fecha).format('DD/MM/YYYY');
+			  			result.push(row);
+			  		}
+					callback(result, rows.length);
+			  	}else{
+			  		log.error(err);
+			  	}
+			  	connection.release();
+			}
+		);
+	});
 }
 
 function _getCantidadPerros(nombre, sexo, raza, lugar, tipo, callback) {
@@ -212,29 +227,41 @@ function _getCantidadPerros(nombre, sexo, raza, lugar, tipo, callback) {
 
 	parameters.push(parseInt(tipo, 10));
 
-	connection.query("SELECT count(id) as total FROM perros WHERE eliminado=0 "+filtros+" AND tipo_perro_id = ?", parameters, function(err, rows, fields) {
-		if (!err){
-	  		if(rows.length > 0){
-	  			callback(rows[0].total);
-	  		}
-	  	}else{
-	  		console.log(err);
-	  	}
+	pool.getConnection(function(err, connection) {
+		if(err){log.error(err); return; }
+		connection.query("SELECT count(id) as total FROM perros WHERE eliminado=0 "+filtros+" AND tipo_perro_id = ?", parameters, function(err, rows, fields) {
+			if (!err){
+		  		if(rows.length > 0){
+		  			callback(rows[0].total);
+		  		}
+		  	}else{
+		  		log.error(err);
+		  	}
+		  	connection.release();
+		});
 	});
 }
 
 function _guardarPerro(perro, callback) {
 	var tipo = _normalizeTipo(perro.tipo);
-	connection.query("INSERT INTO perros (nombre, tel_contacto, fecha, foto, lugar, raza, sexo, duenio, link_sitio, tipo_perro_id) VALUES (?,?,?,?,?,?,?,?,?,?)",[perro.nombre, perro.telefono, perro.fecha, perro.foto, perro.lugar, perro.raza, perro.sexo, perro.duenio, perro.link_sitio, tipo], function(err, result) {
-		if (err) throw err;
-		callback(result.insertId);
+	pool.getConnection(function(err, connection) {
+		if(err){log.error(err); return; }
+		connection.query("INSERT INTO perros (nombre, tel_contacto, fecha, foto, lugar, raza, sexo, duenio, link_sitio, tipo_perro_id) VALUES (?,?,?,?,?,?,?,?,?,?)",[perro.nombre, perro.telefono, perro.fecha, perro.foto, perro.lugar, perro.raza, perro.sexo, perro.duenio, perro.link_sitio, tipo], function(err, result) {
+			callback(result.insertId);
+			connection.release();
+			if (err) throw err;
+		});
 	});
 }
 
 function _editarPerro(perro, callback) {
-	connection.query("UPDATE perros SET nombre=?, tel_contacto=?, fecha=?, foto=?, lugar=?, raza=?, sexo=?, duenio=?, link_sitio=? WHERE id=?",[perro.nombre, perro.telefono, perro.fecha, perro.foto, perro.lugar, perro.raza, perro.sexo, perro.duenio, perro.link_sitio, perro.id], function(err, result) {
-		if (err) {console.log(err); throw err; };
-		callback();
+	pool.getConnection(function(err, connection) {
+		if(err){log.error(err); return; }
+		connection.query("UPDATE perros SET nombre=?, tel_contacto=?, fecha=?, foto=?, lugar=?, raza=?, sexo=?, duenio=?, link_sitio=? WHERE id=?",[perro.nombre, perro.telefono, perro.fecha, perro.foto, perro.lugar, perro.raza, perro.sexo, perro.duenio, perro.link_sitio, perro.id], function(err, result) {
+			callback();
+			connection.release();
+			if (err) {log.error(err); throw err; };
+		});
 	});
 }
 
@@ -280,7 +307,7 @@ function _saveImage(imagen, dir, callback) {
     }
     catch(error)
     {
-        console.log('ERROR:', error);
+        log.error(error);
     }
 }
 
@@ -360,20 +387,20 @@ function _saveImageLabels(image, perro){
 				var googleTags = results[0];
 				var tags = googleTags.concat(coloresFinales).join();
 				
+			}else{
+				var tags = coloresFinales.join();
+			}
+			pool.getConnection(function(err, connection) {
+				if(err){log.error(err); return; }
 				connection.query("UPDATE "+perro.tipo+" SET tags = ? where id = ?",[tags, perro.id], function(err, result) {
 					if (err) {
-						console.log(err);
+						log.error(err);
 					}else{
-						console.log("Tags generados para: " + perro.id);
+						log.info("Tags generados para: " + perro.id);
 					}
+					connection.release();
 				});
-			}else{
-				connection.query("UPDATE "+perro.tipo+" SET tags = ? where id = ?",[coloresFinales.join(), perro.id], function(err, result) {
-					if (err) {
-						console.log(err);
-					}
-				});
-			}
+			});
 		});
 	});	
 }

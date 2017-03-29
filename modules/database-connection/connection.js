@@ -1,6 +1,9 @@
 var PropertiesReader = require('properties-reader'),
+	logger = require('logging'),
 	appRoot = require('app-root-path');
-	
+
+var log = logger();
+
 var properties = PropertiesReader(appRoot+'/config.properties');
 
 var dbUser 		= properties.get('dbUser');
@@ -13,11 +16,11 @@ var dbDebugMode = properties.get('dbDebugMode');
 
 var mysql      = require('mysql');
 
-var connection = null;
+var pool = null;
 
-function createConnection(){
-	if(connection == null){
-		connection = mysql.createConnection({
+function getPool(){
+	if(pool == null){
+		pool = mysql.createPool({
 			host     : dbHost,
 			user     : dbUser,
 			password : dbPass,
@@ -25,21 +28,28 @@ function createConnection(){
 			debug	 : dbDebugMode
 		});
 	}
+	bindErrorHandler(pool);
+	return pool;
 };
 
-function getConnection(){
-	if(connection == null){
-		createConnection();
-	}
+function bindErrorHandler(pool){
+	// Attempt to catch disconnects 
+	pool.on('connection', function(connection) {
 
-	return connection;
-};
-
-function connect(){
-	getConnection().connect();	
+	    connection.on('error', function(err) {
+	        log.error(err);
+	    });
+	    connection.on('close', function(err) {
+	        log.error(err);
+	    });
+	    connection.on('end', function(err) {
+	        log.error(err);
+	        // attempt to restore connection
+	        getPool();
+	    });
+	});
 }
 
 module.exports = {
-	getConnection: getConnection,
-	connect: connect
+	getPool: getPool
 }

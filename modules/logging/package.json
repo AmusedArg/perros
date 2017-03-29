@@ -1,0 +1,7 @@
+{
+  "name": "logging",
+  "description": "Modulo para configurar el logging de la aplicacion",
+  "private": true,
+  "version": "1.0.0",
+  "main": "index.js"
+}

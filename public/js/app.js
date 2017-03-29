@@ -1,4 +1,4 @@
-angular.module('perrosApp', [
+var app = angular.module('perrosApp', [
 	'ngMaterial',
 	'ngAnimate',
 	'ngRoute',

@@ -2,6 +2,9 @@
   "name": "database-connection",
   "description": "Modulo para conectarse a la base de datos",
   "private": true,
-  "version": "1.0.0",
-  "main": "connection.js"
+  "version": "1.0.3",
+  "main": "connection.js",
+  "dependencies":{
+  	"logging": "file:../logging"
+  }
 }

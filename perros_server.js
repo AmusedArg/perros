@@ -5,7 +5,10 @@ var express = require("express"),
     PropertiesReader = require('properties-reader'),
     endpoints = require('app-endpoints'),
     compression = require('compression'),
+    logger = require('logging'),
     methodOverride = require("method-override");
+
+var log = logger();
 
 var properties = PropertiesReader(appRoot+'/config.properties');
 const publicFolderName = properties.get('publicFolder');
@@ -74,5 +77,5 @@ app.use(methodOverride());
 app.use(router);
 app.use('/', express.static(__dirname + '/' + publicFolderName));
 app.listen(8888, function() {  
-	console.log("Ejecutando aplicacion en http://localhost:8888");
+	log.info("Ejecutando aplicacion en http://localhost:8888");
 });

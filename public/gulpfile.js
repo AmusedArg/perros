@@ -23,7 +23,14 @@ gulp.task('minify-css', function () {
 // Concatenate & Minify JS
 gulp.task('minify-js', function() {
 
-    var paths = [
+    var localFiles = [
+      'js/perros/*.js',
+      'js/controllers/*.js',
+      'js/services/*.js',
+      'js/app.js'
+    ];
+
+    var externalLibraries = [
       'node_modules/angular/angular.min.js',
       'node_modules/angular-ui-router/release/angular-ui-router.min.js',
       'node_modules/angular-route/angular-route.min.js',
@@ -32,23 +39,21 @@ gulp.task('minify-js', function() {
       'node_modules/angular-material/angular-material.min.js',
       'node_modules/angular-paging/dist/paging.min.js',
       'node_modules/moment/min/moment.min.js',
-      'js/perros/*.js',
-      'js/controllers/*.js',
-      'js/services/*.js',
-      'js/app.js',
       'js/backtop.min.js'
     ];
 
+    var paths = externalLibraries.concat(localFiles);
+    
     // Minify ONLY these files.
-    var filter = gulpFilter([
-      'js/perros/*.js',
-      'js/services/*.js',
-      'js/controllers/*.js',
-      'js/app.js'
-    ],
+    var filter = gulpFilter(localFiles,
     {
       restore: true
     });
+
+    // search errors on own files
+    gulp.src(localFiles)
+      .pipe(jshint())
+      .pipe(jshint.reporter('default'));
 
     return gulp.src(paths)
       .pipe(filter)
