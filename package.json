@@ -1,6 +1,6 @@
 {
   "name": "perros_node_server",
-  "version": "1.4.6",
+  "version": "1.4.7",
   "description": "Node Server Perros",
   "main": "perros_server.js",
   "dependencies": {
@@ -24,7 +24,9 @@
     "version:major": "npm version major --force",
     "version:minor": "npm version minor --force",
     "version:patch": "npm --no-git-tag-version version patch --force && git commit -a",
-    "postversion": "git push && git push --tags"
+    "postversion:major": "git push && git push --tags",
+    "postversion:minor": "git push && git push --tags",
+    "postversion:patch": "git push"
   },
   "author": "Eduardo Pereyra",
   "license": "ISC"
