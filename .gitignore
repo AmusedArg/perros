@@ -1,4 +1,4 @@
-# exclude files but keep the root folder
+# EXCLUDE FILES BUT KEEP THE ROOT FOLDER
 /public/public_fotos/*
 /public/dist/*
 /logs/*
@@ -8,11 +8,11 @@
 !/public/dist/.gitkeep
 !/logs/.gitkeep
 
-#exclude all node_modules folders
+#EXCLUDE THESE FOLDERS
 node_modules/
 
-#exclude index.html with real api_key
-/public/index.html
-
-#exclude real properties file with sensitive data
+#EXCLUDE THESE FILES
 /config.properties
+#file has real api_key
+/public/index.html
+*.log

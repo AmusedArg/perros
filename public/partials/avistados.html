@@ -1,7 +1,7 @@
 <md-content id="main-content">
     <md-content class="md-padding" layout="column" layout-xs="column">
         <div class="paginator" layout="row" style="margin-top:-10px">
-            <div paging page="pagActualAvistados" page-size="LIMIT" total="perrosList.registros[TIPO_AVISTADO]" paging-action="goToPage(page, LIMIT, TIPO_AVISTADO)" text-next="Siguiente" text-prev="Anterior" show-prev-next="true" hide-if-empty="true"></div> 
+            <div paging page="pagActualAvistados" page-size="LIMIT" total="perrosList.registros[TIPO_AVISTADO]" paging-action="goToPage(page, LIMIT, TIPO_AVISTADO)" text-next="Siguiente" text-prev="Anterior" show-prev-next="true" hide-if-empty="true" text-title-page="Pág. {page}" text-title-prev="Ant" text-title-next="Sig"></div> 
         </div>
         <div layout="row" layout-align="center center" layout-wrap>
             <md-card class="lost-card" data-id="{{::perro.id}}" ng-repeat="perro in perrosList.getPerrosListByTipo(TIPO_AVISTADO) | orderBy:'-real_date'">

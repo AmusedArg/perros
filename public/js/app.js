@@ -55,18 +55,16 @@ config(['$stateProvider', '$urlRouterProvider' , function($stateProvider, $urlRo
 	    var m = moment(dateString, 'DD/MM/YYYY', true);
 	    return m.isValid() ? m.toDate() : new Date(NaN);
 	};
+
+  $mdDateLocaleProvider.months = ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'];
+  $mdDateLocaleProvider.shortMonths = ['Ene', 'Feb', 'Mar', 'Abr', 'May', 'Jun', 'Jul', 'Ago', 'Sep', 'Oct', 'Nov', 'Dic'];
+  $mdDateLocaleProvider.days = ['Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado', 'Domingo'];
+  $mdDateLocaleProvider.shortDays = ['Lu', 'Ma', 'Mi', 'Ju', 'Vi', 'Sa', 'Do'];
 }])
 .config(['$mdIconProvider', function($mdIconProvider) {
   $mdIconProvider
     .iconSet('facebook', 'img/icons/facebook.svg', 24)
     .iconSet('facebook', 'img/icons/red-ascotera.svg', 24);
-}])
-.config(['$mdDateLocaleProvider', function($mdDateLocaleProvider) {
-  // Example of a French localization.
-  $mdDateLocaleProvider.months = ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'];
-  $mdDateLocaleProvider.shortMonths = ['Ene', 'Feb', 'Mar', 'Abr', 'May', 'Jun', 'Jul', 'Ago', 'Sep', 'Oct', 'Nov', 'Dic'];
-  $mdDateLocaleProvider.days = ['Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado', 'Domingo'];
-  $mdDateLocaleProvider.shortDays = ['Lu', 'Ma', 'Mi', 'Ju', 'Vi', 'Sa', 'Do'];
 }])
 .config(['$mdThemingProvider', function($mdThemingProvider) {
   $mdThemingProvider.theme('pinkPurpleTheme')

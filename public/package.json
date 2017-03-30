@@ -1,6 +1,6 @@
 {
   "name": "perros_prod",
-  "version": "1.0.0",
+  "version": "1.5.0",
   "description": "Aplicacion para manejo de perros encontrados y perdidos",
   "main": "index.php",
   "dependencies": {
@@ -26,7 +26,9 @@
     "merge-stream": "^1.0.0"
   },
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "version": "npm run build && git add -A",
+    "postversion": "git push && git push --tags"
   },
   "author": "Eduardo Pereyra",
   "license": "ISC"
