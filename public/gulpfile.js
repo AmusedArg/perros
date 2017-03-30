@@ -7,6 +7,17 @@ var rename = require('gulp-rename');
 var merge = require('merge-stream');
 var uglifycss = require('gulp-uglifycss');
 var gulpFilter = require('gulp-filter');
+var header = require('gulp-header');
+
+/* Template for version comment in files */
+var pkg = require('./package.json');
+var banner = ['/**',
+  ' * @version v<%= pkg.version %>',
+  ' * @author <%= pkg.author %>',
+  ' * @license <%= pkg.license %>',
+  ' */\n',
+  ''
+].join('\n');
 
 //Concatenate & Minify CSS
 gulp.task('minify-css', function () {
@@ -16,12 +27,13 @@ gulp.task('minify-css', function () {
       "uglyComments": true
     }))
     .pipe(concat('all.min.css'))
+    .pipe(header(banner, { pkg : pkg } ))
     .pipe(gulp.dest('dist'));
 });
 
 
 // Concatenate & Minify JS
-gulp.task('minify-js', function() {
+gulp.task('minify-js', function() {    
 
     var localFiles = [
       'js/perros/*.js',
@@ -60,6 +72,7 @@ gulp.task('minify-js', function() {
       .pipe(uglify())
       .pipe(filter.restore)
       .pipe(concat('all.min.js'))
+      .pipe(header(banner, { pkg : pkg } ))
       .pipe(gulp.dest('dist'));
 });
 

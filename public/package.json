@@ -17,6 +17,7 @@
     "gulp": "^3.9.1",
     "gulp-concat": "^2.6.0",
     "gulp-filter": "^4.0.0",
+    "gulp-header": "^1.8.8",
     "gulp-jshint": "^2.0.2",
     "gulp-rename": "^1.2.2",
     "gulp-sass": "^2.3.2",
@@ -26,7 +27,7 @@
     "merge-stream": "^1.0.0"
   },
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"    
+    "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "Eduardo Pereyra",
   "license": "ISC"

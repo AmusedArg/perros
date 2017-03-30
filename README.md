@@ -10,6 +10,6 @@ Copiar y reenombrar config.properties.dist -> config.properties
 Copiar y reenombrar public/index.html.dist -> public/index.html
 
 ## Pushing versions
-npm version major --force -m "Some message to commit"
-npm version minor --force -m "Some message to commit"
-npm --no-git-tag-version version patch --force -m "Some message to commit"
+npm run version:major -- -m "Some message to commit"
+npm run version:minor -- -m "Some message to commit"
+npm run version:patch -- -m "Some message to commit"
