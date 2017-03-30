@@ -1,6 +1,6 @@
 {
   "name": "perros_node_server",
-  "version": "1.1.0",
+  "version": "1.2.0",
   "description": "Node Server Perros",
   "main": "perros_server.js",
   "dependencies": {
@@ -20,7 +20,10 @@
     "winston": "^2.3.0"
   },
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "version:major": "npm version major --force",
+    "version:minor": "npm version minor --force",
+    "version:patch": "npm --no-git-tag-version version patch --force"
   },
   "author": "Eduardo Pereyra",
   "license": "ISC"
