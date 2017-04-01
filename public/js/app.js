@@ -9,7 +9,8 @@ var app = angular.module('perrosApp', [
   'bw.paging',
   'ui.router'
 ]).
-config(['$stateProvider', '$urlRouterProvider' , function($stateProvider, $urlRouterProvider) {
+config(['$stateProvider', '$urlRouterProvider','$locationProvider' , function($stateProvider, $urlRouterProvider, $locationProvider) {
+  $locationProvider.html5Mode(true);
   $urlRouterProvider.when('/','/perdidos');
 
   var perdidosState = {

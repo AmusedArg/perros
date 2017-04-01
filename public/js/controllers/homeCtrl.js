@@ -339,6 +339,10 @@ angular.module('perrosApp.controllers', []).
 	  		getPerros((start-1)*$scope.LIMIT, limit, tipo);
 	  	};
 
+	  	$scope.scrollTop = function(){
+	  		document.body.scrollTop = 0;
+	  	};
+
 	  	function formattedDate(date) {
 		   	return moment(date).format('DD/MM/YYYY');
 		}
