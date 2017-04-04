@@ -36,12 +36,12 @@ angular.module('perrosApp.factories').
 				var deferred = $q.defer(); 
 
 				if(perro.tipo === 'perdidos'){
-					self.perrosService.getPerros(0, 999999, 'encontrados', perroTmp).then(function (response) {
+					self.perrosService.getPerros(0, 'encontrados', perroTmp).then(function (response) {
 						for (var i in response.data[0]) {
 						  response.data[0][i].tipo = 'encontrados';
 						}
 			   			perros = perros.concat(response.data[0]);
-				   		self.perrosService.getPerros(0, 999999, 'avistados', perroTmp).then(function (response) {
+				   		self.perrosService.getPerros(0, 'avistados', perroTmp).then(function (response) {
 				   			for (var i in response.data[0]) {
 							  response.data[0][i].tipo = 'avistados';
 							}
@@ -51,12 +51,12 @@ angular.module('perrosApp.factories').
 			   		});
 
 				}else if(perro.tipo === 'encontrados'){
-					self.perrosService.getPerros(0, 999999, 'perdidos', perroTmp).then(function (response) {
+					self.perrosService.getPerros(0, 'perdidos', perroTmp).then(function (response) {
 						for (var i in response.data[0]) {
 						  response.data[0][i].tipo = 'perdidos';
 						}
 			   			perros = perros.concat(response.data[0]);
-				   		self.perrosService.getPerros(0, 999999, 'avistados', perroTmp).then(function (response) {
+				   		self.perrosService.getPerros(0, 'avistados', perroTmp).then(function (response) {
 				   			for (var i in response.data[0]) {
 							  response.data[0][i].tipo = 'avistados';
 							}

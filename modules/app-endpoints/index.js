@@ -10,6 +10,7 @@ var log = logger();
 
 var properties = PropertiesReader(appRoot+'/config.properties');
 const publicFolderName = properties.get('publicFolder');
+const MAX_RESULTS = 40;
 
 // get pool connection fro mdatabase
 var pool = Connection.getPool();
@@ -27,7 +28,7 @@ function buscarPerro(perro, callback){
 		perro.lugar = perro.lugar.value;
 	}
 
-	_getPerros(perro.nombre, perro.sexo, perro.raza, perro.lugar, perro.tipo, 0, 40, function(perros, total){
+	_getPerros(perro.nombre, perro.sexo, perro.raza, perro.lugar, perro.tipo, 0, function(perros, total){
 		_getCantidadPerros(perro.nombre, perro.sexo, perro.raza, perro.lugar, perro.tipo, function(total){
 			result.perros = perros;
 			result.total = total;
@@ -103,7 +104,7 @@ function getPerros(perro, tipo, callback){
 		total: null
 	};
 	
-	_getPerros(perro.nombre, perro.sexo, perro.raza, perro.lugar, tipo, perro.start, perro.end, function(perros){
+	_getPerros(perro.nombre, perro.sexo, perro.raza, perro.lugar, tipo, perro.page, function(perros){
 		_getCantidadPerros(perro.nombre, perro.sexo, perro.raza, perro.lugar, tipo, function(total){
 			result.perros = perros;
 			result.total = total;
@@ -149,7 +150,7 @@ module.exports = {
 
 /** PRIVATE METHODS DEFINITION **/
 
-function _getPerros(nombre, sexo, raza, lugar, tipo, start, end, callback){
+function _getPerros(nombre, sexo, raza, lugar, tipo, page, callback){
 	var filtros = '';
 	var parameters = [];
 
@@ -174,8 +175,8 @@ function _getPerros(nombre, sexo, raza, lugar, tipo, start, end, callback){
 	
 	tipo = _normalizeTipo(tipo);
 	parameters.push(getIntegerValue(tipo));
-	parameters.push(getIntegerValue(start));
-	parameters.push(getIntegerValue(end));
+	parameters.push(getIntegerValue(page)*MAX_RESULTS);
+	parameters.push(MAX_RESULTS);
 
 	pool.getConnection(function(err, connection) {
 		if(err){ log.error(err); return; }

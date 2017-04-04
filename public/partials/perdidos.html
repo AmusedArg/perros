@@ -1,7 +1,7 @@
 <md-content id="main-content">
     <md-content class="md-padding" layout="column" layout-xs="column">
         <div class="paginator" layout="row" style="margin-top:-10px">
-            <div paging page="pagActualPerdidos" page-size="LIMIT" total="perrosList.registros[TIPO_PERDIDO]" paging-action="goToPage(page, LIMIT, TIPO_PERDIDO)" text-next="Siguiente" text-prev="Anterior" show-prev-next="true" hide-if-empty="true" text-title-page="Pág. {page}" text-title-prev="Ant" text-title-next="Sig"></div>
+            <div paging page="pagActualPerdidos" page-size="MAX_RESULTS" total="perrosList.registros[TIPO_PERDIDO]" paging-action="goToPage(page, TIPO_PERDIDO)" text-next="Siguiente" text-prev="Anterior" show-prev-next="true" hide-if-empty="true" text-title-page="Pág. {page}" text-title-prev="Ant" text-title-next="Sig"></div>
         </div>
         <div layout="row" layout-align="center center" layout-wrap>
             <md-card class="lost-card" data-wow-duration="0.5s" data-id="{{::perro.id}}" ng-repeat="perro in perrosList.getPerrosListByTipo(TIPO_PERDIDO) | orderBy:'-real_date' track by perro.id">
@@ -14,7 +14,7 @@
             </md-card>
         </div>
         <div class="paginator" layout="row" ng-show="perrosList.getPerrosListByTipo(TIPO_PERDIDO).length > 0">
-            <div paging page="pagActualPerdidos" page-size="LIMIT" total="perrosList.registros[TIPO_PERDIDO]" paging-action="goToPage(page, LIMIT, TIPO_PERDIDO);scrollTop();" text-next="Siguiente" text-prev="Anterior" show-prev-next="true" hide-if-empty="true" text-title-page="Pág. {page}" text-title-prev="Ant" text-title-next="Sig"></div> 
+            <div paging page="pagActualPerdidos" page-size="MAX_RESULTS" total="perrosList.registros[TIPO_PERDIDO]" paging-action="goToPage(page, TIPO_PERDIDO);scrollTop();" text-next="Siguiente" text-prev="Anterior" show-prev-next="true" hide-if-empty="true" text-title-page="Pág. {page}" text-title-prev="Ant" text-title-next="Sig"></div> 
         </div>
         <md-button aria-label="Subir" class="btn-agregar-perro md-fab md-fab-bottom-right visible" ng-click="showNuevoPerro($event, TIPO_PERDIDO)" style="position:fixed !important;">
             <md-icon>add</md-icon>

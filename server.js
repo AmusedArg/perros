@@ -12,6 +12,7 @@ var log = logger();
 
 var properties = PropertiesReader(appRoot+'/config.properties');
 const publicFolderName = properties.get('publicFolder');
+const appPort = properties.get('appPort');
 
 var router = express.Router();
 
@@ -86,7 +87,7 @@ process.on('exit', function(){
 });
 
 function startServer(){
-	app.listen(8888, function() {  
-		log.info("Ejecutando aplicacion en http://localhost:8888");
+	app.listen(appPort, function() {  
+		log.info("Ejecutando aplicacion en http://localhost:"+appPort);
 	});
 }

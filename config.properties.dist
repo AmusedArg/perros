@@ -4,3 +4,4 @@ dbUser=
 dbPass=
 dbDebugMode=false
 publicFolder=public
+appPort=8888

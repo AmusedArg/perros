@@ -1,9 +1,9 @@
 angular.module('perrosApp.controllers', []).
 	controller('HomeCtrl', ['$scope', '$mdDialog', '$timeout', '$q', '$log', '$filter', '$mdToast', '$mdConstant', 'perrosService', 'PerroFactory','PerrosList','PerrosPaginator','SearchModelFactory', '$state', '$location', function($scope, $mdDialog, $timeout, $q, $log, $filter, $mdToast, $mdConstant, perrosService, PerroFactory,PerrosList,PerrosPaginator, SearchModelFactory, $state, $location) {
-		$scope.LIMIT = 40;
 		$scope.TIPO_ENCONTRADO = 'encontrados';
 		$scope.TIPO_PERDIDO = 'perdidos';
 		$scope.TIPO_AVISTADO = 'avistados';
+		$scope.MAX_RESULTS = 40;
 		
 		$scope.razas = ['Mestizo','Afgano','Airedale Terrier','Akita','American Stafford Terrier','Basenji','Basset','Beagle','Bearded Collie','Bichon Frisse','Bloodhound','Border Collie','Boston Terrier','Boxer','Boyero De Berna','Braco','Breton','bull dog frances','Bull Dog Ingles','Bull Terrier','Bullmastiff','Cairn Terrier','Cane Corso','Caniche','cavalier king charles spaniel','Chihuahua','Chow Chow','Cocker','Collie','CRESTADO CHINO','Dalmata','Doberman','Dogo','Dogo De Burdeos','Earlier Terrier','Faraon','Fila Brasilero','Fox Terrier','Galgo','Golden','Gos D atura o Pastor catalán','Gran Danes','Grifon De Bruselas','Jack Russell','Kuvasz','Labrador','Lasha Apso','lebrel','Malamute','Maltes','Mastiff Ingles','Mastin Español','Mastin Napolitano','Ovejero Aleman','Ovejero Belga','Ovejero Tervueren','Papillon','Pastor Australiano','Pastor De Brie','pastor del caucaso','Pastor Escoces','Pastor Ingles','Pastor Suizo','Pequines','perro de agua español','Pila','Pincher','Pit Bull','Pointer','pomerania','Presa Canario','Pug','Rodhesian','Rottweiler','Salchicha','Samoyedo','San Bernardo','Schnautzer Grande','Schnautzer Mini','Schnautzer Standar','Scottish Terrier','Setter Irlandes','Sharpei','Shiba Inu','Shitzu','Siberiano','Springer Spaniel Ingles','Terranova','Vizla','Weimaraner','Welsh Corgi','Welsh Terrier','West Highland White','Whippet','Yorkshire Terrier'];
    		
@@ -11,9 +11,9 @@ angular.module('perrosApp.controllers', []).
    		$scope.uploadingEncontrado = false;
    		$scope.uploadingAvistado = false;
 
-   		getPerros(0, $scope.LIMIT, $scope.TIPO_PERDIDO);
-   		getPerros(0, $scope.LIMIT, $scope.TIPO_ENCONTRADO);
-   		getPerros(0, $scope.LIMIT, $scope.TIPO_AVISTADO);
+   		getPerros(0, $scope.TIPO_PERDIDO);
+   		getPerros(0, $scope.TIPO_ENCONTRADO);
+   		getPerros(0, $scope.TIPO_AVISTADO);
 
    		$scope.perrosPaginator = new PerrosPaginator();
    		$scope.perrosList = new PerrosList();
@@ -279,10 +279,10 @@ angular.module('perrosApp.controllers', []).
   			perrosService.toggleFavorite(perro);
 	  	};
 
-	  	function getPerros(start, limit, tipo) {
+	  	function getPerros(page, tipo) {
 	  		angular.element(document.querySelector('#loading-bar')).toggleClass('la-animate');
 	  		var searchModel = $scope.searchModel;
-	  		perrosService.getPerros(start, limit, tipo, searchModel).then(function (response) {
+	  		perrosService.getPerros(page, tipo, searchModel).then(function (response) {
 	  			angular.element(document.querySelector('#loading-bar')).toggleClass('la-animate');
 	  			$scope.perrosList.deletePerrosByTipo(tipo);
 	   			cargarArregloPerros(response.data.perros, response.data.total, tipo);
@@ -335,8 +335,8 @@ angular.module('perrosApp.controllers', []).
 	  		return $scope.searchModel;
 	  	}
 
-	  	$scope.goToPage = function(start, limit, tipo){
-	  		getPerros((start-1)*$scope.LIMIT, limit, tipo);
+	  	$scope.goToPage = function(start, tipo){
+	  		getPerros((start-1), tipo);
 	  	};
 
 	  	$scope.scrollTop = function(){

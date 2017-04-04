@@ -1,7 +1,7 @@
 <md-content id="main-content">
     <md-content class="md-padding" layout="column" layout-xs="column">
         <div class="paginator" layout="row" style="margin-top:-10px">
-            <div paging page="pagActualEncontrados" page-size="LIMIT" total="perrosList.registros[TIPO_ENCONTRADO]" paging-action="goToPage(page, LIMIT, TIPO_ENCONTRADO)" text-next="Siguiente" text-prev="Anterior" show-prev-next="true" hide-if-empty="true" text-title-page="Pág. {page}" text-title-prev="Ant" text-title-next="Sig"></div> 
+            <div paging page="pagActualEncontrados" page-size="MAX_RESULTS" total="perrosList.registros[TIPO_ENCONTRADO]" paging-action="goToPage(page, TIPO_ENCONTRADO)" text-next="Siguiente" text-prev="Anterior" show-prev-next="true" hide-if-empty="true" text-title-page="Pág. {page}" text-title-prev="Ant" text-title-next="Sig"></div> 
         </div>
         <div layout="row" layout-align="center center" layout-wrap>
             <md-card class="lost-card" data-id="{{::perro.id}}" ng-repeat="perro in perrosList.getPerrosListByTipo(TIPO_ENCONTRADO) | orderBy:'-real_date' track by perro.id">
@@ -14,7 +14,7 @@
             </md-card>
         </div>
         <div class="paginator" layout="row" ng-show="perrosList.getPerrosListByTipo(TIPO_ENCONTRADO).length > 0">
-            <div paging page="pagActualEncontrados" page-size="LIMIT" total="perrosList.registros[TIPO_ENCONTRADO]" paging-action="goToPage(page, LIMIT, TIPO_ENCONTRADO);scrollTop();" text-next="Siguiente" text-prev="Anterior" show-prev-next="true" hide-if-empty="true" text-title-page="Pág. {page}" text-title-prev="Ant" text-title-next="Sig"></div> 
+            <div paging page="pagActualEncontrados" page-size="MAX_RESULTS" total="perrosList.registros[TIPO_ENCONTRADO]" paging-action="goToPage(page, TIPO_ENCONTRADO);scrollTop();" text-next="Siguiente" text-prev="Anterior" show-prev-next="true" hide-if-empty="true" text-title-page="Pág. {page}" text-title-prev="Ant" text-title-next="Sig"></div> 
         </div>
         <md-button aria-label="Subir" class="btn-agregar-perro md-fab md-primary md-fab-bottom-right visible" ng-click="showNuevoPerro($event, TIPO_ENCONTRADO)" style="position:fixed !important;">
             <md-icon>add</md-icon>
