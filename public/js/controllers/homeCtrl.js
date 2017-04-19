@@ -1,5 +1,6 @@
 angular.module('perrosApp.controllers', []).
 	controller('HomeCtrl', ['$scope', '$mdDialog', '$timeout', '$q', '$log', '$filter', '$mdToast', '$mdConstant', 'perrosService', 'PerroFactory','PerrosList','PerrosPaginator','SearchModelFactory', '$state', '$location', function($scope, $mdDialog, $timeout, $q, $log, $filter, $mdToast, $mdConstant, perrosService, PerroFactory,PerrosList,PerrosPaginator, SearchModelFactory, $state, $location) {
+		/* Initialization of scope varaibles */
 		$scope.TIPO_ENCONTRADO = 'encontrados';
 		$scope.TIPO_PERDIDO = 'perdidos';
 		$scope.TIPO_AVISTADO = 'avistados';
@@ -11,10 +12,6 @@ angular.module('perrosApp.controllers', []).
    		$scope.uploadingEncontrado = false;
    		$scope.uploadingAvistado = false;
 
-   		getPerros(0, $scope.TIPO_PERDIDO);
-   		getPerros(0, $scope.TIPO_ENCONTRADO);
-   		getPerros(0, $scope.TIPO_AVISTADO);
-
    		$scope.perrosPaginator = new PerrosPaginator();
    		$scope.perrosList = new PerrosList();
    		$scope.searchModelFactory = new SearchModelFactory();
@@ -25,6 +22,10 @@ angular.module('perrosApp.controllers', []).
    		// modelos busqueda avanzada
    		$scope.tagsSearch = [];
    		$scope.chipSeparators = [$mdConstant.KEY_CODE.COMMA, $mdConstant.KEY_CODE.SPACE, $mdConstant.KEY_CODE.ENTER];
+
+   		getPerros(0, $scope.TIPO_PERDIDO);
+   		getPerros(0, $scope.TIPO_ENCONTRADO);
+   		getPerros(0, $scope.TIPO_AVISTADO);
 
    		$scope.changeSearchModel = function(){
 			$scope.searchModel = $scope.searchModelFactory.getSearchModel($scope.navActiveItem);
@@ -282,9 +283,9 @@ angular.module('perrosApp.controllers', []).
 	  	function getPerros(page, tipo) {
 	  		angular.element(document.querySelector('#loading-bar')).toggleClass('la-animate');
 	  		var searchModel = $scope.searchModel;
+	  		$scope.perrosList.deletePerrosByTipo(tipo);
 	  		perrosService.getPerros(page, tipo, searchModel).then(function (response) {
 	  			angular.element(document.querySelector('#loading-bar')).toggleClass('la-animate');
-	  			$scope.perrosList.deletePerrosByTipo(tipo);
 	   			cargarArregloPerros(response.data.perros, response.data.total, tipo);
 	   		});
 	  	}

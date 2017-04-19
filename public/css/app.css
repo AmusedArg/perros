@@ -113,12 +113,12 @@ div[file-dropzone] {
 .pagination a:hover {
   background: #eee;
 }
-.pagination li.active > a, .pagination li:active > a {
+.pagination li.active:not(.disabled) > a, .pagination li:active:not(.disabled) > a {
   border-color: #4285F4;
   background: #4285F4;
   color: #fff;
 }
-/** pagination styles **/
+/** end pagination styles **/
 
 .icon-right{
   padding-right: 11px;
