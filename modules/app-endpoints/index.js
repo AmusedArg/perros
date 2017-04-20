@@ -173,7 +173,7 @@ function _getPerros(perro, tipo, page, callback){
 		parameters.push('%'+perro.lugar+'%');
 	}
 
-	if(perro.has_collar){
+	if(perro.has_collar === true){
 		filtros += " AND has_collar = true ";
 		if(perro.collar_detalle){
 			filtros += " AND collar_detalle LIKE ? ";
@@ -231,7 +231,7 @@ function _getCantidadPerros(perro, tipo, callback) {
 		parameters.push('%'+perro.lugar+'%');
 	}
 
-	if(perro.has_collar){
+	if(perro.has_collar === true){
 		filtros += " AND has_collar = true ";
 		if(perro.collar_detalle){
 			filtros += " AND collar_detalle LIKE ? ";
