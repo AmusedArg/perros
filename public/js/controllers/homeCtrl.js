@@ -139,7 +139,11 @@ angular.module('perrosApp.controllers', []).
 	    	$scope.searchModel.sexo = perro.sexo;
 	    	$scope.searchModel.lugar = perro.lugar;
 	    	$scope.searchModel.tipo = tipo;	   
-	    	
+
+	    	if(perro.has_collar === true){
+	    		$scope.searchModel.has_collar = perro.has_collar;
+	    	}
+
 	    	$scope.navActiveItem = tipo;
 	    	$state.go($scope.navActiveItem);
 	    	$scope.buscarPerro($scope.searchModel);
@@ -311,7 +315,7 @@ angular.module('perrosApp.controllers', []).
 				newPerro.raza = perro.raza;
 				newPerro.sexo = perro.sexo;
 				newPerro.duenio = perro.duenio;
-				newPerro.has_collar = perro.has_collar;
+				newPerro.has_collar = Boolean(perro.has_collar);
 				newPerro.collar_detalle = perro.collar_detalle;
 				newPerro.collar_color = perro.collar_color;
 				newPerro.favorito = perro.favorito;
@@ -332,7 +336,7 @@ angular.module('perrosApp.controllers', []).
 			perroOriginal.raza = perro.raza;
 			perroOriginal.sexo = perro.sexo;
 			perroOriginal.duenio = perro.duenio;
-			perroOriginal.has_collar = perro.has_collar;
+			perroOriginal.has_collar = Boolean(perro.has_collar);
 			perroOriginal.collar_detalle = perro.collar_detalle;
 			perroOriginal.collar_color = perro.collar_color;
 			perroOriginal.tipo  = perro.tipo;

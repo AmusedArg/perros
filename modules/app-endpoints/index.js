@@ -195,6 +195,7 @@ function _getPerros(perro, tipo, page, callback){
 			  		var result = [];
 			  		for (var i = 0; i < rows.length; i++) {
 			  			var row = rows[i];
+			  			row.has_collar = Boolean(row.has_collar);
 			  			row.fecha = moment(row.fecha).format('DD/MM/YYYY');
 			  			result.push(row);
 			  		}
