@@ -28,8 +28,8 @@ function buscarPerro(perro, callback){
 		perro.lugar = perro.lugar.value;
 	}
 
-	_getPerros(perro.nombre, perro.sexo, perro.raza, perro.lugar, perro.tipo, 0, function(perros, total){
-		_getCantidadPerros(perro.nombre, perro.sexo, perro.raza, perro.lugar, perro.tipo, function(total){
+	_getPerros(perro, perro.tipo, 0, function(perros, total){
+		_getCantidadPerros(perro, perro.tipo, function(total){
 			result.perros = perros;
 			result.total = total;
 			callback(JSON.stringify(result));
@@ -54,17 +54,17 @@ function editarPerro(perro, callback){
 		
 		_saveImage(perro.foto, dir, function(imagen){
 			perro.foto = 'public_fotos/'+folder+'/'+imagen;
-			_editarPerro(perro, function(){
-				callback (perro.foto);
+			_editarPerro(perro, function(collar_color){
+				callback (JSON.stringify({foto: perro.foto, collar_color: collar_color}));
 			});
 		});
 	}else if(perro.foto && perro.foto.includes('public_fotos')){
-		_editarPerro(perro, function(){
-			callback (perro.foto);
+		_editarPerro(perro, function(collar_color){
+			callback (JSON.stringify({foto: perro.foto, collar_color: collar_color}));
 		});
 	}else{
-		_editarPerro(perro, function(){
-			callback ('img/dog.png');
+		_editarPerro(perro, function(collar_color){
+			callback (JSON.stringify({foto: 'img/dog.png', collar_color: collar_color}));
 		});
 	}
 }
@@ -84,16 +84,16 @@ function guardarPerro(perro, callback){
 	if(perro.foto && perro.foto !== 'img/dog.png'){
 		_saveImage(perro.foto, dir, function(imagen){
 			perro.foto = 'public_fotos/'+folder+'/'+imagen;
-			_guardarPerro(perro, function(id){
+			_guardarPerro(perro, function(id, collar_color){
 				var imageFullPath = dir+imagen;
 				perro.id = id;
-				callback (JSON.stringify({foto: perro.foto, id: id}));
+				callback (JSON.stringify({foto: perro.foto, id: id, collar_color: collar_color}));
 				_saveImageLabels(imageFullPath, perro);
 			});
 		});
 	}else{
-		_guardarPerro(perro, function(id){
-			callback (JSON.stringify({foto: perro.foto, id: id}));
+		_guardarPerro(perro, function(id, collar_color){
+			callback (JSON.stringify({foto: perro.foto, id: id, collar_color: collar_color}));
 		});
 	}
 }
@@ -104,8 +104,8 @@ function getPerros(perro, tipo, callback){
 		total: null
 	};
 	
-	_getPerros(perro.nombre, perro.sexo, perro.raza, perro.lugar, tipo, perro.page, function(perros){
-		_getCantidadPerros(perro.nombre, perro.sexo, perro.raza, perro.lugar, tipo, function(total){
+	_getPerros(perro, tipo, perro.page, function(perros){
+		_getCantidadPerros(perro, tipo, function(total){
 			result.perros = perros;
 			result.total = total;
 			callback(JSON.stringify(result));
@@ -150,30 +150,38 @@ module.exports = {
 
 /** PRIVATE METHODS DEFINITION **/
 
-function _getPerros(nombre, sexo, raza, lugar, tipo, page, callback){
+function _getPerros(perro, tipo, page, callback){
 	var filtros = '';
 	var parameters = [];
 
-	if(nombre){
+	if(perro.nombre){
 		filtros += " AND nombre LIKE ?";
-		parameters.push('%'+nombre+'%');
+		parameters.push('%'+perro.nombre+'%');
 	}
 
-	if(sexo){
+	if(perro.sexo){
 		filtros += " AND sexo LIKE ?";
-		parameters.push('%'+sexo+'%');
+		parameters.push('%'+perro.sexo+'%');
 	}
 
-	if(raza){
+	if(perro.raza){
 		filtros += " AND raza LIKE ?";
-		parameters.push('%'+raza+'%');
+		parameters.push('%'+perro.raza+'%');
 	}
-	if(lugar){
+	if(perro.lugar){
 		filtros += " AND lugar LIKE ?";
-		parameters.push('%'+lugar+'%');
+		parameters.push('%'+perro.lugar+'%');
+	}
+
+	if(perro.has_collar){
+		filtros += " AND has_collar = true ";
+		if(perro.collar_detalle){
+			filtros += " AND collar_detalle LIKE ? ";
+			parameters.push('%'+perro.collar_detalle+'%');
+		}
 	}
 	
-	tipo = _normalizeTipo(tipo);
+	var tipo = _normalizeTipo(tipo);
 	parameters.push(getIntegerValue(tipo));
 	parameters.push(getIntegerValue(page)*MAX_RESULTS);
 	parameters.push(MAX_RESULTS);
@@ -200,27 +208,35 @@ function _getPerros(nombre, sexo, raza, lugar, tipo, page, callback){
 	});
 }
 
-function _getCantidadPerros(nombre, sexo, raza, lugar, tipo, callback) {
+function _getCantidadPerros(perro, tipo, callback) {
 	var filtros = '';
 	var parameters = [];
 
-	if(nombre){
+	if(perro.nombre){
 		filtros += " AND nombre LIKE ?";
-		parameters.push('%'+nombre+'%');
+		parameters.push('%'+perro.nombre+'%');
 	}
 
-	if(sexo){
+	if(perro.sexo){
 		filtros += " AND sexo LIKE ?";
-		parameters.push('%'+sexo+'%');
+		parameters.push('%'+perro.sexo+'%');
 	}
 
-	if(raza){
+	if(perro.raza){
 		filtros += " AND raza LIKE ?";
-		parameters.push('%'+raza+'%');
+		parameters.push('%'+perro.raza+'%');
 	}
-	if(lugar){
+	if(perro.lugar){
 		filtros += " AND lugar LIKE ?";
-		parameters.push('%'+lugar+'%');
+		parameters.push('%'+perro.lugar+'%');
+	}
+
+	if(perro.has_collar){
+		filtros += " AND has_collar = true ";
+		if(perro.collar_detalle){
+			filtros += " AND collar_detalle LIKE ? ";
+			parameters.push('%'+perro.collar_detalle+'%');
+		}
 	}
 
 	tipo = _normalizeTipo(tipo);
@@ -244,10 +260,11 @@ function _getCantidadPerros(nombre, sexo, raza, lugar, tipo, callback) {
 
 function _guardarPerro(perro, callback) {
 	var tipo = _normalizeTipo(perro.tipo);
+	var collar_color = _getColorCollar(perro.collar_detalle);
 	pool.getConnection(function(err, connection) {
 		if(err){log.error(err); return; }
-		connection.query("INSERT INTO perros (nombre, tel_contacto, fecha, foto, lugar, raza, sexo, duenio, link_sitio, tipo_perro_id) VALUES (?,?,?,?,?,?,?,?,?,?)",[perro.nombre, perro.telefono, perro.fecha, perro.foto, perro.lugar, perro.raza, perro.sexo, perro.duenio, perro.link_sitio, tipo], function(err, result) {
-			callback(result.insertId);
+		connection.query("INSERT INTO perros (nombre, tel_contacto, fecha, foto, lugar, raza, sexo, duenio, has_collar, collar_detalle, collar_color, link_sitio, tipo_perro_id) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?)",[perro.nombre, perro.telefono, perro.fecha, perro.foto, perro.lugar, perro.raza, perro.sexo, perro.duenio, perro.has_collar, perro.collar_detalle, collar_color, perro.link_sitio, tipo], function(err, result) {
+			callback(result.insertId, collar_color);
 			connection.release();
 			if (err) {log.error(err); throw err; };
 		});
@@ -257,8 +274,9 @@ function _guardarPerro(perro, callback) {
 function _editarPerro(perro, callback) {
 	pool.getConnection(function(err, connection) {
 		if(err){log.error(err); return; }
-		connection.query("UPDATE perros SET nombre=?, tel_contacto=?, fecha=?, foto=?, lugar=?, raza=?, sexo=?, duenio=?, link_sitio=? WHERE id=?",[perro.nombre, perro.telefono, perro.fecha, perro.foto, perro.lugar, perro.raza, perro.sexo, perro.duenio, perro.link_sitio, perro.id], function(err, result) {
-			callback();
+		var collar_color = _getColorCollar(perro.collar_detalle);
+		connection.query("UPDATE perros SET nombre=?, tel_contacto=?, fecha=?, foto=?, lugar=?, raza=?, sexo=?, duenio=?, has_collar=?, collar_detalle=?, collar_color=?, link_sitio=? WHERE id=?",[perro.nombre, perro.telefono, perro.fecha, perro.foto, perro.lugar, perro.raza, perro.sexo, perro.duenio, perro.has_collar, perro.collar_detalle, collar_color, perro.link_sitio, perro.id], function(err, result) {
+			callback(collar_color);
 			connection.release();
 			if (err) {log.error(err); throw err; };
 		});
@@ -419,6 +437,27 @@ function _normalizeTipo(tipo){
 		}
 	}else{
 		return tipo;
+	}
+}
+
+function _getColorCollar(collar_detalle) {
+	var materialColors = ['#f44336','#e91e63','#9c27b0','#2196f3','#4caf50','#ffc107','#ff5722','#795548','#9e9e9e','#212121'];
+	var colorsName = ['rojo','rosa','violeta','azul','verde','amarillo','naranja','marron','gris', 'negro'];
+	var defaultColor = '#009688';
+	if(collar_detalle){
+		var words = collar_detalle.split(" ");
+		for (var i = 0; i < words.length; i++) {
+			for (var j = 0; j < colorsName.length; j++) {
+				var word = words[i].trim();
+				var color = colorsName[j];
+				if(word.toUpperCase() === color.toUpperCase()){
+					return materialColors[j];
+				}
+			}
+		}
+		return defaultColor;
+	}else{
+		return null;
 	}
 }
 

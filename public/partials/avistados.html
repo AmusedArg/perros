@@ -5,6 +5,7 @@
         </div>
         <div layout="row" layout-align="center center" layout-wrap>
             <md-card class="lost-card" data-id="{{::perro.id}}" ng-repeat="perro in perrosList.getPerrosListByTipo(TIPO_AVISTADO) | orderBy:'-real_date'">
+                <div class="ribbon" ng-show="perro.has_collar"><span style="background-color: {{perro.collar_color}}">COLLAR</span></div>
                 <div class="name-tag" ng-class="{'tag-hembra': perro.isHembra(), 'tag-macho': perro.isMacho()}" ng-if="perro.nombre">{{perro.nombre}}</div>
                 <img alt="Foto Perro" class="md-card-image" data-ng-src="{{perro.foto}}"/>
                 <md-card-content ng-include="'/partials/templates/card-content.tmpl.html'"></md-card-content>

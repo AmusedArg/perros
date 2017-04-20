@@ -4,7 +4,8 @@
             <div paging page="pagActualPerdidos" page-size="MAX_RESULTS" total="perrosList.registros[TIPO_PERDIDO]" paging-action="goToPage(page, TIPO_PERDIDO)" text-next="Siguiente" text-prev="Anterior" show-prev-next="true" hide-if-empty="true" text-title-page="Pág. {page}" text-title-prev="Ant" text-title-next="Sig"></div>
         </div>
         <div layout="row" layout-align="center center" layout-wrap>
-            <md-card class="lost-card" data-wow-duration="0.5s" data-id="{{::perro.id}}" ng-repeat="perro in perrosList.getPerrosListByTipo(TIPO_PERDIDO) | orderBy:'-real_date' track by perro.id">
+            <md-card class="lost-card" data-id="{{::perro.id}}" ng-repeat="perro in perrosList.getPerrosListByTipo(TIPO_PERDIDO) | orderBy:'-real_date' track by perro.id">
+                <div class="ribbon" ng-show="perro.has_collar"><span style="background-color: {{perro.collar_color}}">COLLAR</span></div>
                 <div class="name-tag" ng-class="{'tag-hembra': perro.isHembra(), 'tag-macho': perro.isMacho()}" ng-if="perro.nombre">{{perro.nombre}}</div>
                 <img alt="Foto Perro" class="md-card-image" data-ng-src="{{perro.foto}}" />
                 <md-card-content ng-include="'/partials/templates/card-content.tmpl.html'"></md-card-content>

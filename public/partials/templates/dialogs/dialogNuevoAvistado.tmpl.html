@@ -47,6 +47,15 @@
                 </md-option>
               </md-select>
             </md-input-container>
+            <md-input-container class="header-checkbox-container" style="margin-left: 7px">
+                <md-checkbox aria-label="Tiene collar" ng-model="nuevoPerro.has_collar" flex>
+                    Collar: <span ng-if="nuevoPerro.has_collar">Si</span><span ng-if="!nuevoPerro.has_collar">No</span>
+                </md-checkbox>
+            </md-input-container>
+            <md-input-container md-no-float class="md-block collar-detalle" flex="25" ng-if="nuevoPerro.has_collar">
+                <md-icon>description</md-icon>
+                <input ng-model="nuevoPerro.collar_detalle" placeholder="Color">
+            </md-input-container>
             <md-input-container class="md-block" flex-gt-sm="30" flex="100">
               <label>Fecha</label>
               <md-datepicker ng-model="nuevoPerro.fecha"></md-datepicker>

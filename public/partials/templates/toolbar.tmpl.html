@@ -21,6 +21,15 @@
                         <md-option ng-repeat="raza in razas" value="{{raza}}">{{::raza | capitalize}}</md-option>
                     </md-select>
                 </md-input-container>
+                <md-input-container class="header-checkbox-container">
+                    <md-checkbox aria-label="Tiene collar" ng-model="searchModel.has_collar" flex style="margin-top: 7px;margin-right: 0px;">
+                        Collar: <span ng-if="searchModel.has_collar">Si</span><span ng-if="!searchModel.has_collar">No</span>
+                    </md-checkbox>
+                </md-input-container>
+                <md-input-container md-no-float class="md-block collar-detalle" flex="25" ng-if="searchModel.has_collar">
+                    <md-icon>description</md-icon>
+                    <input ng-model="searchModel.collar_detalle" placeholder="Color">
+                </md-input-container>
                 <md-autocomplete
                     ng-disabled="ctrl.isDisabled"
                     md-no-cache="ctrl.noCache"

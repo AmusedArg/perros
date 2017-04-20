@@ -14,6 +14,9 @@ angular.module('perrosApp.factories', []).
 			this.tipo = tipo;
 			this.template = template;
 			this.tags = null;
+			this.has_collar = null;
+			this.collar_detalle = null;
+			this.collar_color = null;
 			this.link_sitio = null;
 			this.hasFacebookLink = function(){
 				return (this.link_sitio && this.link_sitio.indexOf('facebook') != -1);

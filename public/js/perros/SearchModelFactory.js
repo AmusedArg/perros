@@ -29,6 +29,8 @@ angular.module('perrosApp.factories').
 					sexo: null,
 					raza: null,
 					lugar: null,
+					has_collar: null,
+					collar_detalle: null,
 					tipo: tipo
 				};
 				return model;
@@ -40,6 +42,8 @@ angular.module('perrosApp.factories').
 				selfModel.sexo = model.sexo;
 				selfModel.raza = model.raza;
 				selfModel.lugar = model.lugar;
+				selfModel.has_collar = model.has_collar;
+				selfModel.collar_detalle = model.collar_detalle;
 				selfModel.tipo = model.tipo;
 				self.modelos.push(selfModel);
 			};

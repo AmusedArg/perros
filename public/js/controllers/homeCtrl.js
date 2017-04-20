@@ -51,6 +51,7 @@ angular.module('perrosApp.controllers', []).
 		  				var data = response.data;
 			  			perro.id = data.id;
 			  			perro.foto = data.foto;
+			  			perro.collar_color = data.collar_color;
 			  			perro.fecha = formattedDate(perro.fecha);
 			  			perro.real_date = createDateFromString(perro.fecha);
 			  			$scope.perrosList.addPerro(perro);
@@ -70,7 +71,8 @@ angular.module('perrosApp.controllers', []).
 	  		}
 	    	$scope.uploadingEdicion = true;
 	  		perrosService.actualizarPerro(perro).then(function(response){
-	  			perro.foto = response.data;
+	  			perro.foto = response.data.foto;
+	  			perro.collar_color = response.data.collar_color;
 	  			perro.real_date = createDateFromString(perro.fecha);
   				var perroOriginal = $scope.perrosList.buscarPerro(perro);
   				if(perroOriginal !== null){
@@ -90,6 +92,7 @@ angular.module('perrosApp.controllers', []).
 	  	};
 
   		$scope.editarPerro = function(ev, perro) {
+  			perro.has_collar = Boolean(perro.has_collar);
   			if(!perro.lugar || perro.lugar.length <= 0){
   				autocomplete.searchText = '';
   			}
@@ -308,6 +311,9 @@ angular.module('perrosApp.controllers', []).
 				newPerro.raza = perro.raza;
 				newPerro.sexo = perro.sexo;
 				newPerro.duenio = perro.duenio;
+				newPerro.has_collar = perro.has_collar;
+				newPerro.collar_detalle = perro.collar_detalle;
+				newPerro.collar_color = perro.collar_color;
 				newPerro.favorito = perro.favorito;
 				newPerro.tags = perro.tags;
 				newPerro.link_sitio = perro.link_sitio;
@@ -326,6 +332,9 @@ angular.module('perrosApp.controllers', []).
 			perroOriginal.raza = perro.raza;
 			perroOriginal.sexo = perro.sexo;
 			perroOriginal.duenio = perro.duenio;
+			perroOriginal.has_collar = perro.has_collar;
+			perroOriginal.collar_detalle = perro.collar_detalle;
+			perroOriginal.collar_color = perro.collar_color;
 			perroOriginal.tipo  = perro.tipo;
 			perroOriginal.favorito = perro.favorito;
 			perroOriginal.tags = perro.tags;
