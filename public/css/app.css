@@ -318,24 +318,6 @@ md-card:hover div.name-tag{
   -ms-transform-origin: 50% 50%;
 }
 
-/*.lost-card.ng-leave{
-  animation: bounceOut linear 0.7s;
-  animation-iteration-count: 0.7;
-  transform-origin: 50% 50%;
-  -webkit-animation: bounceOut linear 0.7s;
-  -webkit-animation-iteration-count: 0.7;
-  -webkit-transform-origin: 50% 50%;
-  -moz-animation: bounceOut linear 0.7s;
-  -moz-animation-iteration-count: 0.7;
-  -moz-transform-origin: 50% 50%;
-  -o-animation: bounceOut linear 0.7s;
-  -o-animation-iteration-count: 0.7;
-  -o-transform-origin: 50% 50%;
-  -ms-animation: bounceOut linear 0.7s;
-  -ms-animation-iteration-count: 0.7;
-  -ms-transform-origin: 50% 50%;
-}*/
-
 @media all and (min-width: 1024px) and (max-width: 1280px) { 
   
 .lost-card{
