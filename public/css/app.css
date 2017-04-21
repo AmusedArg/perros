@@ -283,7 +283,7 @@ md-card:hover div.name-tag{
 #backtop{
   left: 50%;
   right: 50% !important;
-  bottom: 105px !important;
+  bottom: 55px !important;
   z-index: 99999;
 }
 
