@@ -35,7 +35,7 @@ angular.module('perrosApp.controllers', []).
    			$scope.nuevoPerro = PerroFactory.getPerro(tipo);
 		    $mdDialog.show({
 				scope: $scope.$new(),
-				templateUrl: $scope.nuevoPerro.template,
+				templateUrl: '/partials/templates/dialogs/dialogNuevoPerro.tmpl.html',
 				parent: angular.element(document.body),
 				targetEvent: ev,
 				clickOutsideToClose:true

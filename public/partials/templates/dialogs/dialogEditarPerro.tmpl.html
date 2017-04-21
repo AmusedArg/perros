@@ -90,9 +90,6 @@
           <div layout-gt-sm="row" ng-show="!uploadingEdicion && perroEdicion.foto != 'img/dog.png'" layout-align="center" class="div-image-preview">
             <img src="{{perroEdicion.foto}}" class="img-preview">
           </div>
-        <!--   <div class="dropzone" ng-show="!uploadingEdicion" file-dropzone="[image/png, image/jpeg, image/gif]" file="perroEdicion.foto" file-name="imageFileName">
-            <span>Arrastrar Imagen</span>
-          </div> -->
           <div layout-gt-sm="row" ng-show="!uploadingEdicion" layout-align="center">
             <input class="ng-hide" id="btn-foto-perro-perdido" type="file" fileread="perroEdicion.foto" required/>
             <label for="btn-foto-perro-perdido" class="md-button md-raised md-accent"><md-icon>image</md-icon>   Cambiar Foto</label>

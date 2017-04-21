@@ -1,9 +1,7 @@
 angular.module('perrosApp.factories', []).
 	factory('PerroFactory', function(){
 
-		var _dialogsTemplatesFolder = '/partials/templates/dialogs/';
-
-		var Perro = function(tipo, template){
+		var Perro = function(tipo){
 			this.id = null;
 			this.nombre = null;
 			this.telefono = null;
@@ -12,7 +10,6 @@ angular.module('perrosApp.factories', []).
 			this.real_date = new Date();
 			this.favorito = 0;
 			this.tipo = tipo;
-			this.template = template;
 			this.tags = null;
 			this.has_collar = false;
 			this.collar_detalle = null;
@@ -36,21 +33,20 @@ angular.module('perrosApp.factories', []).
 			this.isMacho = function(){
 				return (this.sexo=='Macho');
 			};
+			this.getDescripcionTipoSingular = function(){
+				return this.tipo.substring(0, this.tipo.length-1);
+			};
 		};
 
 		var PerroFactory = {
 			getPerro: function(tipo){
-				var template;
 				switch(tipo){
 					case 'perdidos':
-						template = _dialogsTemplatesFolder + 'dialogNuevoPerdido.tmpl.html';
-						return new Perro(tipo, template);
+						return new Perro(tipo);
 					case 'encontrados': 
-						template = _dialogsTemplatesFolder + 'dialogNuevoEncontrado.tmpl.html';
-						return new Perro(tipo, template);
+						return new Perro(tipo);
 					case 'avistados':
-						template = _dialogsTemplatesFolder + 'dialogNuevoAvistado.tmpl.html';
-						return new Perro(tipo, template);
+						return new Perro(tipo);
 				}
 			}
 		};

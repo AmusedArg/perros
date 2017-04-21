@@ -455,10 +455,8 @@ function _getColorCollar(collar_detalle) {
 				}
 			}
 		}
-		return defaultColor;
-	}else{
-		return null;
 	}
+	return defaultColor;
 }
 
 function getIntegerValue(val){

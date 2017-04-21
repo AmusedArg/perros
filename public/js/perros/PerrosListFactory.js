@@ -9,11 +9,13 @@ angular.module('perrosApp.factories').
 
 			this.addPerro = function(perro){
 				self.perrosList.push(perro);
+				self.registros[perro.tipo]++;
 			};
 
 			this.deletePerro = function(perro){
 				self.perrosList = $filter('filter')(self.perrosList, function(value, index) {return value.id !== perro.id;}); 	
 				self.perrosBusquedaAvanzada = $filter('filter')(self.perrosBusquedaAvanzada, function(value, index) {return value.id !== perro.id;}); 	
+				self.registros[perro.tipo]--;
 			};
 
 			this.deletePerrosByTipo = function(tipo){
