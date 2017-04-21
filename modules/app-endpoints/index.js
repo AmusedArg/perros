@@ -146,7 +146,7 @@ module.exports = {
 	getPerros: getPerros,
 	borrarPerro: borrarPerro,
 	toggleFavorite: toggleFavorite
-}
+};
 
 /** PRIVATE METHODS DEFINITION **/
 
@@ -181,7 +181,7 @@ function _getPerros(perro, tipo, page, callback){
 		}
 	}
 	
-	var tipo = _normalizeTipo(tipo);
+	tipo = _normalizeTipo(tipo);
 	parameters.push(getIntegerValue(tipo));
 	parameters.push(getIntegerValue(page)*MAX_RESULTS);
 	parameters.push(MAX_RESULTS);
@@ -267,7 +267,7 @@ function _guardarPerro(perro, callback) {
 		connection.query("INSERT INTO perros (nombre, tel_contacto, fecha, foto, lugar, raza, sexo, duenio, has_collar, collar_detalle, collar_color, link_sitio, tipo_perro_id) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?)",[perro.nombre, perro.telefono, perro.fecha, perro.foto, perro.lugar, perro.raza, perro.sexo, perro.duenio, perro.has_collar, perro.collar_detalle, collar_color, perro.link_sitio, tipo], function(err, result) {
 			callback(result.insertId, collar_color);
 			connection.release();
-			if (err) {log.error(err); throw err; };
+			if (err) {log.error(err); throw err; }
 		});
 	});
 }
@@ -279,7 +279,7 @@ function _editarPerro(perro, callback) {
 		connection.query("UPDATE perros SET nombre=?, tel_contacto=?, fecha=?, foto=?, lugar=?, raza=?, sexo=?, duenio=?, has_collar=?, collar_detalle=?, collar_color=?, link_sitio=? WHERE id=?",[perro.nombre, perro.telefono, perro.fecha, perro.foto, perro.lugar, perro.raza, perro.sexo, perro.duenio, perro.has_collar, perro.collar_detalle, collar_color, perro.link_sitio, perro.id], function(err, result) {
 			callback(collar_color);
 			connection.release();
-			if (err) {log.error(err); throw err; };
+			if (err) {log.error(err); throw err; }
 		});
 	});
 }
@@ -357,11 +357,11 @@ function _saveImageLabels(image, perro){
 
 	var opts = {
 		maxResults: 10
-	}
+	};
 
 	const path = require('path');
 	const getColors = require('get-image-colors');
-	const namer = require('color-namer')
+	const namer = require('color-namer');
 	
 	var coloresFinales = [];
 	getColors(fileName).then(colors => {
@@ -372,7 +372,7 @@ function _saveImageLabels(image, perro){
 		// por cada hexa encuentro 3 colores cercanos
 		for (var i = 0; i < colors.length; i++) {
 			var hexColor = colors[i];
-			var coloresCercanos = namer(hexColor)['basic'];
+			var coloresCercanos = namer(hexColor).basic;
 			for (var j = 0; j < 3; j++) {
 				if(coloresCercanos[j].distance <= 25){
 					coloresFinales.push(coloresCercanos[j].name);
@@ -405,7 +405,6 @@ function _saveImageLabels(image, perro){
 			if(results[1].error !== null){
 				var googleTags = results[0];
 				var tags = googleTags.concat(coloresFinales).join();
-				
 			}else{
 				var tags = coloresFinales.join();
 			}
