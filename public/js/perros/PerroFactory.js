@@ -14,7 +14,7 @@ angular.module('perrosApp.factories', []).
 			this.tipo = tipo;
 			this.template = template;
 			this.tags = null;
-			this.has_collar = null;
+			this.has_collar = false;
 			this.collar_detalle = null;
 			this.collar_color = null;
 			this.link_sitio = null;

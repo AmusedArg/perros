@@ -39,22 +39,22 @@ function bindErrorHandler(pool){
 	    connection.on('error', function(err) {
 	        log.error(err);
 	        if(err.code === 'PROTOCOL_CONNECTION_LOST') {
-	        	setTimeout(getPool(), 2000); 
+	        	setTimeout(getPool, 2000); 
 		    } else {
 	      		throw err;
 		    }
 	    });
 	    connection.on('close', function(err) {
 	        log.error(err);
-	        setTimeout(getPool(), 2000); 
+	        setTimeout(getPool, 2000); 
 	    });
 	    connection.on('end', function(err) {
 	        log.error(err);
-		    setTimeout(getPool(), 2000);
+		    setTimeout(getPool, 2000);
 	    });
 	});
 }
 
 module.exports = {
 	getPool: getPool
-}
+};
