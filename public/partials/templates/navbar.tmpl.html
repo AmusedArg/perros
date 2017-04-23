@@ -1,6 +1,7 @@
 <md-nav-bar nav-bar-aria-label="links perros" md-selected-nav-item="$parent.navActiveItem">
-    <md-nav-item md-nav-sref="perdidos" name="perdidos" ng-click="changeSearchModel();">Perros Perdidos ({{perrosList.registros[TIPO_PERDIDO]}})</md-nav-item>
-    <md-nav-item md-nav-sref="encontrados" name="encontrados" ng-click="changeSearchModel();">Perros Encontrados ({{perrosList.registros[TIPO_ENCONTRADO]}})</md-nav-item>
-    <md-nav-item md-nav-sref="avistados" name="avistados" ng-click="changeSearchModel();">Perros Avistados ({{perrosList.registros[TIPO_AVISTADO]}})</md-nav-item>
+    <md-nav-item md-nav-sref="perdidos" name="perdidos" ng-click="changeSearchModel()">Perros Perdidos ({{perrosList.registros[TIPO_PERDIDO]}})</md-nav-item>
+    <md-nav-item md-nav-sref="encontrados" name="encontrados" ng-click="changeSearchModel()">Perros Encontrados ({{perrosList.registros[TIPO_ENCONTRADO]}})</md-nav-item>
+    <md-nav-item md-nav-sref="avistados" name="avistados" ng-click="changeSearchModel()">Perros Avistados ({{perrosList.registros[TIPO_AVISTADO]}})</md-nav-item>
     <md-nav-item md-nav-sref="favoritos" name="favoritos">Perros Favoritos</md-nav-item>
+    <md-nav-item md-nav-sref="coincidencias" name="coincidencias" ng-click="getCoincidencias()">Coincidencias</md-nav-item>
 </md-nav-bar>

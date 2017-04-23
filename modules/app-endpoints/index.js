@@ -32,7 +32,7 @@ function buscarPerro(perro, callback){
 		_getCantidadPerros(perro, perro.tipo, function(total){
 			result.perros = perros;
 			result.total = total;
-			callback(JSON.stringify(result));
+			callback(result);
 		});
 	});
 }
@@ -55,16 +55,16 @@ function editarPerro(perro, callback){
 		_saveImage(perro.foto, dir, function(imagen){
 			perro.foto = 'public_fotos/'+folder+'/'+imagen;
 			_editarPerro(perro, function(collar_color){
-				callback (JSON.stringify({foto: perro.foto, collar_color: collar_color}));
+				callback ({foto: perro.foto, collar_color: collar_color});
 			});
 		});
 	}else if(perro.foto && perro.foto.includes('public_fotos')){
 		_editarPerro(perro, function(collar_color){
-			callback (JSON.stringify({foto: perro.foto, collar_color: collar_color}));
+			callback ({foto: perro.foto, collar_color: collar_color});
 		});
 	}else{
 		_editarPerro(perro, function(collar_color){
-			callback (JSON.stringify({foto: 'img/dog.png', collar_color: collar_color}));
+			callback ({foto: 'img/dog.png', collar_color: collar_color});
 		});
 	}
 }
@@ -87,13 +87,13 @@ function guardarPerro(perro, callback){
 			_guardarPerro(perro, function(id, collar_color){
 				var imageFullPath = dir+imagen;
 				perro.id = id;
-				callback (JSON.stringify({foto: perro.foto, id: id, collar_color: collar_color}));
+				callback ({foto: perro.foto, id: id, collar_color: collar_color});
 				_saveImageLabels(imageFullPath, perro);
 			});
 		});
 	}else{
 		_guardarPerro(perro, function(id, collar_color){
-			callback (JSON.stringify({foto: perro.foto, id: id, collar_color: collar_color}));
+			callback ({foto: perro.foto, id: id, collar_color: collar_color});
 		});
 	}
 }
@@ -108,7 +108,7 @@ function getPerros(perro, tipo, callback){
 		_getCantidadPerros(perro, tipo, function(total){
 			result.perros = perros;
 			result.total = total;
-			callback(JSON.stringify(result));
+			callback(result);
 		});
 	});
 }
@@ -137,6 +137,19 @@ function toggleFavorite(id, favorito){
 	});
 }
 
+function getCoincidencias(callback) {
+	pool.getConnection(function(err, connection) {
+		if(err){log.error(err); return; }
+		connection.query("SELECT * FROM view_coincidencias", function(err, rows, fields) {
+			callback(rows);
+			connection.release();
+			if (err){
+		  		log.error(err);
+		  	}
+		});
+	});
+}
+
 /** END PUBLIC METHODS DEFINITION **/
 
 module.exports = {
@@ -145,7 +158,8 @@ module.exports = {
 	guardarPerro: guardarPerro,
 	getPerros: getPerros,
 	borrarPerro: borrarPerro,
-	toggleFavorite: toggleFavorite
+	toggleFavorite: toggleFavorite,
+	getCoincidencias: getCoincidencias
 };
 
 /** PRIVATE METHODS DEFINITION **/

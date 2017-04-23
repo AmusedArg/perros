@@ -31,3 +31,6 @@ CREATE TABLE `perros` (
 ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8 COLLATE=utf8_spanish_ci;
 
 INSERT INTO `perros`.`tipo_perro` (`id`, `descripcion`) VALUES ('1', 'avistados'), ('2', 'encontrados'), ('3', 'perdidos');
+
+/** view_coincidencias **/
+CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `view_coincidencias` AS select `perro_principal`.`id` AS `id`,`perro_principal`.`foto` AS `foto`,group_concat(`perro_secundario`.`id`,';',`perro_secundario`.`foto` separator ',') AS `coincidencias` from (`perros` `perro_secundario` join `perros` `perro_principal` on(((`perro_principal`.`lugar` = `perro_secundario`.`lugar`) and (`perro_principal`.`raza` = `perro_secundario`.`raza`) and (`perro_principal`.`sexo` = `perro_secundario`.`sexo`) and (`perro_principal`.`id` <> `perro_secundario`.`id`) and (`perro_principal`.`tipo_perro_id` <> `perro_secundario`.`tipo_perro_id`)))) group by `perro_principal`.`id` order by `perro_principal`.`fecha` desc limit 0,10;

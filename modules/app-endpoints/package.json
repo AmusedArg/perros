@@ -2,7 +2,7 @@
   "name": "app-endpoints",
   "description": "Endpoints de la aplicacion",
   "private": true,
-  "version": "1.2.5",
+  "version": "1.2.7",
   "main": "index.js",
   "dependencies": {
   	"database-connection": "file:../database-connection",

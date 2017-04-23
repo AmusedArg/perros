@@ -27,6 +27,8 @@ angular.module('perrosApp.controllers', []).
    		getPerros(0, $scope.TIPO_ENCONTRADO);
    		getPerros(0, $scope.TIPO_AVISTADO);
 
+   		$scope.coincidencias = [];
+
    		$scope.changeSearchModel = function(){
 			$scope.searchModel = $scope.searchModelFactory.getSearchModel($scope.navActiveItem);
    		};
@@ -173,6 +175,13 @@ angular.module('perrosApp.controllers', []).
 	  		});
 	  	};
 
+	  	$scope.getCoincidencias = function(){
+	  		$scope.coincidencias = [];
+	  		perrosService.getCoincidencias().then(function (response) {
+	  			$scope.coincidencias = response.data;
+	  		});
+	  	};
+
 	  	$scope.verMapa = function(ev, perro){
 	  		var zona = perro.lugar + ", AR";
 	  		var geocoder = new google.maps.Geocoder();
@@ -290,6 +299,7 @@ angular.module('perrosApp.controllers', []).
 	  	function getPerros(page, tipo) {
 	  		angular.element(document.querySelector('#loading-bar')).toggleClass('la-animate');
 	  		var searchModel = $scope.searchModel;
+	  		searchModel.tipo = undefined;
 	  		$scope.perrosList.deletePerrosByTipo(tipo);
 	  		perrosService.getPerros(page, tipo, searchModel).then(function (response) {
 	  			angular.element(document.querySelector('#loading-bar')).toggleClass('la-animate');
@@ -355,6 +365,16 @@ angular.module('perrosApp.controllers', []).
 
 	  	$scope.scrollTop = function(){
 	  		document.body.scrollTop = 0;
+	  	};
+
+	  	$scope.scrollRight = function(element){
+	  		var dogsWidth = document.getElementsByClassName('coincidencia-perro-secundario')[0].clientWidth;
+	  		document.getElementById(element).scrollLeft = dogsWidth;
+	  	};
+
+	  	$scope.scrollLeft = function(element){
+	  		var dogsWidth = document.getElementsByClassName('coincidencia-perro-secundario')[0].clientWidth;
+	  		document.getElementById(element).scrollLeft = -dogsWidth;
 	  	};
 
 	  	function formattedDate(date) {

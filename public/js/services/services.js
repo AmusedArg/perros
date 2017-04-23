@@ -25,10 +25,14 @@ angular.module('perrosApp.services', []).
 
         perrosService.getPerros = function(start, tipo, perro){
             var params = '';
-            if(perro){
+            if($httpParamSerializer(perro)){
                 params = '&'+$httpParamSerializer(perro);
             }
             return $http.get('/perros/'+tipo+'?page='+start+params);
+        };
+
+        perrosService.getCoincidencias = function(){
+            return $http.get('/coincidencias');
         };
 
         perrosService.busquedaAvanzada = function (tags) {
