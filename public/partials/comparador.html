@@ -1,0 +1,28 @@
+<md-content id="main-content" >
+    <md-content class="md-padding" layout="column" layout-xs="column" style="padding-right: 8px;padding-left: 8px;">
+        <div class="animation-container" ng-show="coincidenciasList.buscando">
+            <div class="sk-folding-cube">
+                <div class="sk-cube1 sk-cube"></div>
+                <div class="sk-cube2 sk-cube"></div>
+                <div class="sk-cube4 sk-cube"></div>
+                <div class="sk-cube3 sk-cube"></div>
+            </div>
+            <div>Buscando coincidencias</div>
+        </div>
+        <md-virtual-repeat-container id="virtual-repeat-container" ng-style="coincidenciasHeight()" ng-show="coincidenciasList.hasCoincidencias()">
+            <div md-virtual-repeat="c in coincidenciasList.getCoincidencias()" md-orient-vertical class="fila-coincidencias-container md-whiteframe-4dp" ng-show="c.coincidencias.length > 0">
+                <div class="coincidencia-principal" data-id="{{c.id}}">
+                    <img data-ng-src="{{c.foto}}" alt="foto-principal">
+                </div>
+                <div class="coincidencias-secundarias-container">
+                    <div ng-repeat="s in c.coincidencias" class="coincidencia-secundaria" data-id="{{s.id}}">
+                        <img data-ng-src="{{s.foto}}" alt="foto-coincidencia">
+                        <div class="coincidencias-actions-btn-container">
+                            <div class="coincidencias-rechazar-btn" ng-click="coincidenciasList.quitarCoincidencia(c.id, s.id)">QUITAR</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </md-virtual-repeat-container>
+    </md-content>
+</md-content>

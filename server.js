@@ -76,6 +76,12 @@ router.get('/coincidencias', function(req, res) {
 	});
 });
 
+router.post('/coincidencia/baja', function(req, res) {  
+	var coincidencia = req.body;
+	endpoints.quitarCoincidencia(coincidencia.idPrincipal, coincidencia.idSecundario);
+	res.end();
+});
+
 
 /** NODE SERVER CONFIGURATION AND START UP **/
 app.use(bodyParser.urlencoded({ extended: false, limit: '50mb'}));  

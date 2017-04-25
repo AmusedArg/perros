@@ -150,6 +150,18 @@ function getCoincidencias(callback) {
 	});
 }
 
+function quitarCoincidencia(idPrincipal, idSecundario) {
+	pool.getConnection(function(err, connection) {
+		if(err){log.error(err); return; }
+		connection.query("INSERT INTO coincidencias_descartadas (perro_id, perro_id_coincidencia) VALUES (?,?)", [idPrincipal,idSecundario], function(err, rows, fields) {
+			connection.release();
+			if (err){
+		  		log.error(err);
+		  	}
+		});
+	});
+}
+
 /** END PUBLIC METHODS DEFINITION **/
 
 module.exports = {
@@ -159,7 +171,8 @@ module.exports = {
 	getPerros: getPerros,
 	borrarPerro: borrarPerro,
 	toggleFavorite: toggleFavorite,
-	getCoincidencias: getCoincidencias
+	getCoincidencias: getCoincidencias,
+	quitarCoincidencia: quitarCoincidencia
 };
 
 /** PRIVATE METHODS DEFINITION **/

@@ -1,5 +1,5 @@
 angular.module('perrosApp.controllers', []).
-	controller('HomeCtrl', ['$scope', '$mdDialog', '$timeout', '$q', '$log', '$filter', '$mdToast', '$mdConstant', 'perrosService', 'PerroFactory','PerrosList','PerrosPaginator','SearchModelFactory', '$state', '$location', function($scope, $mdDialog, $timeout, $q, $log, $filter, $mdToast, $mdConstant, perrosService, PerroFactory,PerrosList,PerrosPaginator, SearchModelFactory, $state, $location) {
+	controller('HomeCtrl', ['$scope', '$mdDialog', '$timeout', '$q', '$log', '$filter', '$mdToast', '$mdConstant', 'perrosService', 'PerroFactory','PerrosList','PerrosPaginator','SearchModelFactory', '$state', '$location' , 'CoincidenciasList', function($scope, $mdDialog, $timeout, $q, $log, $filter, $mdToast, $mdConstant, perrosService, PerroFactory,PerrosList,PerrosPaginator, SearchModelFactory, $state, $location, CoincidenciasList) {
 		/* Initialization of scope varaibles */
 		$scope.TIPO_ENCONTRADO = 'encontrados';
 		$scope.TIPO_PERDIDO = 'perdidos';
@@ -14,6 +14,7 @@ angular.module('perrosApp.controllers', []).
 
    		$scope.perrosPaginator = new PerrosPaginator();
    		$scope.perrosList = new PerrosList();
+   		$scope.coincidenciasList = new CoincidenciasList();
    		$scope.searchModelFactory = new SearchModelFactory();
 
    		$scope.navActiveItem = $location.path().substring(1, $location.path().length); // active item por defecto
@@ -26,8 +27,6 @@ angular.module('perrosApp.controllers', []).
    		getPerros(0, $scope.TIPO_PERDIDO);
    		getPerros(0, $scope.TIPO_ENCONTRADO);
    		getPerros(0, $scope.TIPO_AVISTADO);
-
-   		$scope.coincidencias = [];
 
    		$scope.changeSearchModel = function(){
 			$scope.searchModel = $scope.searchModelFactory.getSearchModel($scope.navActiveItem);
@@ -175,11 +174,9 @@ angular.module('perrosApp.controllers', []).
 	  		});
 	  	};
 
-	  	$scope.getCoincidencias = function(){
-	  		$scope.coincidencias = [];
-	  		perrosService.getCoincidencias().then(function (response) {
-	  			$scope.coincidencias = response.data;
-	  		});
+	  	$scope.coincidenciasHeight = function(){
+	  		var windowHeight = window.innerHeight - 100;
+	  		return {height: windowHeight + 'px'};
 	  	};
 
 	  	$scope.verMapa = function(ev, perro){
@@ -365,16 +362,6 @@ angular.module('perrosApp.controllers', []).
 
 	  	$scope.scrollTop = function(){
 	  		document.body.scrollTop = 0;
-	  	};
-
-	  	$scope.scrollRight = function(element){
-	  		var dogsWidth = document.getElementsByClassName('coincidencia-perro-secundario')[0].clientWidth;
-	  		document.getElementById(element).scrollLeft = dogsWidth;
-	  	};
-
-	  	$scope.scrollLeft = function(element){
-	  		var dogsWidth = document.getElementsByClassName('coincidencia-perro-secundario')[0].clientWidth;
-	  		document.getElementById(element).scrollLeft = -dogsWidth;
 	  	};
 
 	  	function formattedDate(date) {

@@ -36,17 +36,17 @@ config(['$stateProvider', '$urlRouterProvider','$locationProvider' , function($s
     templateUrl: "partials/favoritos.html",
   };
 
-  var coincidenciasState = {
-    name: 'coincidencias',
-    url: '/coincidencias',
-    templateUrl: "partials/coincidencias.html",
+  var comparadorState = {
+    name: 'comparador',
+    url: '/comparador',
+    templateUrl: "partials/comparador.html",
   };
 
   $stateProvider.state(perdidosState);
   $stateProvider.state(encontradosState);
   $stateProvider.state(avistadosState);
   $stateProvider.state(favoritosState);
-  $stateProvider.state(coincidenciasState);
+  $stateProvider.state(comparadorState);
 }])
 .config(['$compileProvider', function ($compileProvider) {
   $compileProvider.debugInfoEnabled(false); // change to true for dev
