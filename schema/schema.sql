@@ -32,5 +32,41 @@ CREATE TABLE `perros` (
 
 INSERT INTO `perros`.`tipo_perro` (`id`, `descripcion`) VALUES ('1', 'avistados'), ('2', 'encontrados'), ('3', 'perdidos');
 
-/** view_coincidencias **/
-CREATE VIEW `view_coincidencias` AS select `perro_principal`.`id` AS `id`, `perro_principal`.`foto` AS `foto`, `perro_principal`.`tipo_perro_id` AS `tipo`, group_concat(`perro_secundario`.`id`,';',`perro_secundario`.`foto` separator ',') AS `coincidencias` FROM `perros`.`perros` `perro_secundario` JOIN `perros`.`perros` `perro_principal` ON `perro_principal`.`lugar` = `perro_secundario`.`lugar` AND `perro_principal`.`raza` = `perro_secundario`.`raza` AND `perro_principal`.`sexo` = `perro_secundario`.`sexo` AND `perro_principal`.`id` <> `perro_secundario`.`id` AND `perro_principal`.`tipo_perro_id` <> `perro_secundario`.`tipo_perro_id` AND `perro_principal`.`eliminado` = false AND `perro_secundario`.`eliminado` = FALSE GROUP BY `perro_principal`.`id` ORDER BY `perro_principal`.`fecha` DESC;
+
+--
+-- Estructura de tabla para la tabla `coincidencias_descartadas`
+--
+
+CREATE TABLE IF NOT EXISTS `coincidencias_descartadas` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `perro_id` int(11) NOT NULL,
+  `perro_id_coincidencia` int(11) NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_spanish_ci AUTO_INCREMENT=1 ;
+
+-- --------------------------------------------------------
+
+--
+-- Estructura Stand-in para la vista `view_coincidencias`
+--
+CREATE TABLE IF NOT EXISTS `view_coincidencias` (
+`id` int(11)
+,`foto` varchar(500)
+,`coincidencias` text
+,`excluidos` varchar(256)
+);
+-- --------------------------------------------------------
+
+--
+-- Estructura Stand-in para la vista `view_perros_con_exclusiones`
+--
+CREATE TABLE IF NOT EXISTS `view_perros_con_exclusiones` (
+`id` int(11)
+,`lugar` varchar(100)
+,`raza` varchar(100)
+,`sexo` varchar(15)
+,`tipo_perro_id` int(11)
+,`eliminado` tinyint(1)
+,`foto` varchar(500)
+,`excluidos` varchar(256)
+);
