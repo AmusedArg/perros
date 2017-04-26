@@ -49,24 +49,11 @@ CREATE TABLE IF NOT EXISTS `coincidencias_descartadas` (
 --
 -- Estructura Stand-in para la vista `view_coincidencias`
 --
-CREATE TABLE IF NOT EXISTS `view_coincidencias` (
-`id` int(11)
-,`foto` varchar(500)
-,`coincidencias` text
-,`excluidos` varchar(256)
-);
+CREATE VIEW `view_coincidencias` AS select `perros_con_excluidos`.`id` AS `id`,`perros_con_excluidos`.`foto` AS `foto`,group_concat(`coincidencias`.`id`,';',`coincidencias`.`foto` separator ',') AS `coincidencias`,`perros_con_excluidos`.`excluidos` AS `excluidos` from (`view_perros_con_exclusiones` `perros_con_excluidos` join `perros` `coincidencias` on(((`perros_con_excluidos`.`lugar` = `coincidencias`.`lugar`) and (`perros_con_excluidos`.`raza` = `coincidencias`.`raza`) and (`perros_con_excluidos`.`sexo` = `coincidencias`.`sexo`) and (`perros_con_excluidos`.`id` <> `coincidencias`.`id`) and (`perros_con_excluidos`.`tipo_perro_id` <> `coincidencias`.`tipo_perro_id`) and (`perros_con_excluidos`.`eliminado` = 0) and (`coincidencias`.`eliminado` = 0)))) group by `perros_con_excluidos`.`id`;
 -- --------------------------------------------------------
 
 --
 -- Estructura Stand-in para la vista `view_perros_con_exclusiones`
 --
-CREATE TABLE IF NOT EXISTS `view_perros_con_exclusiones` (
-`id` int(11)
-,`lugar` varchar(100)
-,`raza` varchar(100)
-,`sexo` varchar(15)
-,`tipo_perro_id` int(11)
-,`eliminado` tinyint(1)
-,`foto` varchar(500)
-,`excluidos` varchar(256)
-);
+CREATE VIEW `view_perros_con_exclusiones` AS select `id` AS `id`,`lugar` AS `lugar`,`raza` AS `raza`,`sexo` AS `sexo`,`tipo_perro_id` AS `tipo_perro_id`,`eliminado` AS `eliminado`,`foto` AS `foto`,(select group_concat(`cd`.`perro_id_coincidencia` separator ',') AS `id_coincidencias` from `coincidencias_descartadas` `cd` where (`cd`.`perro_id` = `id`)) AS `excluidos` from `perros` order by `fecha` desc;
+
