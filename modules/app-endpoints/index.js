@@ -137,10 +137,42 @@ function toggleFavorite(id, favorito){
 	});
 }
 
-function getCoincidencias(callback) {
+function getCoincidencias(filter, callback) {
+	var columnas_a_coincidir = '';
+	var orderby = ' ORDER BY fecha DESC ';	
+
+	if(filter.matchCollar == 'true'){
+		columnas_a_coincidir += ' perros_con_excluidos.has_collar = true AND (perros_con_excluidos.has_collar = coincidencias.has_collar) AND ';
+	}
+	if(filter.matchLugar == 'true' || filter.matchLugar == null){
+		columnas_a_coincidir += '(perros_con_excluidos.lugar = coincidencias.lugar) AND ';
+	}
+	if(filter.matchRaza == 'true' || filter.matchRaza == null){
+		columnas_a_coincidir += ' (perros_con_excluidos.raza = coincidencias.raza) AND ';
+	}
+	if(filter.matchSexo == 'true' || filter.matchSexo == null){
+		columnas_a_coincidir += ' (perros_con_excluidos.sexo = coincidencias.sexo) AND ';
+	}
+
+	if(filter.order){
+		orderby = _parseOrderBy(filter.order);
+	}
+
+	var query = 
+		" select perros_con_excluidos.*, group_concat(coincidencias.id,';',coincidencias.foto separator ',') AS coincidencias " +
+		" from perros.view_perros_con_exclusiones perros_con_excluidos  "+
+		"   join perros.perros coincidencias  "+
+		"   on "
+				+ columnas_a_coincidir +
+		"       (perros_con_excluidos.id <> coincidencias.id) and  "+
+		"       (perros_con_excluidos.tipo_perro_id <> coincidencias.tipo_perro_id) and  "+
+		"       (perros_con_excluidos.eliminado = 0 and coincidencias.eliminado = 0)  "+
+		" group by perros_con_excluidos.id " +
+		  orderby;
+
 	pool.getConnection(function(err, connection) {
 		if(err){log.error(err); return; }
-		connection.query("SELECT * FROM view_coincidencias", function(err, rows, fields) {
+		connection.query(query, function(err, rows, fields) {
 			callback(rows);
 			connection.release();
 			if (err){
@@ -464,6 +496,28 @@ function _normalizeTipo(tipo){
 		}
 	}else{
 		return tipo;
+	}
+}
+
+/**
+* order String en formato <column>_<orderType>
+*/
+function _parseOrderBy(order){
+	var orderByColumn = order.split("_")[0];
+	var orderType = order.split("_")[1];
+	var parsedOrderByColumn, parsedOrderType = null;
+
+	if(orderByColumn.toUpperCase() === 'FECHA'){ parsedOrderByColumn = ' fecha '; }
+	if(orderByColumn.toUpperCase() === 'LUGAR'){ parsedOrderByColumn = ' lugar '; }
+	if(orderByColumn.toUpperCase() === 'RAZA'){ parsedOrderByColumn = ' raza '; }
+
+	if(orderType.toUpperCase() === 'DESC'){ parsedOrderType = ' DESC '; }
+	if(orderType.toUpperCase() === 'ASC'){ parsedOrderType = ' ASC '; }	
+
+	if(parsedOrderByColumn && parsedOrderType){
+		return ' ORDER BY ' + parsedOrderByColumn + parsedOrderType;
+	}else{
+		return '';
 	}
 }
 

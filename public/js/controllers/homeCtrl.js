@@ -279,6 +279,37 @@ angular.module('perrosApp.controllers', []).
 	  		window.open(link, '_blank');
 	  	};
 
+	  	$scope.dialogCompararPerros = function(principal, coincidencia, ev){
+	  		$mdDialog.show({
+	  			locals:{
+	  				data: {
+		  				principal: principal,
+		  				coincidencia: coincidencia
+	  				}
+	  			},
+	  			controller: DialogCompararCtrl,
+		      	templateUrl: '/partials/templates/dialogs/dialogCompararPerros.tmpl.html',
+		      	parent: angular.element(document.body),
+		      	targetEvent: ev,
+		      	clickOutsideToClose:true,
+		      	fullscreen: true
+		    });
+	  	};
+
+		function DialogCompararCtrl($scope, $mdDialog, data) {
+			$scope.data = data;
+
+			$scope.hide = function() {
+				$mdDialog.hide();
+			};
+
+			$scope.cancel = function() {
+				$mdDialog.cancel();
+			};
+		}
+
+		DialogCompararCtrl.$inject = ['$scope', '$mdDialog', 'data'];
+
 	    $scope.hide = function() {
 	      	$mdDialog.hide();
 	    };
@@ -448,6 +479,25 @@ angular.module('perrosApp.controllers', []).
 	        }
 	    };
 	}])
+	.directive('forceSelectFocus', function() {
+  		return {
+    		restrict: 'A',
+   	 		require: ['^^mdSelect', '^ngModel'],
+    		link: function(scope, element, controller) {
+      			scope.$watch(function () {
+			        var foundElement = element;
+			        while (!foundElement.hasClass('md-select-menu-container')) {
+			        	foundElement = foundElement.parent();
+			        }
+	        		return foundElement.hasClass('md-active');
+	      		}, function (newVal) {
+			        if (newVal) {
+			            element.focus();
+			        }
+		      	});
+		    }
+  		};
+  	})
 	.filter('capitalize', function() {
 	    return function(input) {
 	      	return (!!input) ? input.charAt(0).toUpperCase() + input.substr(1).toLowerCase() : '';

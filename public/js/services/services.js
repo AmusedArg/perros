@@ -31,8 +31,8 @@ angular.module('perrosApp.services', []).
             return $http.get('/perros/'+tipo+'?page='+start+params);
         };
 
-        perrosService.loadCoincidencias = function(){
-            return $http.get('/coincidencias');
+        perrosService.loadCoincidencias = function(filter){
+            return $http.get('/coincidencias', {params: filter});
         };
 
         perrosService.quitarCoincidencia = function(idPrincipal, idSecundario){

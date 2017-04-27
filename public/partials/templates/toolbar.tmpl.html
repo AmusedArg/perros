@@ -16,9 +16,17 @@
                 </md-input-container>
                 <md-input-container md-no-float class="md-block" flex="35">
                     <md-icon>local_offer</md-icon>
-                    <md-select ng-model="searchModel.raza" placeholder="Raza">
+                    <md-select ng-model="searchModel.raza" placeholder="Raza" data-md-container-class="selectContainer">
+                        <md-select-header class="select-header">
+                            <input ng-model="searchTermRaza"
+                               type="Filtrar..."
+                               placeholder="Buscar raza.."
+                               class="header-searchbox md-text"
+                               ng-keydown="$event.stopPropagation()" 
+                               force-select-focus>
+                        </md-select-header>
                         <md-option value="">Todas</md-option>
-                        <md-option ng-repeat="raza in razas" value="{{raza}}">{{::raza | capitalize}}</md-option>
+                        <md-option ng-repeat="raza in razas | filter:searchTermRaza" value="{{raza}}">{{::raza | capitalize}}</md-option>
                     </md-select>
                 </md-input-container>
                 <md-input-container class="header-checkbox-container">

@@ -15,31 +15,31 @@ config(['$stateProvider', '$urlRouterProvider','$locationProvider' , function($s
   var perdidosState = {
     name: 'perdidos',
     url: '/perdidos',
-    templateUrl: "partials/perdidos.html",
+    templateUrl: "partials/perdidos.html"
   };
 
   var encontradosState = {
     name: 'encontrados',
     url: '/encontrados',
-    templateUrl: "partials/encontrados.html",
+    templateUrl: "partials/encontrados.html"
   };
 
   var avistadosState = {
     name: 'avistados',
     url: '/avistados',
-    templateUrl: "partials/avistados.html",
+    templateUrl: "partials/avistados.html"
   };
 
   var favoritosState = {
     name: 'favoritos',
     url: '/favoritos',
-    templateUrl: "partials/favoritos.html",
+    templateUrl: "partials/favoritos.html"
   };
 
   var comparadorState = {
     name: 'comparador',
     url: '/comparador',
-    templateUrl: "partials/comparador.html",
+    templateUrl: "partials/comparador.html"
   };
 
   $stateProvider.state(perdidosState);
@@ -90,4 +90,7 @@ config(['$stateProvider', '$urlRouterProvider','$locationProvider' , function($s
   $mdThemingProvider.theme('avistados')
       .primaryPalette('blue')
       .accentPalette('blue');
-}]);
+}])
+.config(['$sceDelegateProvider', function($sceDelegateProvider) {
+     $sceDelegateProvider.resourceUrlWhitelist(['self', 'http://10.217.37.44:8082/demo/add']);
+ }]);

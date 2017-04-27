@@ -20,7 +20,7 @@ angular.module('perrosApp.factories').
 					}
 				});
 
-				perrosService.quitarCoincidencia(idPrincipal, idSecundario);
+				perrosService.quitarCoincidencia(idPrincipal, idCoincidencia);
 			};
 
 			this.getCoincidencias = function(){
@@ -31,10 +31,10 @@ angular.module('perrosApp.factories').
 				return this.coincidencias.length > 0;
 			};
 
-			this.loadCoincidencias = function(){
+			this.loadCoincidencias = function(filter){
 				self.coincidencias = [];
 				self.buscando = true;
-		  		perrosService.loadCoincidencias().then(function (response) {
+		  		perrosService.loadCoincidencias(filter).then(function (response) {
 		  			var datos = response.data;
 		  			for (var i = 0; i < datos.length; i++) {
 		  				var c = datos[i];

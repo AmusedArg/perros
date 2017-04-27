@@ -71,7 +71,7 @@ router.post('/favoritos', function(req, res) {
 });
 
 router.get('/coincidencias', function(req, res) {  
-	endpoints.getCoincidencias(function(results){
+	endpoints.getCoincidencias(req.query, function(results){
 		res.end(JSON.stringify(results));
 	});
 });

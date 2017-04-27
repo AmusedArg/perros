@@ -1,16 +1,24 @@
-<md-dialog aria-label="Comparar">
-ID:{{idA}}
+<md-dialog aria-label="Comparar" flex="90">
     <md-toolbar>
-      <div class="md-toolbar-tools">
-        <h2>Mango (Fruit)</h2>
-        <span flex></span>
-        <md-button class="md-icon-button" ng-click="cancel()">
-        </md-button>
-      </div>
+        <div class="md-toolbar-tools">
+            <h2>Comparar</h2>
+            <span flex></span>
+                <md-button class="md-icon-button" ng-click="cancel()">
+                    <md-icon aria-label="Cerrar">close</md-icon>
+                </md-button>
+        </div>
     </md-toolbar>
 
     <md-dialog-content>
-      <div class="md-dialog-content">
-      </div>
+        <div class="md-dialog-content">
+            <div layout="row">
+                <div class="comparacion-img-container" flex="50" style="margin-right">
+                    <img data-ng-src="{{data.principal.foto}}" alt="Principal">
+                </div>
+                <div class="comparacion-img-container" flex="50" flex-offset="5">
+                    <img data-ng-src="{{data.coincidencia.foto}}" alt="Coincidencia">
+                </div>
+            </div>
+        </div>
     </md-dialog-content>
 </md-dialog>
