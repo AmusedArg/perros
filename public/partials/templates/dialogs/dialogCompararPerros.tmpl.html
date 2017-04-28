@@ -14,9 +14,59 @@
             <div layout="row">
                 <div class="comparacion-img-container" flex="50" style="margin-right">
                     <img data-ng-src="{{data.principal.foto}}" alt="Principal">
+                    <div layout="column" class="coincidencia-info-container">
+                        <span class="info-value coincidencia-fila-info">{{data.principalFullInfo.tipo.toUpperCase()}}</span>
+                        <div layout="row" class="coincidencia-fila-info">
+                            <span flex="15" class="info-label">Nombre:</span><span class="info-value">{{data.principalFullInfo.nombre}}</span>
+                        </div>
+                        <div layout="row" class="coincidencia-fila-info">
+                            <span flex="15" class="info-label">Dueño:</span><span class="info-value">{{data.principalFullInfo.duenio}}</span>
+                        </div>
+                        <div layout="row" class="coincidencia-fila-info">
+                            <span flex="15" class="info-label">Teléfono:</span><span class="info-value">{{data.principalFullInfo.tel_contacto}}</span>
+                        </div>
+                        <div layout="row" class="coincidencia-fila-info">
+                            <span flex="15" class="info-label">Raza:</span><span class="info-value">{{data.principalFullInfo.raza}}</span>
+                        </div>
+                        <div layout="row" class="coincidencia-fila-info">
+                            <span flex="15" class="info-label">Lugar:</span><span class="info-value">{{data.principalFullInfo.lugar}}</span>
+                        </div>
+                        <div layout="row" class="coincidencia-fila-info">
+                            <span flex="15" class="info-label">Sexo:</span><span class="info-value">{{data.principalFullInfo.sexo}}</span>
+                        </div>
+                        <div layout="row" class="coincidencia-fila-info">
+                            <span flex="15" class="info-label">Fecha:</span><span class="info-value">{{data.principalFullInfo.fecha}}</span>
+                        </div>
+                        <a ng-href="{{data.principalFullInfo.link_sitio}}" target="_blank" class="info-value" ng-show="data.principalFullInfo.link_sitio">Link Publicación</a>
+                    </div>
                 </div>
                 <div class="comparacion-img-container" flex="50" flex-offset="5">
                     <img data-ng-src="{{data.coincidencia.foto}}" alt="Coincidencia">
+                    <div layout="column" class="coincidencia-info-container">
+                        <span class="info-value coincidencia-fila-info">{{data.coincidenciaFullInfo.tipo.toUpperCase()}}</span>
+                        <div layout="row" class="coincidencia-fila-info">
+                            <span flex="15" class="info-label">Nombre:</span><span class="info-value">{{data.coincidenciaFullInfo.nombre}}</span>
+                        </div>
+                        <div layout="row" class="coincidencia-fila-info">
+                            <span flex="15" class="info-label">Dueño:</span><span class="info-value">{{data.coincidenciaFullInfo.duenio}}</span>
+                        </div>
+                        <div layout="row" class="coincidencia-fila-info">
+                            <span flex="15" class="info-label">Teléfono:</span><span class="info-value">{{data.coincidenciaFullInfo.tel_contacto}}</span>
+                        </div>
+                        <div layout="row" class="coincidencia-fila-info">
+                            <span flex="15" class="info-label">Raza:</span><span class="info-value">{{data.coincidenciaFullInfo.raza}}</span>
+                        </div>
+                        <div layout="row" class="coincidencia-fila-info">
+                            <span flex="15" class="info-label">Lugar:</span><span class="info-value">{{data.coincidenciaFullInfo.lugar}}</span>
+                        </div>
+                        <div layout="row" class="coincidencia-fila-info">
+                            <span flex="15" class="info-label">Sexo:</span><span class="info-value">{{data.coincidenciaFullInfo.sexo}}</span>
+                        </div>
+                        <div layout="row" class="coincidencia-fila-info">
+                            <span flex="15" class="info-label">Fecha:</span><span class="info-value">{{data.coincidenciaFullInfo.fecha}}</span>
+                        </div>
+                        <a ng-href="{{data.coincidenciaFullInfo.link_sitio}}" target="_blank" class="info-value" ng-show="data.coincidenciaFullInfo.link_sitio">Link Publicación</a>
+                    </div>
                 </div>
             </div>
         </div>

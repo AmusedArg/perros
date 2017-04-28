@@ -339,6 +339,25 @@ div[file-dropzone] {
   opacity: 1;
 }
 
+.coincidencia-info-container{
+  margin-top: 1em;
+  margin-bottom: 1em;
+  margin-left: 1em;
+}
+
+.coincidencia-fila-info{
+  margin-bottom: .5em;
+}
+
+.info-value, .info-label{
+  font-size: 18px;
+  margin-right: 5px;
+}
+
+.info-label{
+  font-weight: bold;
+}
+
 #virtual-repeat-container{
   height: 600px;
 }

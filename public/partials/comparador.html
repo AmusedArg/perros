@@ -38,7 +38,7 @@
             <div>Buscando coincidencias</div>
         </div>
         <md-virtual-repeat-container id="virtual-repeat-container" ng-style="coincidenciasHeight()" ng-show="coincidenciasList.hasCoincidencias()">
-            <div md-virtual-repeat="c in coincidenciasList.getCoincidencias()" md-orient-vertical class="fila-coincidencias-container md-whiteframe-4dp" ng-show="c.coincidencias.length > 0">
+            <div md-virtual-repeat="c in coincidenciasList.getCoincidencias()" md-orient-vertical class="fila-coincidencias-container md-whiteframe-4dp">
                 <div class="coincidencia-principal" data-id="{{c.id}}">
                     <img data-ng-src="{{c.foto}}" alt="foto-principal">
                 </div>

@@ -98,6 +98,20 @@ function guardarPerro(perro, callback){
 	}
 }
 
+function getPerro(id, callback){
+	pool.getConnection(function(err, connection) {
+		if(err){log.error(err); return; }
+		connection.query("SELECT p.*, tp.descripcion as tipo FROM perros p JOIN tipo_perro tp ON tp.id = p.tipo_perro_id WHERE p.id=?",[id], function(err, rows, fields) {
+			rows[0].fecha = moment(rows[0].fecha).format('DD/MM/YYYY');
+			callback(rows[0]);
+			connection.release();
+			if (err){
+		  		log.error(err);
+		  	}
+		});
+	});
+}
+
 function getPerros(perro, tipo, callback){
 	var result = {
 		perros: null,
@@ -162,8 +176,7 @@ function getCoincidencias(filter, callback) {
 		" select perros_con_excluidos.*, group_concat(coincidencias.id,';',coincidencias.foto separator ',') AS coincidencias " +
 		" from perros.view_perros_con_exclusiones perros_con_excluidos  "+
 		"   join perros.perros coincidencias  "+
-		"   on "
-				+ columnas_a_coincidir +
+		"   on " + columnas_a_coincidir +
 		"       (perros_con_excluidos.id <> coincidencias.id) and  "+
 		"       (perros_con_excluidos.tipo_perro_id <> coincidencias.tipo_perro_id) and  "+
 		"       (perros_con_excluidos.eliminado = 0 and coincidencias.eliminado = 0)  "+
@@ -201,6 +214,7 @@ module.exports = {
 	editarPerro: editarPerro,
 	guardarPerro: guardarPerro,
 	getPerros: getPerros,
+	getPerro: getPerro,
 	borrarPerro: borrarPerro,
 	toggleFavorite: toggleFavorite,
 	getCoincidencias: getCoincidencias,

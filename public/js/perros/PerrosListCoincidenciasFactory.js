@@ -1,6 +1,6 @@
 angular.module('perrosApp.factories').
 	factory('CoincidenciasList', ['$filter', '$q', 'perrosService', function($filter, $q, perrosService){
-		var PerrosList = function(){
+		var CoincidenciasList = function(){
 			this.coincidencias = [];
 			this.perrosService = perrosService;
 			this.buscando = false;
@@ -51,16 +51,19 @@ angular.module('perrosApp.factories').
 			  					id: parseInt(coincidencias[j].split(';')[0],10),
 			  					foto: coincidencias[j].split(';')[1]
 			  				};
+
 			  				if(!c.excluidos || ((c.excluidos) && (c.excluidos.split(",").indexOf(secundario.id.toString()) === -1))){
 			  					principal.coincidencias.push(secundario);
 			  				}
 		  				}
-		  				self.coincidencias.push(principal);
+		  				if(principal.coincidencias.length > 0){
+		  					self.coincidencias.push(principal);
+		  				}
 		  			}
 		  			self.buscando = false;
 		  		});
 		  	};		  
 		};
 
-		return PerrosList;
+		return CoincidenciasList;
 	}]);

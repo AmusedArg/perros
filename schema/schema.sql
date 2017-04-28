@@ -48,4 +48,4 @@ CREATE TABLE IF NOT EXISTS `coincidencias_descartadas` (
 --
 -- Estructura para la vista `view_perros_con_exclusiones`
 --
-CREATE VIEW `view_perros_con_exclusiones` AS select `id` AS `id`,`lugar` AS `lugar`,`raza` AS `raza`,`sexo` AS `sexo`,`fecha` AS `fecha`,`tipo_perro_id` AS `tipo_perro_id`,`eliminado` AS `eliminado`,`foto` AS `foto`,`nombre` AS `nombre`,`has_collar` AS `has_collar`,(select group_concat(`cd`.`perro_id_coincidencia` separator ',') AS `id_coincidencias` from `coincidencias_descartadas` `cd` where (`cd`.`perro_id` = `id`)) AS `excluidos` from `perros`;
+CREATE VIEW `view_perros_con_exclusiones` AS select `id` AS `id`,`lugar` AS `lugar`,`raza` AS `raza`,`sexo` AS `sexo`,`fecha` AS `fecha`,`tipo_perro_id` AS `tipo_perro_id`,`eliminado` AS `eliminado`,`foto` AS `foto`,`nombre` AS `nombre`,`has_collar` AS `has_collar`,(select group_concat(`cd`.`perro_id_coincidencia` separator ',') AS `id_coincidencias` from `coincidencias_descartadas` `cd` where (`cd`.`perro_id` = `perros`.`id`)) AS `excluidos` from `perros`;

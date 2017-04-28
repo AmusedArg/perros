@@ -292,7 +292,16 @@ angular.module('perrosApp.controllers', []).
 		      	parent: angular.element(document.body),
 		      	targetEvent: ev,
 		      	clickOutsideToClose:true,
-		      	fullscreen: true
+		      	fullscreen: true,
+		      	onComplete: function(scope, element){
+			  		perrosService.getPerro(principal.id).then(function(result){
+			  			scope.data.principalFullInfo = result.data;
+			  		});
+
+			  		perrosService.getPerro(coincidencia.id).then(function(result){
+			  			scope.data.coincidenciaFullInfo = result.data;
+			  		});
+		      	}
 		    });
 	  	};
 

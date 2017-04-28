@@ -23,6 +23,10 @@ angular.module('perrosApp.services', []).
             return $http.post('/favoritos', perro);
         };
 
+        perrosService.getPerro = function(perroId){
+            return $http.get('/perro/'+perroId);
+        };
+
         perrosService.getPerros = function(start, tipo, perro){
             var params = '';
             if($httpParamSerializer(perro)){

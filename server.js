@@ -40,6 +40,12 @@ router.post('/perros/guardar', function(req, res) {
 	});
 });
 
+router.get('/perro/:id', function(req, res) {  
+	endpoints.getPerro(req.params.id, function(result){
+		res.end(JSON.stringify(result));
+	});
+});
+
 router.get('/perros/avistados', function(req, res) {  
 	endpoints.getPerros(req.query, 1, function(result){
 		res.end(JSON.stringify(result));
