@@ -1,9 +1,10 @@
 angular.module('perrosApp.factories').
-	factory('CoincidenciasList', ['$filter', '$q', 'perrosService', function($filter, $q, perrosService){
+	factory('CoincidenciasList', ['$filter', '$q', 'perrosService', 'ErrorFactory', function($filter, $q, perrosService, ErrorFactory){
 		var CoincidenciasList = function(){
 			this.coincidencias = [];
 			this.perrosService = perrosService;
 			this.buscando = false;
+			this.errorFactory = ErrorFactory;
 			var self = this;
 
 			this.quitarCoincidencia = function(idPrincipal, idCoincidencia){
@@ -34,6 +35,7 @@ angular.module('perrosApp.factories').
 			this.loadCoincidencias = function(filter){
 				self.coincidencias = [];
 				self.buscando = true;
+				self.errorFactory.message = null;
 		  		perrosService.loadCoincidencias(filter).then(function (response) {
 		  			var datos = response.data;
 		  			for (var i = 0; i < datos.length; i++) {
@@ -61,6 +63,9 @@ angular.module('perrosApp.factories').
 		  				}
 		  			}
 		  			self.buscando = false;
+		  		},
+		  		function(){
+		  			self.errorFactory.message = "Ha ocurrido un error al obtener las coincidencias. Intente nuevamente. ";
 		  		});
 		  	};		  
 		};

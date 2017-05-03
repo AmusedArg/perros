@@ -1,5 +1,5 @@
 angular.module('perrosApp.controllers', []).
-	controller('HomeCtrl', ['$scope', '$mdDialog', '$timeout', '$q', '$log', '$filter', '$mdToast', '$mdConstant', 'perrosService', 'PerroFactory','PerrosList','PerrosPaginator','SearchModelFactory', '$state', '$location' , 'CoincidenciasList', function($scope, $mdDialog, $timeout, $q, $log, $filter, $mdToast, $mdConstant, perrosService, PerroFactory,PerrosList,PerrosPaginator, SearchModelFactory, $state, $location, CoincidenciasList) {
+	controller('HomeCtrl', ['$scope', '$mdDialog', '$timeout', '$q', '$log', '$filter', '$mdToast', '$mdConstant', 'perrosService', 'PerroFactory','PerrosList','PerrosPaginator','SearchModelFactory', '$state', '$location' , 'CoincidenciasList', 'ErrorFactory', function($scope, $mdDialog, $timeout, $q, $log, $filter, $mdToast, $mdConstant, perrosService, PerroFactory,PerrosList,PerrosPaginator, SearchModelFactory, $state, $location, CoincidenciasList, ErrorFactory) {
 		/* Initialization of scope varaibles */
 		$scope.TIPO_ENCONTRADO = 'encontrados';
 		$scope.TIPO_PERDIDO = 'perdidos';
@@ -16,6 +16,7 @@ angular.module('perrosApp.controllers', []).
    		$scope.perrosList = new PerrosList();
    		$scope.coincidenciasList = new CoincidenciasList();
    		$scope.searchModelFactory = new SearchModelFactory();
+   		$scope.errorFactory = ErrorFactory;
 
    		$scope.navActiveItem = $location.path().substring(1, $location.path().length); // active item por defecto
    		$scope.searchModel = $scope.searchModelFactory.getSearchModel($scope.navActiveItem);
@@ -28,8 +29,12 @@ angular.module('perrosApp.controllers', []).
    		getPerros(0, $scope.TIPO_ENCONTRADO);
    		getPerros(0, $scope.TIPO_AVISTADO);
 
-   		$scope.changeSearchModel = function(){
+   		$scope.changeTab = function(){
 			$scope.searchModel = $scope.searchModelFactory.getSearchModel($scope.navActiveItem);
+			// reload only if there arent dogs, otherwise just change tab view
+			if($scope.perrosList.getCantidadPerrosByTipo($scope.navActiveItem) === 0){
+				getPerros(0, $scope.navActiveItem);
+			}
    		};
 
    		$scope.showNuevoPerro = function(ev, tipo) {
@@ -47,23 +52,35 @@ angular.module('perrosApp.controllers', []).
 	    	$scope.uploading = true;
 	    	perro.lugar = autocomplete.lugar;
 	  		perrosService.guardarPerro(perro)
-	  			.then(function(response){
-	  				if(response.status == 200){
-		  				var data = response.data;
-			  			perro.id = data.id;
-			  			perro.foto = data.foto;
-			  			perro.collar_color = data.collar_color;
-			  			perro.fecha = formattedDate(perro.fecha);
-			  			perro.real_date = createDateFromString(perro.fecha);
-			  			$scope.perrosList.addPerro(perro);
-			  			$mdDialog.cancel();
+	  			.then(
+	  				function(response){
+		  				if(response.status == 200){
+			  				var data = response.data;
+				  			perro.id = data.id;
+				  			perro.foto = data.foto;
+				  			perro.collar_color = data.collar_color;
+				  			perro.fecha = formattedDate(perro.fecha);
+				  			perro.real_date = createDateFromString(perro.fecha);
+				  			$scope.perrosList.addPerro(perro);
+				  			$mdDialog.cancel();
+				  			$scope.uploading = false;
+				  			autocomplete.lugar = '';
+				  			$scope.nuevoPerro = null;
+		  				}
+			  		},
+			  		function(){
 			  			$scope.uploading = false;
-			  			autocomplete.lugar = '';
-			  			$scope.nuevoPerro = null;
-	  				}else{
-		  				$scope.uploading = false;
-	  				}
-		  		});
+			  			$mdToast.show(
+						    $mdToast.simple()
+					        .textContent('No se pudo guardar el perro.')
+					        .position('bottom left')
+					        .hideDelay(10000)
+					        .action('OK')
+      						.highlightAction(true)
+					        .parent('#dialog-nuevo-perro')
+					    );
+			  		}
+		  		);
 	  	};
 
 	  	$scope.guardarPerroEdicion = function(perro){
@@ -151,13 +168,20 @@ angular.module('perrosApp.controllers', []).
 	    };
 
 	  	$scope.buscarPerro = function (perro) {
+	  		$scope.errorFactory.message = null;
+	  		angular.element(document.querySelector('#loading-spinner')).removeClass('hide');
 			perro.tipo = $scope.navActiveItem;
-	  		angular.element(document.querySelector('#loading-bar')).toggleClass('la-animate');
-	  		perrosService.filtrarPerros(perro).then(function (response) {
-	  			angular.element(document.querySelector('#loading-bar')).toggleClass('la-animate');
-	  			$scope.perrosList.deletePerrosByTipo(perro.tipo);
-	  			cargarArregloPerros(response.data.perros, response.data.total, perro.tipo);
-	  		});
+			$scope.perrosList.deletePerrosByTipo(perro.tipo);
+	  		perrosService.filtrarPerros(perro).then(
+	  			function (response) {
+	  				hideSpinner();
+		  			cargarArregloPerros(response.data.perros, response.data.total, perro.tipo);
+		  		},
+		  		function(){
+		  			hideSpinner();
+		  			$scope.errorFactory.message = 'Ha ocurrido un error al obtener los perros. Intente nuevamente';
+		  		}
+	  		);
 	  	};
 
 	  	$scope.busquedaAvanzada = function(tags){
@@ -275,6 +299,14 @@ angular.module('perrosApp.controllers', []).
 			});
 	  	};
 
+	  	$scope.retryAction = function(navActiveItem){
+	  		if(navActiveItem === 'coincidencias'){
+	  			$scope.coincidenciasList.loadCoincidencias();
+	  		}else{
+	  			getPerros(0,navActiveItem);
+	  		}
+	  	};
+
 	  	$scope.verPublicacion = function(link){
 	  		window.open(link, '_blank');
 	  	};
@@ -334,14 +366,21 @@ angular.module('perrosApp.controllers', []).
 	  	};
 
 	  	function getPerros(page, tipo) {
-	  		angular.element(document.querySelector('#loading-bar')).toggleClass('la-animate');
+	  		$scope.errorFactory.message = null;
+	  		angular.element(document.querySelector('#loading-spinner')).removeClass('hide');
 	  		var searchModel = $scope.searchModel;
 	  		searchModel.tipo = undefined;
 	  		$scope.perrosList.deletePerrosByTipo(tipo);
-	  		perrosService.getPerros(page, tipo, searchModel).then(function (response) {
-	  			angular.element(document.querySelector('#loading-bar')).toggleClass('la-animate');
-	   			cargarArregloPerros(response.data.perros, response.data.total, tipo);
-	   		});
+	  		perrosService.getPerros(page, tipo, searchModel).then(
+	  			function (response) {
+		  			hideSpinner();
+		   			cargarArregloPerros(response.data.perros, response.data.total, tipo);
+		   		},
+		   		function(){
+		   			hideSpinner();
+		   			$scope.errorFactory.message = 'Ha ocurrido un error al obtener los perros. Intente nuevamente';
+		   		}
+		   	);
 	  	}
 
 	  	function capitalizeFirstLetter(string) {
@@ -411,6 +450,10 @@ angular.module('perrosApp.controllers', []).
 		function createDateFromString(str){
 			var m = moment(str, 'DD/MM/YYYY', true);
 			return m.toDate();
+		}
+
+		function hideSpinner(){
+			angular.element(document.querySelector('#loading-spinner')).addClass('hide');
 		}
 
 	    var autocomplete = this;

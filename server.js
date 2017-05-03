@@ -105,7 +105,8 @@ process.on('exit', function(){
 });
 
 function startServer(){
-	app.listen(appPort, function() {  
+	var server = app.listen(appPort, function() {  
 		log.info("Ejecutando aplicacion en http://localhost:"+appPort);
 	});
+	server.timeout = 30000; // 30 seconds
 }

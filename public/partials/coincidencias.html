@@ -1,6 +1,6 @@
 <md-content id="main-content" >
     <md-content class="md-padding" layout="column" layout-xs="column" style="padding-right: 8px;padding-left: 8px;">
-        <div layout="row" flex>
+        <div layout="row" flex ng-show="coincidenciasList.hasCoincidencias()">
             <md-input-container class="md-block" flex="10">Coincidir por:</md-input-container>
             <md-input-container class="md-block" flex="10">
                 <md-checkbox ng-model="filtroCoincidencias.matchRaza" ng-init="filtroCoincidencias.matchRaza=true">Raza</md-checkbox>

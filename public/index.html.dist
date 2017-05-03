@@ -3,13 +3,14 @@
 <head>
     <title>Mis Perros</title>
     <meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no" />
+    <base href="/">
     <link rel="icon" type="image/png" href="favicon.png">
     <link href="https://fonts.googleapis.com/css?family=Roboto:100,300,400,500,700,900" rel="stylesheet">
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <link rel="stylesheet" type="text/css" href="dist/all.min.css">
 </head>
     <body ng-app="perrosApp">
-    <div ng-include="'partials/home.html'"></div>
+    <div ng-include="'partials/home.html'" class="height-100"></div>
     <back-top></back-top>
     <script src="dist/all.min.js"></script> 
     <script src="https://maps.googleapis.com/maps/api/js?key=API_KEY" async defer></script>

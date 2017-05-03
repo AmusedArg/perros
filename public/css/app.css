@@ -8,6 +8,15 @@ background: white; }
 .tabsdemoDynamicHeight md-content h1:first-child {
 margin-top: 0; } 
 
+.height-100{
+  height: 100%;
+}
+
+.link{
+  text-decoration: underline;
+  cursor: pointer
+}
+
 [role="tabpanel"] {
     transition: none;
 }
@@ -506,34 +515,30 @@ md-card:hover div.name-tag{
   pointer-events: none;
 }
 
-.la-anim-1::after {
-  position: absolute;
-  top: 0;
-  right: 0;
-  width: 100px;
-  height: 100%;
-  background: rgb(255,64,129);
-  box-shadow: 0 0 15px rgb(255,64,129), 0 0 5px rgb(255,64,129);
-  content: '';
-  opacity: 0;
-  -webkit-transition: opacity 0.2s, box-shadow 2s 4s;
-  transition: opacity 0.2s, box-shadow 2s 4s;
-  -webkit-transform: rotate(2deg) translateY(-2px);
-  transform: rotate(2deg) translateY(-2px);
+.center-info{
+  margin-top: 10%;
 }
 
-.la-anim-1.la-animate {
-  z-index: 100;
-  opacity: 0;
-  -webkit-transition: -webkit-transform 1s ease-in, opacity 1s 1s;
-  transition: transform 1s ease-in, opacity 1s 1s;
-  -webkit-transform: translate3d(0%, 0, 0);
-  transform: translate3d(0%, 0, 0);
+.center-info-msg{
+  text-align: center;
 }
 
-.la-anim-1.la-animate::after {
-  box-shadow: 0 0 3px rgb(255,64,129), 0 0 1px rgb(255,64,129);
-  opacity: 1;
+.center-info-msg > img{
+  vertical-align: middle;
+}
+
+#error-msg-info{
+  display: inline-block;
+  font-size: 20px;
+  text-align: left;
+  width: 60%;
+  margin-left: 2em;
+  height: 75px;
+  color: #9E9E9E;
+}
+
+#error-msg-info > a{
+  color: #9E9E9E; 
 }
 
 /** RIBBON **/

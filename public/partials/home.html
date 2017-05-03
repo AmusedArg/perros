@@ -1,8 +1,17 @@
-<div ng-cloak ng-controller="HomeCtrl as ctrl">
-    <div class="la-anim-1" id="loading-bar" style="height: 5px; width: 100%"></div>
-    <md-content id="main-content">
+<div ng-cloak ng-controller="HomeCtrl as ctrl" class="height-100">
+    <md-content id="main-content" class="height-100">
         <div ng-include="'/partials/templates/toolbar.tmpl.html'"></div>
         <div ng-include="'/partials/templates/navbar.tmpl.html'"></div>
+        <div layout="row" layout-align="space-around" id="loading-spinner" class="center-info" ng-show="navActiveItem != 'coincidencias' && navActiveItem != 'favoritos'">
+            <md-progress-circular md-mode="indeterminate"></md-progress-circular>
+        </div>
+        <div layout="row" layout-align="space-around" class="center-info" ng-show="errorFactory.message != null && navActiveItem != 'favoritos'">
+            <div class="center-info-msg">
+                <!-- No Animals icon by Icons8 -->
+                <img width="75" height="75" src="data:image/png;base64,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">
+                <div id="error-msg-info">{{errorFactory.message}} <md-button md-no-ink class="md-primary" ng-click="retryAction(navActiveItem)" > Reintentar </md-button></div>
+            </div>
+        </div>
         <!-- Contenido con las tarjetas de los perros -->
         <ui-view></ui-view> 
     </md-content>

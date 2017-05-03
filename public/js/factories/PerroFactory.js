@@ -1,4 +1,4 @@
-angular.module('perrosApp.factories', []).
+angular.module('perrosApp.factories').
 	factory('PerroFactory', function(){
 
 		var Perro = function(tipo){

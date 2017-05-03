@@ -1,6 +1,6 @@
 <md-content id="main-content">
     <md-content class="md-padding" layout="column" layout-xs="column">
-        <div class="paginator" layout="row" style="margin-top:-10px">
+        <div class="paginator" layout="row" ng-show="perrosList.getPerrosListByTipo(TIPO_AVISTADO).length > 0" style="margin-top:-10px">
             <div paging page="pagActualAvistados" page-size="MAX_RESULTS" total="perrosList.registros[TIPO_AVISTADO]" paging-action="goToPage(page, TIPO_AVISTADO)" text-next="Siguiente" text-prev="Anterior" show-prev-next="true" hide-if-empty="true" text-title-page="Pág. {page}" text-title-prev="Ant" text-title-next="Sig"></div> 
         </div>
         <div layout="row" layout-align="center center" layout-wrap>
