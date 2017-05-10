@@ -2,7 +2,7 @@
     <md-content id="main-content" class="height-100">
         <div ng-include="'/partials/templates/toolbar.tmpl.html'"></div>
         <div ng-include="'/partials/templates/navbar.tmpl.html'"></div>
-        <div layout="row" layout-align="space-around" id="loading-spinner" class="center-info" ng-show="navActiveItem != 'coincidencias' && navActiveItem != 'favoritos'">
+        <div layout="row" layout-align="space-around" id="loading-spinner" class="center-info" ng-show="errorFactory.message == null && navActiveItem != 'coincidencias' && navActiveItem != 'favoritos'">
             <md-progress-circular md-mode="indeterminate"></md-progress-circular>
         </div>
         <div layout="row" layout-align="space-around" class="center-info" ng-show="errorFactory.message != null && navActiveItem != 'favoritos'">

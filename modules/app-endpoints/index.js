@@ -419,11 +419,6 @@ function decodeBase64Image(dataString) {
 }
 
 function _saveImageLabels(image, perro){
-	// Imports the Google Cloud client library
-	const Vision = require('@google-cloud/vision');
-
-	// Instantiates a client
-	const vision = Vision();
 
 	// The path to the local image file
 	const fileName = image;
@@ -472,25 +467,16 @@ function _saveImageLabels(image, perro){
 			}
 		}
 
-		// Performs label detection on the local file
-		vision.detectLabels(fileName, opts)
-		.then((results) => {
-			if(results[1].error !== null){
-				var googleTags = results[0];
-				var tags = googleTags.concat(coloresFinales).join();
-			}else{
-				var tags = coloresFinales.join();
-			}
-			pool.getConnection(function(err, connection) {
-				if(err){log.error(err); return; }
-				connection.query("UPDATE "+perro.tipo+" SET tags = ? where id = ?",[tags, perro.id], function(err, result) {
-					if (err) {
-						log.error(err);
-					}else{
-						log.info("Tags generados para: " + perro.id);
-					}
-					connection.release();
-				});
+		var tags = coloresFinales.join();
+		pool.getConnection(function(err, connection) {
+			if(err){log.error(err); return; }
+			connection.query("UPDATE "+perro.tipo+" SET tags = ? where id = ?",[tags, perro.id], function(err, result) {
+				if (err) {
+					log.error(err);
+				}else{
+					log.info("Tags generados para: " + perro.id);
+				}
+				connection.release();
 			});
 		});
 	});	
