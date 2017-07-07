@@ -1,31 +1,33 @@
 {
-  "name": "perros_node_server",
-  "version": "1.8.0",
-  "description": "Node Server Perros",
-  "main": "perros_server.js",
+  "name": "perros_prod",
+  "version": "1.6.0",
+  "description": "Aplicacion para manejo de perros encontrados y perdidos",
+  "main": "index.php",
   "dependencies": {
-    "app-endpoints": "file:modules/app-endpoints",
-    "logging": "file:modules/logging",
-    "app-root-path": "^2.0.1",
-    "body-parser": "^1.5.1",
-    "color-namer": "^1.1.0",
-    "compression": "^1.6.2",
-    "express": "^4.7.1",
-    "get-image-colors": "^1.8.1",
-    "method-override": "^2.1.2",
-    "moment": "^2.16.0",
-    "mysql": "^2.5.4",
-    "properties-reader": "0.0.15",
-    "winston": "^2.3.0"
+    "angular": "^1.5.8",
+    "angular-animate": "^1.5.8",
+    "angular-aria": "^1.5.8",
+    "angular-material": "^1.1.3",
+    "angular-paging": "^2.2.2",
+    "angular-route": "^1.6.3",
+    "angular-ui-router": "^1.0.0-rc.1",
+    "moment": "^2.16.0"
+  },
+  "devDependencies": {
+    "gulp": "^3.9.1",
+    "gulp-concat": "^2.6.0",
+    "gulp-filter": "^4.0.0",
+    "gulp-header": "^1.8.8",
+    "gulp-jshint": "^2.0.2",
+    "gulp-rename": "^1.2.2",
+    "gulp-sass": "^2.3.2",
+    "gulp-uglify": "^2.0.0",
+    "gulp-uglifycss": "^1.0.6",
+    "jshint": "^2.9.4",
+    "merge-stream": "^1.0.0"
   },
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "version:major": "npm version major --force",
-    "version:minor": "npm version minor --force",
-    "version:patch": "npm --no-git-tag-version version patch --force && git commit -a",
-    "postversion:major": "git push && git push --tags",
-    "postversion:minor": "git push && git push --tags",
-    "postversion:patch": "git push"
+    "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "Eduardo Pereyra",
   "license": "ISC"
