@@ -201,103 +201,7 @@ angular.module('perrosApp.controllers', []).
 	  	$scope.coincidenciasHeight = function(){
 	  		var windowHeight = window.innerHeight - 100;
 	  		return {height: windowHeight + 'px'};
-	  	};
-
-	  	$scope.verMapa = function(ev, perro){
-	  		var zona = perro.lugar + ", AR";
-	  		var geocoder = new google.maps.Geocoder();
-			geocoder.geocode( { 'address': zona }, function(results, status) {
-				if(results.length === 0){return false;}
-
-				var imageMarker = {
-				  size: new google.maps.Size(80, 80),
-				  origin: new google.maps.Point(0, 0),
-				  anchor: new google.maps.Point(17, 34),
-				  scaledSize: new google.maps.Size(30, 30)
-				};
-
-		  		var map = new google.maps.Map(document.getElementById('map'), {
-					center: results[0].geometry.location,
-					zoom: 13					
-				});
-
-				//perro original
-				imageMarker.url = perro.foto;
-
-				var tipoOriginal = perro.tipo.substring(0, perro.tipo.length - 1);
-
-				var marker = new google.maps.Marker({
-					position: results[0].geometry.location,
-					map: map,
-					title: perro.nombre,
-					draggable:true,
-					label: capitalizeFirstLetter(tipoOriginal),
-					animation: google.maps.Animation.DROP,
-					icon: imageMarker
-				});
-
-				marker.addListener('mousedown', function(){
-					  this.getIcon().scaledSize = new google.maps.Size(80,80);
-				});
-
-				marker.addListener('mouseup', function(){
-					  this.getIcon().scaledSize = new google.maps.Size(30,30);
-				});
-
-				// carga de los otros perros cercanos
-				var latOriginal = results[0].geometry.location.lat();
-				var lngOriginal = results[0].geometry.location.lng();
-
-				var perrosCercanos = [];
-
-				$scope.perrosList.buscarPerrosCercanos(perro).then(function(result) {
-					perrosCercanos = result;
-
-					for (var i = 0; i < perrosCercanos.length; i++) {
-						var p = perrosCercanos[i];
-
-						if(p.foto){
-							imageMarker.url = p.foto;
-						}else{
-							imageMarker.url = 'img/dog.png';
-						}
-
-						var tipo = p.tipo.substring(0, p.tipo.length - 1);
-
-						var plusOrMinus = Math.random() < 0.5 ? -1 : 1;
-						var randomLat = parseFloat((Math.random() * (0.00900 - 0.02000) + 0.02000)) * plusOrMinus;
-						plusOrMinus = Math.random() < 0.5 ? -1 : 1;
-						var randomLng = parseFloat((Math.random() * (0.00900 - 0.02000) + 0.02000)) * plusOrMinus;
-
-						var marker = new google.maps.Marker({
-							position: new google.maps.LatLng(latOriginal + randomLat, lngOriginal + randomLng),
-							map: map,
-							icon: imageMarker,
-							draggable:true,
-							label: capitalizeFirstLetter(tipo),
-							animation: google.maps.Animation.DROP,
-							title: p.nombre
-						});
-
-						marker.addListener('mousedown', function(){
-						  	this.getIcon().scaledSize = new google.maps.Size(80,80);
-						});
-
-						marker.addListener('mouseup', function(){
-						  	this.getIcon().scaledSize = new google.maps.Size(30,30);
-						});
-					}
-			   	});
-
-			    $mdDialog.show({
-					scope: $scope.$new(),
-					contentElement: '#dialogMapa',
-					parent: angular.element(document.body),
-					targetEvent: ev,
-					clickOutsideToClose: true
-			    });
-			});
-	  	};
+	  	};	  	
 
 	  	$scope.retryAction = function(navActiveItem){
 	  		if(navActiveItem === 'coincidencias'){
@@ -371,44 +275,43 @@ angular.module('perrosApp.controllers', []).
 	  		var searchModel = $scope.searchModel;
 	  		searchModel.tipo = undefined;
 	  		$scope.perrosList.deletePerrosByTipo(tipo);
-	  		perrosService.getPerros(page, tipo, searchModel).then(
-	  			function (response) {
-		  			hideSpinner();
-		   			cargarArregloPerros(response.data.perros, response.data.total, tipo);
-		   		},
-		   		function(){
-		   			hideSpinner();
-		   			$scope.errorFactory.message = 'Ha ocurrido un error al obtener los perros. Intente nuevamente';
-		   		}
-		   	);
+	  		perrosService.getPerros(null, tipo, searchModel)
+					.then(function(snapshot){
+						hideSpinner();
+						cargarArregloPerros(snapshot, snapshot.numChildren(), tipo);	
+					})
+					.catch(function(error) {		   		
+						hideSpinner();
+						$scope.errorFactory.message = 'Ha ocurrido un error al obtener los perros. Intente nuevamente';
+					});		   	
 	  	}
 
 	  	function capitalizeFirstLetter(string) {
 		    return string.charAt(0).toUpperCase() + string.slice(1);
 		}
 
-	  	function cargarArregloPerros(data, cantRegistros, tipo){
-	  		for (var i = data.length - 1; i >= 0; i--) {
-   				var perro = data[i];
+	  	function cargarArregloPerros(snapshot, cantRegistros, tipo){
+	  		snapshot.forEach(function(data) {   				
    				var newPerro = PerroFactory.getPerro(tipo);
-   				newPerro.id = perro.id;
+					var perro = data.val();
+   				newPerro.id = data.key;					
    				newPerro.nombre = perro.nombre;
    				newPerro.telefono = perro.tel_contacto;
-				newPerro.fecha = perro.fecha;
-				newPerro.real_date = createDateFromString(newPerro.fecha);
-				newPerro.foto = perro.foto;
-				newPerro.lugar = perro.lugar;
-				newPerro.raza = perro.raza;
-				newPerro.sexo = perro.sexo;
-				newPerro.duenio = perro.duenio;
-				newPerro.has_collar = Boolean(perro.has_collar);
-				newPerro.collar_detalle = perro.collar_detalle;
-				newPerro.collar_color = perro.collar_color;
-				newPerro.favorito = perro.favorito;
-				newPerro.tags = perro.tags;
-				newPerro.link_sitio = perro.link_sitio;
-				$scope.perrosList.addPerro(newPerro);
-   			}
+					newPerro.fecha = perro.fecha;
+					newPerro.real_date = createDateFromString(newPerro.fecha);
+					newPerro.foto = perro.foto;
+					newPerro.lugar = perro.lugar;
+					newPerro.raza = perro.raza;
+					newPerro.sexo = perro.sexo;
+					newPerro.duenio = perro.duenio;
+					newPerro.has_collar = Boolean(perro.has_collar);
+					newPerro.collar_detalle = perro.collar_detalle;
+					newPerro.collar_color = perro.collar_color;
+					newPerro.favorito = perro.favorito;
+					newPerro.tags = perro.tags;
+					newPerro.link_sitio = perro.link_sitio;
+					$scope.perrosList.addPerro(newPerro);
+   			});
    			$scope.perrosList.setTotalRegistros(cantRegistros, tipo);
 	  	}
 

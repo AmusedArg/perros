@@ -28,7 +28,7 @@ gulp.task('minify-css', function () {
     }))
     .pipe(concat('all.min.css'))
     .pipe(header(banner, { pkg : pkg } ))
-    .pipe(gulp.dest('dist'));
+    .pipe(gulp.dest('public/dist'));
 });
 
 
@@ -74,7 +74,7 @@ gulp.task('minify-js', function() {
       .pipe(filter.restore)
       .pipe(concat('all.min.js'))
       .pipe(header(banner, { pkg : pkg } ))
-      .pipe(gulp.dest('dist'));
+      .pipe(gulp.dest('public/dist'));
 });
 
 // Watch Files For Changes

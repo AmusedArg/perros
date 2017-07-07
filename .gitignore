@@ -1,18 +1,15 @@
 # EXCLUDE FILES BUT KEEP THE ROOT FOLDER
 /public/public_fotos/*
 /public/dist/*
-/logs/*
 
 # exception to the rule, KEEP THIS FILES so the folder won't get deleted
 !/public/public_fotos/.gitkeep
 !/public/dist/.gitkeep
-!/logs/.gitkeep
 
 #EXCLUDE THESE FOLDERS
 node_modules/
 
 #EXCLUDE THESE FILES
-/config.properties
-#file has real api_key
-/public/index.html
-*.log
+firebase.json
+database.rules.json
+.firebaserc

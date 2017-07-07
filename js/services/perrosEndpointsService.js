@@ -1,7 +1,8 @@
 angular.module('perrosApp.services', []).
     factory('perrosService', ['$http', '$httpParamSerializer', function($http, $httpParamSerializer) {
-
+        var maxResults = 40;
         var perrosService = {};
+        var db = firebase.database();
 
         perrosService.guardarPerro = function(perro) {
             return $http.post('/perros/guardar', (perro));
@@ -27,12 +28,13 @@ angular.module('perrosApp.services', []).
             return $http.get('/perro/'+perroId);
         };
 
-        perrosService.getPerros = function(start, tipo, perro){
-            var params = '';
-            if($httpParamSerializer(perro)){
-                params = '&'+$httpParamSerializer(perro);
-            }
-            return $http.get('/perros/'+tipo+'?page='+start+params);
+        perrosService.getPerros = function(startKey, tipo, perro){
+          var dbRef = db.ref("/perros");
+          if(startKey){
+            return dbRef.orderByKey().startAt(startKey).limitToFirst(maxResults).once("value");
+          }else{
+            return dbRef.orderByKey().limitToFirst(maxResults).once("value"); 
+          }
         };
 
         perrosService.loadCoincidencias = function(filter){

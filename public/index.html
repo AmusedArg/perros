@@ -8,11 +8,19 @@
     <link href="https://fonts.googleapis.com/css?family=Roboto:100,300,400,500,700,900" rel="stylesheet">
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <link rel="stylesheet" type="text/css" href="dist/all.min.css">
+    <!-- update the version number as needed -->
+    <script defer src="/__/firebase/4.1.3/firebase-app.js"></script>
+    <!-- include only the Firebase features as you need -->
+    <script defer src="/__/firebase/4.1.3/firebase-auth.js"></script>
+    <script defer src="/__/firebase/4.1.3/firebase-database.js"></script>
+    <script defer src="/__/firebase/4.1.3/firebase-messaging.js"></script>
+    <script defer src="/__/firebase/4.1.3/firebase-storage.js"></script>
+    <!-- initialize the SDK after all desired features are loaded -->
+    <script defer src="/__/firebase/init.js"></script>
 </head>
     <body ng-app="perrosApp">
     <div ng-include="'partials/home.html'" class="height-100"></div>
     <back-top></back-top>
     <script src="dist/all.min.js"></script> 
-    <script src="https://maps.googleapis.com/maps/api/js?key=API_KEY" async defer></script>
 </body>
 </html> 
