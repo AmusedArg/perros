@@ -5,27 +5,29 @@ angular.module('perrosApp.services', []).
         var db = firebase.database();
 
         perrosService.guardarPerro = function(perro) {
-            return $http.post('/perros/guardar', (perro));
+            var nuevoPerroRef = db.ref("/perros").push();
+            return nuevoPerroRef.set(perro);
         };
 
         perrosService.actualizarPerro = function(perro) {
-            return $http.post('/perros/editar', perro);
+            return db.ref("/perros").update(perro);
         };
 
         perrosService.filtrarPerros = function(perro) {
-            return $http.post('/search', perro);
+            var dbRef = db.ref("/perros");
+            return dbRef.orderByKey().limitToFirst(maxResults).once("value");             
         }; 
 
         perrosService.borrarPerro = function(id, tipo) {
-            return $http.post('/borrar', {id: id, tipo: tipo});
+            return db.ref("/perros/"+id).remove();
         };
 
         perrosService.toggleFavorite = function(perro){
-            return $http.post('/favoritos', perro);
+            return db.ref("/perros").update(perro);
         };
 
         perrosService.getPerro = function(perroId){
-            return $http.get('/perro/'+perroId);
+            return db.ref("/perros/"+perroId);            
         };
 
         perrosService.getPerros = function(startKey, tipo, perro){
@@ -35,14 +37,6 @@ angular.module('perrosApp.services', []).
           }else{
             return dbRef.orderByKey().limitToFirst(maxResults).once("value"); 
           }
-        };
-
-        perrosService.loadCoincidencias = function(filter){
-            return $http.get('/coincidencias', {params: filter});
-        };
-
-        perrosService.quitarCoincidencia = function(idPrincipal, idSecundario){
-            return $http.post('/coincidencia/baja', {idPrincipal: idPrincipal, idSecundario: idSecundario});
         };
 
         perrosService.busquedaAvanzada = function (tags) {
