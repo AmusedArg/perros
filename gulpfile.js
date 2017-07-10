@@ -70,7 +70,7 @@ gulp.task('minify-js', function() {
 
     return gulp.src(paths)
       .pipe(filter)
-      .pipe(uglify())
+      // .pipe(uglify())
       .pipe(filter.restore)
       .pipe(concat('all.min.js'))
       .pipe(header(banner, { pkg : pkg } ))

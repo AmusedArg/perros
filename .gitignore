@@ -13,3 +13,5 @@ node_modules/
 firebase.json
 database.rules.json
 .firebaserc
+firebaserc
+*.log
