@@ -304,6 +304,7 @@ angular.module('perrosApp.controllers', []).
 					newPerro.fecha = formattedDate(perro.fecha);
 					newPerro.real_date = createDateFromString(newPerro.fecha);
 					newPerro.foto = perro.foto;
+					newPerro.foto_name = perro.foto_name;
 					newPerro.lugar = perro.lugar;
 					newPerro.raza = perro.raza;
 					newPerro.sexo = perro.sexo;

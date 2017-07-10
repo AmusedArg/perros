@@ -40,7 +40,7 @@ angular.module('perrosApp.services', []).
                 imageUploadFactory.uploadImage(perro.foto, function(filename, url){
                     imageUploadFactory.deleteImage(perro.foto_name); // borrar foto anterior
                     perro.foto = url;
-                    perro.foto_name = filename;
+                    perro.foto_name = filename; // nueva foto
                     var perroJSON = JSON.parse(angular.toJson(perro)); // json simple para guardar en datbase
                     db.ref("/perros/"+perro.tipo+"/"+perro.id).update(perroJSON)
                         .then(function(){
@@ -76,6 +76,7 @@ angular.module('perrosApp.services', []).
         }; 
 
         perrosService.borrarPerro = function(perro) {
+            console.log(perro);
             imageUploadFactory.deleteImage(perro.foto_name); // borrar foto asociada
             return db.ref("/perros/"+perro.tipo+"/"+perro.id).remove();
         };

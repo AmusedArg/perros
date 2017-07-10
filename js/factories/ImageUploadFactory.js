@@ -4,11 +4,17 @@ angular.module('perrosApp.factories').
             self = this;
             this.storageRef = firebase.storage().ref();
             this.uploadImage = function(file, callback){
-                var filename = '_' + Math.random().toString(36).substr(2, 9);
-                var uploadTask = self.storageRef.child('images').child(filename).putString(file.substring(23), 'base64');
+                var extension = self.getExtension(file);
+                if(!extension){
+                    callback(null,null);
+                }
+                var metadata = {
+                  contentType: 'image/'+extension,
+                };
+                var filename = '_' + Math.random().toString(36).substr(2, 9) + "." + extension;
+                var uploadTask = self.storageRef.child('images').child(filename).putString(file.substring(23), 'base64', metadata);
                 uploadTask.on('state_changed', function(snapshot){
                     }, function(error) {
-                        console.log(error);
                         uploadTask.cancel();
                         callback(null, null);
                     }, function() {
@@ -22,9 +28,14 @@ angular.module('perrosApp.factories').
                       // File deleted successfully
                     })
                     .catch(function(error) {
-                        console.log(error);
                       // Uh-oh, an error occurred!
                     });
+            };
+            this.getExtension = function(file){
+                if(file.indexOf('image/png') !== -1){return 'png';}
+                if(file.indexOf('image/jpg') !== -1){return 'jpg';}
+                if(file.indexOf('image/jpeg') !== -1){return 'jpeg';}
+                return null;
             };
         };
 
