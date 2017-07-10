@@ -2,7 +2,6 @@ angular.module('perrosApp.factories').
 	factory('PerrosList', ['$filter', '$q', 'perrosService', function($filter, $q, perrosService){
 		var PerrosList = function(){
 			this.perrosList = [];
-			this.perrosBusquedaAvanzada = [];
 			this.registros = [];
 			this.perrosService = perrosService;
 			var self = this;
@@ -17,7 +16,6 @@ angular.module('perrosApp.factories').
 
 			this.deletePerro = function(perro){
 				self.perrosList = $filter('filter')(self.perrosList, function(value, index) {return value.id !== perro.id;}); 	
-				self.perrosBusquedaAvanzada = $filter('filter')(self.perrosBusquedaAvanzada, function(value, index) {return value.id !== perro.id;}); 	
 				self.registros[perro.tipo]--;
 			};
 
@@ -58,18 +56,6 @@ angular.module('perrosApp.factories').
 
 			this.setTotalRegistros = function(cant, tipo){
 				self.registros[tipo] = cant;
-			};
-
-			this.addPerroBusquedaAvanzada = function(perro){
-				self.perrosBusquedaAvanzada.push(perro);
-			};
-
-			this.setPerrosBusquedaAvanzada = function(perros){
-				self.perrosBusquedaAvanzada = perros;
-			};
-
-			this.getPerrosBusquedaAvanzada = function(){
-				return self.perrosBusquedaAvanzada;
 			};
 		};
 

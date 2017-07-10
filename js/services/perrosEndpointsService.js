@@ -71,12 +71,11 @@ angular.module('perrosApp.services', []).
         };
 
         perrosService.filtrarPerros = function(perro) {
-            var dbRef = db.ref("/perros");
-            return dbRef.orderByKey().limitToFirst(maxResults).once("value");             
+            var dbRef = db.ref("/perros/"+perro.tipo);
+            return dbRef.orderByChild("fecha").once("value");             
         }; 
 
         perrosService.borrarPerro = function(perro) {
-            console.log(perro);
             imageUploadFactory.deleteImage(perro.foto_name); // borrar foto asociada
             return db.ref("/perros/"+perro.tipo+"/"+perro.id).remove();
         };
@@ -93,10 +92,6 @@ angular.module('perrosApp.services', []).
         perrosService.getPerros = function(tipo){
           var dbRef = db.ref("/perros/"+tipo);
           return dbRef.orderByChild("fecha").once("value");
-        };
-
-        perrosService.busquedaAvanzada = function (tags) {
-            return $http.post('/advancedSearch', {tags: tags}); 
         };
 
         return perrosService;

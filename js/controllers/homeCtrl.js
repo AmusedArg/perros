@@ -14,16 +14,13 @@ angular.module('perrosApp.controllers', []).
 
    		$scope.perrosPaginator = new PerrosPaginator();
    		$scope.perrosList = new PerrosList();
+   		$scope.perrosList.registros.perdidos = $scope.perrosList.registros.encontrados = $scope.perrosList.registros.avistados = 0;
    		$scope.coincidenciasList = new CoincidenciasList();
    		$scope.searchModelFactory = new SearchModelFactory();
    		$scope.errorFactory = ErrorFactory;
 
    		$scope.navActiveItem = $location.path().substring(1, $location.path().length); // active item por defecto
    		$scope.searchModel = $scope.searchModelFactory.getSearchModel($scope.navActiveItem);
-
-   		// modelos busqueda avanzada
-   		$scope.tagsSearch = [];
-   		$scope.chipSeparators = [$mdConstant.KEY_CODE.COMMA, $mdConstant.KEY_CODE.SPACE, $mdConstant.KEY_CODE.ENTER];
 
    		getPerros($scope.TIPO_PERDIDO);
    		getPerros($scope.TIPO_ENCONTRADO);
@@ -149,28 +146,9 @@ angular.module('perrosApp.controllers', []).
 		    );
 	  	};
 
-	  	$scope.openMenuBuscar = function($mdMenu, ev, perro) {
-     		$mdMenu.open(ev);
-	    };
-
-	    $scope.buscarPerroAvanzado = function(event, perro, tipo){
-	    	$scope.searchModel = $scope.searchModelFactory.getSearchModel(tipo);
-	    	$scope.searchModel.nombre = null;
-	    	$scope.searchModel.raza = null;
-	    	$scope.searchModel.sexo = perro.sexo;
-	    	$scope.searchModel.lugar = perro.lugar;
-	    	$scope.searchModel.tipo = tipo;	   
-
-	    	if(perro.has_collar === true){
-	    		$scope.searchModel.has_collar = perro.has_collar;
-	    	}
-
-	    	$scope.navActiveItem = tipo;
-	    	$state.go($scope.navActiveItem);
-	    	$scope.buscarPerro($scope.searchModel);
-	    };
-
 	  	$scope.buscarPerro = function (perro) {
+	  		if(perro.sexo === ""){perro.sexo=null;}
+	    	if(perro.raza === ""){perro.raza=null;}
 	  		$scope.errorFactory.message = null;
 	  		angular.element(document.querySelector('#loading-spinner')).removeClass('hide');
 			perro.tipo = $scope.navActiveItem;
@@ -180,31 +158,12 @@ angular.module('perrosApp.controllers', []).
 	  				hideSpinner();
 		  			cargarArregloPerros(snapshot, perro, perro.tipo);
 		  		},
-		  		function(){
+		  		function(error){
 		  			hideSpinner();
 		  			$scope.errorFactory.message = 'Ha ocurrido un error al obtener los perros. Intente nuevamente';
 		  		}
 	  		);
 	  	};
-
-	  	$scope.busquedaAvanzada = function(tags){
-	  		tags = tags.join();
-	  		angular.element(document.querySelector('#loading-bar')).toggleClass('la-animate');
-	  		perrosService.busquedaAvanzada(tags).then(function (response) {
-	  			angular.element(document.querySelector('#loading-bar')).toggleClass('la-animate');
-	  			$scope.perrosList.setPerrosBusquedaAvanzada([]);
-	  			for (var i = response.data.length - 1; i >= 0; i--) {
-	   				var perro = response.data[i];
-	   				perro.real_date = createDateFromString(perro.fecha);
-					$scope.perrosList.addPerroBusquedaAvanzada(perro);
-	   			}
-	  		});
-	  	};
-
-	  	$scope.coincidenciasHeight = function(){
-	  		var windowHeight = window.innerHeight - 100;
-	  		return {height: windowHeight + 'px'};
-	  	};	  	
 
 	  	$scope.retryAction = function(navActiveItem){
 	  		if(navActiveItem === 'coincidencias'){
@@ -218,46 +177,6 @@ angular.module('perrosApp.controllers', []).
 	  		window.open(link, '_blank');
 	  	};
 
-	  	$scope.dialogCompararPerros = function(principal, coincidencia, ev){
-	  		$mdDialog.show({
-	  			locals:{
-	  				data: {
-		  				principal: principal,
-		  				coincidencia: coincidencia
-	  				}
-	  			},
-	  			controller: DialogCompararCtrl,
-		      	templateUrl: '/partials/templates/dialogs/dialogCompararPerros.tmpl.html',
-		      	parent: angular.element(document.body),
-		      	targetEvent: ev,
-		      	clickOutsideToClose:true,
-		      	fullscreen: true,
-		      	onComplete: function(scope, element){
-			  		perrosService.getPerro(principal.id).then(function(result){
-			  			scope.data.principalFullInfo = result.data;
-			  		});
-
-			  		perrosService.getPerro(coincidencia.id).then(function(result){
-			  			scope.data.coincidenciaFullInfo = result.data;
-			  		});
-		      	}
-		    });
-	  	};
-
-		function DialogCompararCtrl($scope, $mdDialog, data) {
-			$scope.data = data;
-
-			$scope.hide = function() {
-				$mdDialog.hide();
-			};
-
-			$scope.cancel = function() {
-				$mdDialog.cancel();
-			};
-		}
-
-		DialogCompararCtrl.$inject = ['$scope', '$mdDialog', 'data'];
-
 	    $scope.hide = function() {
 	      	$mdDialog.hide();
 	    };
@@ -266,12 +185,6 @@ angular.module('perrosApp.controllers', []).
 	     	$mdDialog.cancel();
 	    };
 	    
-	  	$scope.toggleFavorite = function(perro){
-	  		var favorito = (perro.favorito==1) ? 0 : 1;
-	  		perro.favorito = favorito;
-  			perrosService.toggleFavorite(perro);
-	  	};
-
 	  	function getPerros(tipo) {
 	  		$scope.errorFactory.message = null;
 	  		angular.element(document.querySelector('#loading-spinner')).removeClass('hide');
@@ -290,8 +203,8 @@ angular.module('perrosApp.controllers', []).
 	  	}
 
 	  	function capitalizeFirstLetter(string) {
-				return string.charAt(0).toUpperCase() + string.slice(1);
-			}
+			return string.charAt(0).toUpperCase() + string.slice(1);
+		}
 
 	  	function cargarArregloPerros(snapshot, searchModel, tipo){
 	  		snapshot.forEach(function(data) {
@@ -316,6 +229,7 @@ angular.module('perrosApp.controllers', []).
 					newPerro.tags = perro.tags;
 					newPerro.tipo = perro.tipo;
 					newPerro.link_sitio = perro.link_sitio;
+
 					//filtro resultados
 					if(searchModel.sexo !== null && searchModel.raza !== null){
 						if(perro.sexo === searchModel.sexo && perro.raza === searchModel.raza){
@@ -334,28 +248,29 @@ angular.module('perrosApp.controllers', []).
 					}
 				}
    			});
+   			
    			$scope.$apply(function() {
 		    	$scope.perrosList = $scope.perrosList;
 		   	});
 	  	}
 
 	  	function copyAttributes(perroOriginal, perro){
-				perroOriginal.nombre = perro.nombre;
-				perroOriginal.telefono = perro.telefono;
-				perroOriginal.fecha = formattedDate(perro.fecha);
-				perroOriginal.real_date = perro.real_date;
-				perroOriginal.foto = perro.foto;
-				perroOriginal.lugar = perro.lugar;
-				perroOriginal.raza = perro.raza;
-				perroOriginal.sexo = perro.sexo;
-				perroOriginal.duenio = perro.duenio;
-				perroOriginal.has_collar = Boolean(perro.has_collar);
-				perroOriginal.collar_detalle = perro.collar_detalle;
-				perroOriginal.collar_color = perro.collar_color;
-				perroOriginal.tipo  = perro.tipo;
-				perroOriginal.favorito = perro.favorito;
-				perroOriginal.tags = perro.tags;
-				perroOriginal.link_sitio = perro.link_sitio;
+			perroOriginal.nombre = perro.nombre;
+			perroOriginal.telefono = perro.telefono;
+			perroOriginal.fecha = formattedDate(perro.fecha);
+			perroOriginal.real_date = perro.real_date;
+			perroOriginal.foto = perro.foto;
+			perroOriginal.lugar = perro.lugar;
+			perroOriginal.raza = perro.raza;
+			perroOriginal.sexo = perro.sexo;
+			perroOriginal.duenio = perro.duenio;
+			perroOriginal.has_collar = Boolean(perro.has_collar);
+			perroOriginal.collar_detalle = perro.collar_detalle;
+			perroOriginal.collar_color = perro.collar_color;
+			perroOriginal.tipo  = perro.tipo;
+			perroOriginal.favorito = perro.favorito;
+			perroOriginal.tags = perro.tags;
+			perroOriginal.link_sitio = perro.link_sitio;
 	  	}
 
 	  	function getSearchModel(tipo){
