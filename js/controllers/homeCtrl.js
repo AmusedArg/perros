@@ -355,7 +355,9 @@ angular.module('perrosApp.controllers', []).
 	  		if(angular.isDefined($scope.user.email) && angular.isDefined($scope.user.password)){
 	  			$scope.firebaseAuthenticator.login($scope.user.email, $scope.user.password)
 	  				.then(function(result){
-	  					console.log(result);
+	  					$scope.user.isAdmin = true;
+						$scope.state.go('perdidos');
+						$scope.navActiveItem = 'perdidos';
 	  				})
 	  				.catch(function(error) {
 	  				});
