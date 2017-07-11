@@ -4,6 +4,9 @@ angular.module('perrosApp.factories').
             this.login = function(email, password){
                 return firebase.auth().signInWithEmailAndPassword(email, password);
             };
+            this.getCurrentUser = function(){
+                return firebase.auth().currentUser;
+            };
         };
 
         return FirebaseAuthenticator;
