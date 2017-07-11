@@ -7,7 +7,7 @@ angular.module('perrosApp.controllers', []).
 		$scope.MAX_RESULTS = 40;
 		$scope.state = $state;
 		$scope.firebaseAuthenticator = new FirebaseAuthenticator();
-		$scope.user = firebaseAuthenticator.getCurrentUser() || {};
+		$scope.user = $scope.firebaseAuthenticator.getCurrentUser() || {};
 
 		$scope.razas = ['Mestizo','Afgano','Airedale Terrier','Akita','American Stafford Terrier','Basenji','Basset','Beagle','Bearded Collie','Bichon Frisse','Bloodhound','Border Collie','Boston Terrier','Boxer','Boyero De Berna','Braco','Breton','bull dog frances','Bull Dog Ingles','Bull Terrier','Bullmastiff','Cairn Terrier','Cane Corso','Caniche','cavalier king charles spaniel','Chihuahua','Chow Chow','Cocker','Collie','CRESTADO CHINO','Dalmata','Doberman','Dogo','Dogo De Burdeos','Earlier Terrier','Faraon','Fila Brasilero','Fox Terrier','Galgo','Golden','Gos D atura o Pastor catalán','Gran Danes','Grifon De Bruselas','Jack Russell','Kuvasz','Labrador','Lasha Apso','lebrel','Malamute','Maltes','Mastiff Ingles','Mastin Español','Mastin Napolitano','Ovejero Aleman','Ovejero Belga','Ovejero Tervueren','Papillon','Pastor Australiano','Pastor De Brie','pastor del caucaso','Pastor Escoces','Pastor Ingles','Pastor Suizo','Pequines','perro de agua español','Pila','Pincher','Pit Bull','Pointer','pomerania','Presa Canario','Pug','Rodhesian','Rottweiler','Salchicha','Samoyedo','San Bernardo','Schnautzer Grande','Schnautzer Mini','Schnautzer Standar','Scottish Terrier','Setter Irlandes','Sharpei','Shiba Inu','Shitzu','Siberiano','Springer Spaniel Ingles','Terranova','Vizla','Weimaraner','Welsh Corgi','Welsh Terrier','West Highland White','Whippet','Yorkshire Terrier'];
    		
