@@ -1,12 +1,12 @@
-<md-button aria-label="Borrar" ng-hide="user.isAdmin == false" class="md-icon-button" ng-click="borrarPerro($event,perro)">
+<md-button aria-label="Borrar" ng-hide="!user" class="md-icon-button" ng-click="borrarPerro($event,perro)">
     <md-icon>delete</md-icon>
     <md-tooltip md-direction="bottom">Borrar</md-tooltip>
 </md-button>
-<md-button aria-label="Editar" ng-hide="user.isAdmin == false" class="md-icon-button" ng-click="editarPerro($event, perro)">
+<md-button aria-label="Editar" ng-hide="!user" class="md-icon-button" ng-click="editarPerro($event, perro)">
     <md-icon>edit</md-icon>
     <md-tooltip md-direction="bottom">Editar</md-tooltip>
 </md-button>
-<md-button aria-label="Editar" ng-hide="user.isAdmin == false" class="md-icon-button" ng-click="reportarPerro($event, perro)">
+<md-button aria-label="Editar" ng-hide="!user" class="md-icon-button" ng-click="reportarPerro($event, perro)">
     <md-icon>report</md-icon>
     <md-tooltip md-direction="bottom">Reportar Inadecuado</md-tooltip>
 </md-button>
