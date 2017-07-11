@@ -1,11 +1,14 @@
 angular.module('perrosApp.controllers', []).
-	controller('HomeCtrl', ['$scope', '$mdDialog', '$timeout', '$q', '$log', '$filter', '$mdToast', '$mdConstant', 'perrosService', 'PerroFactory','PerrosList','PerrosPaginator','SearchModelFactory', '$state', '$location' , 'CoincidenciasList', 'ErrorFactory', function($scope, $mdDialog, $timeout, $q, $log, $filter, $mdToast, $mdConstant, perrosService, PerroFactory,PerrosList,PerrosPaginator, SearchModelFactory, $state, $location, CoincidenciasList, ErrorFactory) {
+	controller('HomeCtrl', ['$scope', '$mdDialog', '$timeout', '$q', '$log', '$filter', '$mdToast', '$mdConstant', 'perrosService', 'PerroFactory','PerrosList','PerrosPaginator','SearchModelFactory', '$state', '$location' , 'CoincidenciasList', 'ErrorFactory', 'FirebaseAuthenticator', function($scope, $mdDialog, $timeout, $q, $log, $filter, $mdToast, $mdConstant, perrosService, PerroFactory,PerrosList,PerrosPaginator, SearchModelFactory, $state, $location, CoincidenciasList, ErrorFactory, FirebaseAuthenticator) {
 		/* Initialization of scope varaibles */
 		$scope.TIPO_ENCONTRADO = 'encontrados';
 		$scope.TIPO_PERDIDO = 'perdidos';
 		$scope.TIPO_AVISTADO = 'avistados';
 		$scope.MAX_RESULTS = 40;
-		
+		$scope.state = $state;
+		$scope.firebaseAuthenticator = new FirebaseAuthenticator();
+		$scope.user = {};
+
 		$scope.razas = ['Mestizo','Afgano','Airedale Terrier','Akita','American Stafford Terrier','Basenji','Basset','Beagle','Bearded Collie','Bichon Frisse','Bloodhound','Border Collie','Boston Terrier','Boxer','Boyero De Berna','Braco','Breton','bull dog frances','Bull Dog Ingles','Bull Terrier','Bullmastiff','Cairn Terrier','Cane Corso','Caniche','cavalier king charles spaniel','Chihuahua','Chow Chow','Cocker','Collie','CRESTADO CHINO','Dalmata','Doberman','Dogo','Dogo De Burdeos','Earlier Terrier','Faraon','Fila Brasilero','Fox Terrier','Galgo','Golden','Gos D atura o Pastor catalán','Gran Danes','Grifon De Bruselas','Jack Russell','Kuvasz','Labrador','Lasha Apso','lebrel','Malamute','Maltes','Mastiff Ingles','Mastin Español','Mastin Napolitano','Ovejero Aleman','Ovejero Belga','Ovejero Tervueren','Papillon','Pastor Australiano','Pastor De Brie','pastor del caucaso','Pastor Escoces','Pastor Ingles','Pastor Suizo','Pequines','perro de agua español','Pila','Pincher','Pit Bull','Pointer','pomerania','Presa Canario','Pug','Rodhesian','Rottweiler','Salchicha','Samoyedo','San Bernardo','Schnautzer Grande','Schnautzer Mini','Schnautzer Standar','Scottish Terrier','Setter Irlandes','Sharpei','Shiba Inu','Shitzu','Siberiano','Springer Spaniel Ingles','Terranova','Vizla','Weimaraner','Welsh Corgi','Welsh Terrier','West Highland White','Whippet','Yorkshire Terrier'];
    		
    		$scope.uploadingPerdido = false;
@@ -24,9 +27,9 @@ angular.module('perrosApp.controllers', []).
    		$scope.navActiveItem = $location.path().substring(1, $location.path().length); // active item por defecto
    		$scope.searchModel = $scope.searchModelFactory.getSearchModel($scope.navActiveItem);
 
-   		getPerros($scope.TIPO_PERDIDO);
-   		getPerros($scope.TIPO_ENCONTRADO);
-   		getPerros($scope.TIPO_AVISTADO);
+   		// getPerros($scope.TIPO_PERDIDO);
+   		// getPerros($scope.TIPO_ENCONTRADO);
+   		// getPerros($scope.TIPO_AVISTADO);
 
    		$scope.changeTab = function(){
 			$scope.searchModel = $scope.searchModelFactory.getSearchModel($scope.navActiveItem);
@@ -347,6 +350,17 @@ angular.module('perrosApp.controllers', []).
 			perroOriginal.tags = perro.tags;
 			perroOriginal.link_sitio = perro.link_sitio;
 	  	}
+
+	  	$scope.login = function(form){
+	  		if(angular.isDefined($scope.user.email) && angular.isDefined($scope.user.password)){
+	  			$scope.firebaseAuthenticator.login($scope.user.email, $scope.user.password)
+	  				.then(function(result){
+	  					console.log(result);
+	  				})
+	  				.catch(function(error) {
+	  				});
+	  		}
+	  	};
 
 	  	function getSearchModel(tipo){
 	  		return $scope.searchModel;

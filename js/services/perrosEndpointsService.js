@@ -84,7 +84,7 @@ angular.module('perrosApp.services', []).
 
         perrosService.filtrarPerros = function(perro) {
             var dbRef = db.ref("/perros/"+perro.tipo);
-            return dbRef.orderByChild("real_date").limitToFirst(10).once("value");             
+            return dbRef.orderByChild("real_date").once("value");             
         }; 
 
         perrosService.borrarPerro = function(perro) {
@@ -105,7 +105,7 @@ angular.module('perrosApp.services', []).
 
         perrosService.getPerros = function(tipo){
           var dbRef = db.ref("/perros/"+tipo);
-          return dbRef.orderByChild("real_date").limitToFirst(10).once("value");
+          return dbRef.orderByChild("real_date").once("value");
         };
 
         return perrosService;
