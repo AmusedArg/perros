@@ -90,7 +90,7 @@
           <img src="{{nuevoPerro.foto}}" class="img-preview">
         </div>
         <div layout-gt-sm="row" ng-show="!uploading" layout-align="center">
-          <input class="ng-hide" id="btn-foto-perro" type="file" fileread="nuevoPerro.foto" required/>
+          <input class="ng-hide" id="btn-foto-perro" type="file" accept=".png,.jpeg, .jpg" fileread="nuevoPerro.foto" required/>
           <label for="btn-foto-perro" class="md-button md-raised md-accent"><md-icon>image</md-icon>   
             <span ng-show="nuevoPerro.foto == 'img/dog.png'">Agregar Foto (max: 2MB)</span>
             <span ng-show="nuevoPerro.foto != 'img/dog.png'">Cambiar Foto (max: 2MB)</span>

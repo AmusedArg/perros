@@ -20,6 +20,7 @@ angular.module('perrosApp.factories').
 			};
 
 			this.deletePerrosByTipo = function(tipo){
+				self.registros[tipo] = 0;
 				self.perrosList = $filter('filter')(self.perrosList, function(value, index) {return value.tipo !== tipo ;}); 	
 			};
 

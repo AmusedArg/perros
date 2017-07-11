@@ -25,6 +25,23 @@
                         <md-option ng-repeat="raza in razas | filter:searchTermRaza" value="{{raza}}">{{::raza | capitalize}}</md-option>
                     </md-select>
                 </md-input-container>
+                <md-autocomplete
+                    ng-disabled="ctrl.isDisabled"
+                    md-no-cache="ctrl.noCache"
+                    md-selected-item="searchModel.lugar"
+                    md-search-text-change="ctrl.searchTextChange(ctrl.searchTextFilter)"
+                    md-search-text="ctrl.searchTextFilter"
+                    md-selected-item-change="ctrl.selectedItemChange(item)"
+                    md-items="item in ctrl.querySearch(ctrl.searchTextFilter)"
+                    md-item-text="item.display"
+                    md-min-length="0"
+                    placeholder="Encontrado en"
+                    style="width: 400px; margin-top:10px; margin-left: 10px">
+                    <md-item-template>
+                        <span md-highlight-text="ctrl.searchText" md-highlight-flags="^i">{{::item.display}}</span>
+                    </md-item-template>
+                    <md-not-found>Ese lugar no existe.</md-not-found>
+                </md-autocomplete>
                 <md-input-container md-no-float class="md-block toolbar-search-btn" flex="35">
                     <md-button class="md-raised md-primary" ng-click="buscarPerro(searchModel)">Buscar</md-button>
                 </md-input-container>          

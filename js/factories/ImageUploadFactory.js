@@ -7,6 +7,7 @@ angular.module('perrosApp.factories').
                 var extension = self.getExtension(file);
                 if(!extension){
                     callback(null,null);
+                    return false;
                 }
                 var metadata = {
                   contentType: 'image/'+extension,
@@ -23,18 +24,22 @@ angular.module('perrosApp.factories').
                 });
             };
             this.deleteImage = function(file){
-                self.storageRef.child('images').child(file).delete()
-                    .then(function() {
-                      // File deleted successfully
-                    })
-                    .catch(function(error) {
-                      // Uh-oh, an error occurred!
-                    });
+                if(file){
+                    self.storageRef.child('images').child(file).delete()
+                        .then(function() {
+                          // File deleted successfully
+                        })
+                        .catch(function(error) {
+                          // Uh-oh, an error occurred!
+                        });
+                }
             };
             this.getExtension = function(file){
-                if(file.indexOf('image/png') !== -1){return 'png';}
-                if(file.indexOf('image/jpg') !== -1){return 'jpg';}
-                if(file.indexOf('image/jpeg') !== -1){return 'jpeg';}
+                if(file){
+                    if(file.indexOf('image/png') !== -1){return 'png';}
+                    if(file.indexOf('image/jpg') !== -1){return 'jpg';}
+                    if(file.indexOf('image/jpeg') !== -1){return 'jpeg';}
+                }
                 return null;
             };
         };
