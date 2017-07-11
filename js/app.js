@@ -42,11 +42,42 @@ config(['$stateProvider', '$urlRouterProvider','$locationProvider' , function($s
     templateUrl: "partials/coincidencias.html"
   };
 
+  var loginState = {
+    name: 'login',
+    url: '/login',
+    templateUrl: "partials/login.html",
+    resolve: {
+      //need to chain our promises since we neeed to first load the authenticate.js
+      //and second, execute authenticate()
+      authenticate: ['$q', 'FirebaseAuthenticator', function($q, FirebaseAuthenticator) {
+        //declare a deferred promise
+        var deferred = $q.defer();
+        var firebaseAuthenticator = new FirebaseAuthenticator();
+        firebaseAuthenticator.login().then(function(result) {
+          // This gives you a Google Access Token. You can use it to access the Google API.
+          var token = result.credential.accessToken;
+          // The signed-in user info.
+          var user = result.user;
+          console.log(token);
+          deferred.resolve('authenticated!');
+          // ...
+        }).catch(function(error) {
+            //authenticate fail, reject the promise
+            console.log(error);
+            deferred.reject('authenticate failed');
+
+        });
+
+        return deferred.promise;
+      }]
+    }
+  };
+
   $stateProvider.state(perdidosState);
   $stateProvider.state(encontradosState);
   $stateProvider.state(avistadosState);
   $stateProvider.state(favoritosState);
-  $stateProvider.state(coincidenciasState);
+  $stateProvider.state(loginState);
 }])
 .config(['$compileProvider', function ($compileProvider) {
   $compileProvider.debugInfoEnabled(false); // change to true for dev
