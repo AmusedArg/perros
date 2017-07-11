@@ -27,9 +27,9 @@ angular.module('perrosApp.controllers', []).
    		$scope.navActiveItem = $location.path().substring(1, $location.path().length); // active item por defecto
    		$scope.searchModel = $scope.searchModelFactory.getSearchModel($scope.navActiveItem);
 
-   		// getPerros($scope.TIPO_PERDIDO);
-   		// getPerros($scope.TIPO_ENCONTRADO);
-   		// getPerros($scope.TIPO_AVISTADO);
+   		getPerros($scope.TIPO_PERDIDO);
+   		getPerros($scope.TIPO_ENCONTRADO);
+   		getPerros($scope.TIPO_AVISTADO);
 
    		$scope.changeTab = function(){
 			$scope.searchModel = $scope.searchModelFactory.getSearchModel($scope.navActiveItem);
