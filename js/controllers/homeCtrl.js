@@ -139,7 +139,7 @@ angular.module('perrosApp.controllers', []).
 	  	};
 
   		$scope.editarPerro = function(ev, perro) {
-  			perro.has_collar = Boolean(perro.has_collar);
+  			perro.has_collar = (perro.has_collar == 'true');
   			if(!perro.lugar || perro.lugar.length <= 0){
   				autocomplete.searchText = '';
   			}
@@ -153,6 +153,12 @@ angular.module('perrosApp.controllers', []).
 		      	targetEvent: ev,
 		      	clickOutsideToClose:true
 		    });
+	  	};
+
+	  	$scope.reportarPerro = function(ev, perro) {
+	  		perro.foto = null;
+	  		perro.reportado = true;
+  			perrosService.actualizarPerro(perro);
 	  	};
 
 	  	$scope.borrarPerro = function(ev, perro){
@@ -260,7 +266,7 @@ angular.module('perrosApp.controllers', []).
 					newPerro.raza = perro.raza;
 					newPerro.sexo = perro.sexo;
 					newPerro.duenio = perro.duenio;
-					newPerro.has_collar = Boolean(perro.has_collar);
+					newPerro.has_collar = (perro.has_collar == 'true');
 					newPerro.collar_detalle = perro.collar_detalle;
 					newPerro.collar_color = perro.collar_color;
 					newPerro.favorito = perro.favorito;
@@ -268,37 +274,40 @@ angular.module('perrosApp.controllers', []).
 					newPerro.tipo = perro.tipo;
 					newPerro.link_sitio = perro.link_sitio;
 
-					//filtro resultados
-					if(searchModel.sexo !== null && searchModel.raza !== null && searchModel.lugar !== null){
-						if(newPerro.sexo === searchModel.sexo && newPerro.raza === searchModel.raza && newPerro.lugar === searchModel.lugar){
-							$scope.perrosList.addPerro(newPerro);		
+					if(perro.reportado !== true){
+
+						//filtro resultados
+						if(searchModel.sexo !== null && searchModel.raza !== null && searchModel.lugar !== null){
+							if(newPerro.sexo === searchModel.sexo && newPerro.raza === searchModel.raza && newPerro.lugar === searchModel.lugar){
+								$scope.perrosList.addPerro(newPerro);		
+							}
+						}else if(searchModel.lugar !== null && searchModel.sexo !== null && searchModel.raza === null){
+							if(newPerro.lugar === searchModel.lugar.value && newPerro.sexo === searchModel.sexo){
+								$scope.perrosList.addPerro(newPerro);		
+							}
+						}else if(searchModel.lugar !== null && searchModel.sexo === null && searchModel.raza !== null){
+							if(newPerro.lugar === searchModel.lugar.value && newPerro.raza === searchModel.raza){
+								$scope.perrosList.addPerro(newPerro);		
+							}
+						}else if(searchModel.lugar === null && searchModel.sexo !== null && searchModel.raza !== null){
+							if(newPerro.sexo === searchModel.sexo && newPerro.raza === searchModel.raza){
+								$scope.perrosList.addPerro(newPerro);		
+							}
+						}else if(searchModel.lugar === null && searchModel.sexo === null && searchModel.raza !== null){
+							if(newPerro.raza === searchModel.raza){
+								$scope.perrosList.addPerro(newPerro);		
+							}
+						}else if(searchModel.lugar === null && searchModel.sexo !== null && searchModel.raza === null){
+							if(newPerro.sexo === searchModel.sexo){
+								$scope.perrosList.addPerro(newPerro);		
+							}
+						}else if(searchModel.lugar !== null && searchModel.sexo === null && searchModel.raza === null){
+							if(newPerro.lugar === searchModel.lugar.value){
+								$scope.perrosList.addPerro(newPerro);		
+							}
+						}else{
+							$scope.perrosList.addPerro(newPerro);	
 						}
-					}else if(searchModel.lugar !== null && searchModel.sexo !== null && searchModel.raza === null){
-						if(newPerro.lugar === searchModel.lugar.value && newPerro.sexo === searchModel.sexo){
-							$scope.perrosList.addPerro(newPerro);		
-						}
-					}else if(searchModel.lugar !== null && searchModel.sexo === null && searchModel.raza !== null){
-						if(newPerro.lugar === searchModel.lugar.value && newPerro.raza === searchModel.raza){
-							$scope.perrosList.addPerro(newPerro);		
-						}
-					}else if(searchModel.lugar === null && searchModel.sexo !== null && searchModel.raza !== null){
-						if(newPerro.sexo === searchModel.sexo && newPerro.raza === searchModel.raza){
-							$scope.perrosList.addPerro(newPerro);		
-						}
-					}else if(searchModel.lugar === null && searchModel.sexo === null && searchModel.raza !== null){
-						if(newPerro.raza === searchModel.raza){
-							$scope.perrosList.addPerro(newPerro);		
-						}
-					}else if(searchModel.lugar === null && searchModel.sexo !== null && searchModel.raza === null){
-						if(newPerro.sexo === searchModel.sexo){
-							$scope.perrosList.addPerro(newPerro);		
-						}
-					}else if(searchModel.lugar !== null && searchModel.sexo === null && searchModel.raza === null){
-						if(newPerro.lugar === searchModel.lugar.value){
-							$scope.perrosList.addPerro(newPerro);		
-						}
-					}else{
-						$scope.perrosList.addPerro(newPerro);	
 					}
 				}
    			});
@@ -318,7 +327,7 @@ angular.module('perrosApp.controllers', []).
 			perroOriginal.raza = perro.raza;
 			perroOriginal.sexo = perro.sexo;
 			perroOriginal.duenio = perro.duenio;
-			perroOriginal.has_collar = Boolean(perro.has_collar);
+			perroOriginal.has_collar = (perro.has_collar == 'true');
 			perroOriginal.collar_detalle = perro.collar_detalle;
 			perroOriginal.collar_color = perro.collar_color;
 			perroOriginal.tipo  = perro.tipo;
