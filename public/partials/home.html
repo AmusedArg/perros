@@ -1,7 +1,7 @@
 <div ng-cloak ng-controller="HomeCtrl as ctrl" class="height-100">
     <md-content id="main-content" class="height-100">
         <div ng-include="'/partials/templates/toolbar.tmpl.html'"></div>
-        <div ng-include="'/partials/templates/navbar.tmpl.html'"></div>
+        <div id="navbar-main" ng-include="'/partials/templates/navbar.tmpl.html'"></div>
         <div layout="row" layout-align="space-around" id="loading-spinner" class="center-info" ng-show="errorFactory.message == null && navActiveItem != 'coincidencias' && navActiveItem != 'favoritos'">
             <md-progress-circular md-mode="indeterminate"></md-progress-circular>
         </div>
@@ -15,9 +15,4 @@
         <!-- Contenido con las tarjetas de los perros -->
         <ui-view></ui-view> 
     </md-content>
-    <div style="visibility: hidden">
-        <div class="md-dialog-container" id="dialogMapa">
-            <md-dialog aria-label="Mapa" layout-padding><div class="md-dialog-content" id="map"></div></md-dialog>
-        </div>
-    </div>
 </div>

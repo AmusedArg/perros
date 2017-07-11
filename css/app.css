@@ -583,3 +583,24 @@ md-card:hover div.name-tag{
   border-bottom: 3px solid transparent;
   border-top: 3px solid #A7A70D;
 }
+
+@media (max-width: 599px){
+  #navbar-main{
+    overflow-x: auto;
+  }
+  #autocomplete-search{
+    width: 100% !important;
+  }
+  #link-publicacion{
+    margin-left: 0 !important;
+    margin-top: 2em !important;
+  }
+  .img-preview{
+    height: auto;
+    width: 100%;
+    border-radius: 5px;
+  }
+  #btn-upload-foto{
+    display: block;
+  }
+}

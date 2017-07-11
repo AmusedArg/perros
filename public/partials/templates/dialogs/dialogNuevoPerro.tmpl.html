@@ -60,8 +60,9 @@
             <md-datepicker ng-model="nuevoPerro.fecha"></md-datepicker>
           </md-input-container>
         </div>
-        <div layout="row" ng-cloak style="padding-top:0;">
+            <div layout="row" layout-xs="column" ng-cloak style="padding-top:0;">
             <md-autocomplete
+                  id="autocomplete-search"
                 ng-disabled="ctrl.isDisabled"
                 md-no-cache="ctrl.noCache"
                 md-selected-item="ctrl.selectedItem"
@@ -80,7 +81,7 @@
                 Ese lugar no existe.
               </md-not-found>
             </md-autocomplete>
-            <md-input-container class="md-block md-icon-float" flex-gt-sm style="margin-top:0px; margin-left: 2em">
+              <md-input-container id="link-publicacion" class="md-block md-icon-float" flex-gt-sm style="margin-top:0px; margin-left: 2em">
               <label>Link de la publicacion</label>
               <md-icon>link</md-icon>
               <input ng-model="nuevoPerro.link_sitio">
@@ -99,8 +100,8 @@
         <md-progress-linear md-mode="indeterminate" ng-show="uploading"></md-progress-linear>
       </form>
     </div>
-    <md-dialog-actions layout="row">
-      <span flex></span>
+    <md-dialog-actions layout="row" layout-align-xs="center center">
+      <!-- <span flex></span> -->
       <md-button ng-click="cancel()">Cancelar</md-button>
       <md-button ng-click="guardarPerro(nuevoPerro)">Guardar</md-button>
     </md-dialog-actions>

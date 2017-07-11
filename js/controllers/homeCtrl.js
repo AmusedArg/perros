@@ -12,6 +12,8 @@ angular.module('perrosApp.controllers', []).
    		$scope.uploadingEncontrado = false;
    		$scope.uploadingAvistado = false;
 
+   		$scope.speedDialPerdidosOpen = $scope.speedDialEncontradosOpen = $scope.speedDialAvistadosOpen = false;
+
    		$scope.perrosPaginator = new PerrosPaginator();
    		$scope.perrosList = new PerrosList();
    		$scope.perrosList.registros.perdidos = $scope.perrosList.registros.encontrados = $scope.perrosList.registros.avistados = 0;
@@ -39,6 +41,16 @@ angular.module('perrosApp.controllers', []).
 		    $mdDialog.show({
 				scope: $scope.$new(),
 				templateUrl: '/partials/templates/dialogs/dialogNuevoPerro.tmpl.html',
+				parent: angular.element(document.body),
+				targetEvent: ev,
+				clickOutsideToClose:true
+		    });
+	  	};
+
+	  	$scope.showDialogBuscarPerro = function(ev, tipo) {
+		    $mdDialog.show({
+				scope: $scope.$new(),
+				templateUrl: '/partials/templates/dialogs/dialogBuscarPerro.tmpl.html',
 				parent: angular.element(document.body),
 				targetEvent: ev,
 				clickOutsideToClose:true
