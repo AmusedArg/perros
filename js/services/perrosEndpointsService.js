@@ -1,5 +1,5 @@
 angular.module('perrosApp.services', []).
-    factory('perrosService', ['$http', '$httpParamSerializer', 'ImageUploadFactory', function($http, $httpParamSerializer, ImageUploadFactory) {
+    factory('perrosService', ['$http', '$httpParamSerializer', 'ImageUploadFactory', 'UtilsFactory', function($http, $httpParamSerializer, ImageUploadFactory, UtilsFactory) {
         var maxResults = 40;
         var perrosService = {};
         var db = firebase.database();
@@ -9,6 +9,9 @@ angular.module('perrosApp.services', []).
         perrosService.guardarPerro = function(perro, callback) {
             var nuevoPerroRef = db.ref("/perros/"+perro.tipo).push();
             perro.id = nuevoPerroRef.key;
+            if(perro.has_collar){
+                perro.collar_color = UtilsFactory.getHexColorCollar(perro.collar_color);
+            }
             if(perro.foto !== null && perro.foto !== 'img/dog.png' && !perrosService.isUrl(perro.foto)){
                 imageUploadFactory.uploadImage(perro.foto, function(filename, url){
                     perro.foto = url;
@@ -42,6 +45,9 @@ angular.module('perrosApp.services', []).
         };
 
         perrosService.actualizarPerro = function(perro, callback) {
+            if(perro.has_collar){
+                perro.collar_color = UtilsFactory.getHexColorCollar(perro.collar_color);
+            }
             if(perro.foto !== null && perro.foto !== 'img/dog.png' && !perrosService.isUrl(perro.foto)){
                 imageUploadFactory.uploadImage(perro.foto, function(filename, url){
                     //no se pudo guardar la goto

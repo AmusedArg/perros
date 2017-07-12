@@ -156,7 +156,7 @@ angular.module('perrosApp.controllers', []).
 	  	};
 
   		$scope.editarPerro = function(ev, perro) {
-  			perro.has_collar = (perro.has_collar == 'true');
+  			perro.has_collar = (perro.has_collar == '1');
   			if(!perro.lugar || perro.lugar.length <= 0){
   				autocomplete.searchText = '';
   			}
@@ -283,7 +283,7 @@ angular.module('perrosApp.controllers', []).
 					newPerro.raza = perro.raza;
 					newPerro.sexo = perro.sexo;
 					newPerro.duenio = perro.duenio;
-					newPerro.has_collar = (perro.has_collar == 'true');
+					newPerro.has_collar = (perro.has_collar == '1');
 					newPerro.collar_detalle = perro.collar_detalle;
 					newPerro.collar_color = perro.collar_color;
 					newPerro.favorito = perro.favorito;
@@ -344,7 +344,7 @@ angular.module('perrosApp.controllers', []).
 			perroOriginal.raza = perro.raza;
 			perroOriginal.sexo = perro.sexo;
 			perroOriginal.duenio = perro.duenio;
-			perroOriginal.has_collar = (perro.has_collar == 'true');
+			perroOriginal.has_collar = (perro.has_collar == '1');
 			perroOriginal.collar_detalle = perro.collar_detalle;
 			perroOriginal.collar_color = perro.collar_color;
 			perroOriginal.tipo  = perro.tipo;
