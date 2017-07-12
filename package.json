@@ -1,6 +1,6 @@
 {
   "name": "perros_prod",
-  "version": "1.6.0",
+  "version": "1.7.0",
   "description": "Aplicacion para manejo de perros encontrados y perdidos",
   "main": "index.php",
   "dependencies": {
@@ -24,6 +24,7 @@
     "gulp-sass": "^2.3.2",
     "gulp-uglify": "^2.0.0",
     "gulp-uglifycss": "^1.0.6",
+    "gulp-version-append": "^0.2.0",
     "jshint": "^2.9.4",
     "merge-stream": "^1.0.0"
   },

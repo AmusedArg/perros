@@ -8,6 +8,7 @@ var merge = require('merge-stream');
 var uglifycss = require('gulp-uglifycss');
 var gulpFilter = require('gulp-filter');
 var header = require('gulp-header');
+var versionAppend = require('gulp-version-append');
 
 /* Template for version comment in files */
 var pkg = require('./package.json');
@@ -78,6 +79,12 @@ gulp.task('minify-js', function() {
       .pipe(gulp.dest('public/dist'));
 });
 
+gulp.task('html', ['minify-js'], function(){
+    return gulp.src('views/index.html')
+          .pipe(versionAppend(['js']))
+          .pipe(gulp.dest('./public/'));
+});
+
 // Watch Files For Changes
 gulp.task('watch', function() {
     gulp.watch(['js/**'], ['minify-js']);
@@ -92,4 +99,4 @@ gulp.task('lint', function() {
 });
 
 // Default Task
-gulp.task('default', ['lint', 'minify-js', 'minify-css']);
+gulp.task('default', ['lint', 'minify-js', 'minify-css', 'html']);

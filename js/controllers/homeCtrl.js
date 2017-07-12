@@ -392,6 +392,31 @@ angular.module('perrosApp.controllers', []).
 			angular.element(document.querySelector('#loading-spinner')).addClass('hide');
 		}
 
+		//listen for version changes
+		var ref = firebase.database().ref("app");
+
+		ref.on("child_changed", function(snapshot) {
+		  	if(snapshot.key === 'version'){
+			  	var template = '<md-toast>'+
+								  '<span class="md-toast-text" flex>Hay una actualización disponible</span>'+
+								  '<md-button class="md-highlight" ng-click="reloadToUpdate()">'+
+								    'Actualizar'+
+								  '</md-button>'+
+								  '<md-button ng-click="closeUpdateToast()">'+
+								    'Cancelar'+
+								  '</md-button>'+
+								'</md-toast>';
+			    $mdToast.show({
+			    	hideDelay: 0,
+		          	position : 'bottom left',
+		          	template : template,
+		          	controller: 'VersionUpdateCtrl',
+		          	bindToController: true
+			    });
+		  	}
+		});
+
+
 	    var autocomplete = this;
 	    autocomplete.simulateQuery = false;
 	    autocomplete.isDisabled    = false;
@@ -448,6 +473,15 @@ angular.module('perrosApp.controllers', []).
 	        return (lugar.value.indexOf(lowercaseQuery) === 0);
 	      };
 	    }
+	}])
+	.controller('VersionUpdateCtrl', ['$scope', '$mdToast', function($scope, $mdToast){
+		$scope.reloadToUpdate = function(){
+			window.location.reload();
+		};
+
+		$scope.closeUpdateToast = function(){
+			$mdToast.hide();
+		};
 	}])
 	.directive("fileread", [function () {
 	    return {
