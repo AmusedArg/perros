@@ -10,7 +10,7 @@ angular.module('perrosApp.services', []).
             var nuevoPerroRef = db.ref("/perros/"+perro.tipo).push();
             perro.id = nuevoPerroRef.key;
             if(perro.has_collar){
-                perro.collar_color = UtilsFactory.getHexColorCollar(perro.collar_color);
+                perro.collar_color = UtilsFactory.getHexColorCollar(perro.collar_detalle);
             }
             if(perro.foto !== null && perro.foto !== 'img/dog.png' && !perrosService.isUrl(perro.foto)){
                 imageUploadFactory.uploadImage(perro.foto, function(filename, url){
@@ -46,7 +46,7 @@ angular.module('perrosApp.services', []).
 
         perrosService.actualizarPerro = function(perro, callback) {
             if(perro.has_collar){
-                perro.collar_color = UtilsFactory.getHexColorCollar(perro.collar_color);
+                perro.collar_color = UtilsFactory.getHexColorCollar(perro.collar_detalle);
             }
             if(perro.foto !== null && perro.foto !== 'img/dog.png' && !perrosService.isUrl(perro.foto)){
                 imageUploadFactory.uploadImage(perro.foto, function(filename, url){
