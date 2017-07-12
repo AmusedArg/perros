@@ -137,6 +137,7 @@ angular.module('perrosApp.controllers', []).
 				    );
   				}else{
 		  			perro.real_date = createDateFromString(perroEditado.fecha);
+		  			perro.collar_color = createDateFromString(perroEditado.collar_color);
 	  				var perroOriginal = $scope.perrosList.buscarPerro(perroEditado);
 	  				if(perroOriginal !== null){
 	  					copyAttributes(perroOriginal, perroEditado);
