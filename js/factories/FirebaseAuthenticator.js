@@ -4,8 +4,11 @@ angular.module('perrosApp.factories').
             this.login = function(email, password){
                 return firebase.auth().signInWithEmailAndPassword(email, password);
             };
-            this.getCurrentUser = function(){
-                return firebase.auth().currentUser;
+            this.getCurrentUser = function(callback){
+                firebase.auth().onAuthStateChanged(function(user) {
+                  callback(user);
+                  return;
+                });
             };
         };
 
