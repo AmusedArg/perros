@@ -1,5 +1,5 @@
 angular.module('perrosApp.controllers', []).
-	controller('HomeCtrl', ['$scope', '$mdDialog', '$timeout', '$q', '$log', '$filter', '$mdToast', '$mdConstant', 'perrosService', 'PerroFactory','PerrosList','PerrosPaginator','SearchModelFactory', '$state', '$location' , 'CoincidenciasList', 'ErrorFactory', 'FirebaseAuthenticator', function($scope, $mdDialog, $timeout, $q, $log, $filter, $mdToast, $mdConstant, perrosService, PerroFactory,PerrosList,PerrosPaginator, SearchModelFactory, $state, $location, CoincidenciasList, ErrorFactory, FirebaseAuthenticator) {
+	controller('HomeCtrl', ['$scope', '$mdDialog', '$timeout', '$q', '$log', '$filter', '$mdToast', '$mdConstant', 'perrosService', 'PerroFactory','PerrosList','PerrosPaginator','SearchModelFactory', '$state', '$location', '$cookies', 'ErrorFactory', 'FirebaseAuthenticator', function($scope, $mdDialog, $timeout, $q, $log, $filter, $mdToast, $mdConstant, perrosService, PerroFactory,PerrosList,PerrosPaginator, SearchModelFactory, $state, $location, $cookies, ErrorFactory, FirebaseAuthenticator) {
 		/* Initialization of scope varaibles */
 		$scope.TIPO_ENCONTRADO = 'encontrados';
 		$scope.TIPO_PERDIDO = 'perdidos';
@@ -22,7 +22,6 @@ angular.module('perrosApp.controllers', []).
    		$scope.perrosPaginator = new PerrosPaginator();
    		$scope.perrosList = new PerrosList();
    		$scope.perrosList.registros.perdidos = $scope.perrosList.registros.encontrados = $scope.perrosList.registros.avistados = 0;
-   		$scope.coincidenciasList = new CoincidenciasList();
    		$scope.searchModelFactory = new SearchModelFactory();
    		$scope.errorFactory = ErrorFactory;
 
@@ -228,11 +227,7 @@ angular.module('perrosApp.controllers', []).
 	  	};
 
 	  	$scope.retryAction = function(navActiveItem){
-	  		if(navActiveItem === 'coincidencias'){
-	  			$scope.coincidenciasList.loadCoincidencias();
-	  		}else{
-	  			getPerros(navActiveItem);
-	  		}
+  			getPerros(navActiveItem);
 	  	};
 
 	  	$scope.verPublicacion = function(link){
@@ -330,9 +325,9 @@ angular.module('perrosApp.controllers', []).
 				}
    			});
    			
-   			$scope.$apply(function() {
-		    	$scope.perrosList = $scope.perrosList;
-		   	});
+	   			$scope.$apply(function() {
+			    	$scope.perrosList = $scope.perrosList;
+			   	});
 	  	}
 
 	  	function copyAttributes(perroOriginal, perro){
@@ -376,7 +371,7 @@ angular.module('perrosApp.controllers', []).
 	  	};
 
 	  	$scope.scrollTop = function(){
-	  		document.body.scrollTop = 0;
+	  		document.getElementById('main-content').scrollTop = 0;
 	  	};
 
 	  	function formattedDate(date) {
@@ -395,26 +390,42 @@ angular.module('perrosApp.controllers', []).
 		//listen for version changes
 		var ref = firebase.database().ref("app");
 
+		firebase.database().ref("app/version").once('value').then(function(snapshot) {
+			var appVersion = $cookies.get('app-version');
+			if(!appVersion){
+				$cookies.put('app-version', snapshot.val());
+			}else{
+				if(appVersion !== snapshot.val()){
+					$scope.showUpdateToast(snapshot.val());
+				}
+			}
+		});
+
 		ref.on("child_changed", function(snapshot) {
 		  	if(snapshot.key === 'version'){
-			  	var template = '<md-toast>'+
-								  '<span class="md-toast-text" flex>Hay una actualización disponible</span>'+
-								  '<md-button class="md-highlight" ng-click="reloadToUpdate()">'+
-								    'Actualizar'+
-								  '</md-button>'+
-								  '<md-button ng-click="closeUpdateToast()">'+
-								    'Cancelar'+
-								  '</md-button>'+
-								'</md-toast>';
-			    $mdToast.show({
-			    	hideDelay: 0,
-		          	position : 'bottom left',
-		          	template : template,
-		          	controller: 'VersionUpdateCtrl',
-		          	bindToController: true
-			    });
+  				$scope.showUpdateToast(snapshot.val());
 		  	}
 		});
+
+		$scope.showUpdateToast = function(appVersion){
+			var template = '<md-toast>'+
+							  '<span class="md-toast-text" flex>Hay una actualización disponible</span>'+
+							  '<md-button class="md-highlight" ng-click="reloadToUpdate()">'+
+							    'Actualizar'+
+							  '</md-button>'+
+							  '<md-button ng-click="closeUpdateToast()">'+
+							    'Cancelar'+
+							  '</md-button>'+
+							'</md-toast>';
+		    $mdToast.show({
+		    	hideDelay: 0,
+	          	position: 'bottom left',
+	          	template: template,
+	          	locals: {appVersion : appVersion},
+	          	controller: 'VersionUpdateCtrl',
+	          	bindToController: true
+		    });
+		};
 
 
 	    var autocomplete = this;
@@ -474,8 +485,9 @@ angular.module('perrosApp.controllers', []).
 	      };
 	    }
 	}])
-	.controller('VersionUpdateCtrl', ['$scope', '$mdToast', function($scope, $mdToast){
+	.controller('VersionUpdateCtrl', ['$scope', '$mdToast', '$cookies', 'locals', function($scope, $mdToast, $cookies, locals){
 		$scope.reloadToUpdate = function(){
+			$cookies.put('app-version', locals.appVersion);
 			window.location.reload();
 		};
 

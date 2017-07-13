@@ -1,6 +1,7 @@
 var app = angular.module('perrosApp', [
 	'ngMaterial',
   'ngMessages',
+  'ngCookies',
 	'ngAnimate',
 	'ngRoute',
 	'perrosApp.controllers',

@@ -17,7 +17,7 @@
         <div class="paginator" layout="row" ng-show="perrosList.getPerrosListByTipo(TIPO_ENCONTRADO).length > 0">
             <div paging page="pagActualEncontrados" page-size="MAX_RESULTS" total="perrosList.registros[TIPO_ENCONTRADO]" paging-action="goToPage(page, TIPO_ENCONTRADO);scrollTop();" text-next="Siguiente" text-prev="Anterior" show-prev-next="true" hide-if-empty="true" text-title-page="Pág. {page}" text-title-prev="Ant" text-title-next="Sig"></div> 
         </div>
-        <md-fab-speed-dial ng-hide="!user" md-open="false" md-direction="up" show-xs hide-gt-xs class="md-fling md-fab-bottom-right" style="position:fixed !important;">
+        <md-fab-speed-dial ng-hide="user" md-open="false" md-direction="up" show-xs hide-gt-xs class="md-fling md-fab-bottom-right" style="position:fixed !important;">
             <md-fab-trigger>
                 <md-button aria-label="menu" class="md-fab">
                     <md-icon>menu</md-icon>
@@ -25,7 +25,7 @@
             </md-fab-trigger>
 
             <md-fab-actions>
-                <md-button aria-label="Nuevo Perro" class="md-fab md-raised md-mini md-primary" ng-click="showNuevoPerro($event, TIPO_ENCONTRADO)">
+                <md-button aria-label="Nuevo Perro" ng-hide="!user" class="md-fab md-raised md-mini md-primary" ng-click="showNuevoPerro($event, TIPO_ENCONTRADO)">
                     <md-icon>add</md-icon>
                 </md-button>
                 <md-button aria-label="Buscar Perro" class="md-fab md-raised md-mini" ng-click="showDialogBuscarPerro($event, TIPO_ENCONTRADO)">

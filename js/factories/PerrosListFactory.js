@@ -2,6 +2,7 @@ angular.module('perrosApp.factories').
 	factory('PerrosList', ['$filter', '$q', 'perrosService', function($filter, $q, perrosService){
 		var PerrosList = function(){
 			this.perrosList = [];
+			this.perrosListByTipo = [];
 			this.registros = [];
 			this.perrosService = perrosService;
 			var self = this;
@@ -46,13 +47,15 @@ angular.module('perrosApp.factories').
 				}
 				var firstIndex = page*max_results;
 				var lastIndex = firstIndex + max_results;
-				var listado = $filter('filter')(self.perrosList, function(value, index) {return (value.tipo === tipo) ;});
-				listado = listado.reverse(); // ya vienen ordenados pero ascendentemente por fecha
-				return listado.slice(firstIndex, lastIndex);
-			};
+				if(!angular.isDefined(self.perrosListByTipo[tipo]) || self.perrosListByTipo[tipo].length === 0 || (self.registros[tipo] !== self.perrosListByTipo[tipo].length)){
+					self.perrosListByTipo[tipo] = $filter('filter')(self.perrosList, function(value, index) {return (value.tipo === tipo) ;});
+					self.perrosListByTipo[tipo].sort(function(a, b) {
+					    return moment(b.fecha, 'DD/MM/YYYY', true) - moment(a.fecha, 'DD/MM/YYYY', true);
+					});
 
-			this.getFavoritos = function(){
-				return $filter('filter')(self.perrosList, function(value, index) {return value.favorito == '1' ;}); 
+				}
+				// listado = listado.reverse(); // ya vienen ordenados pero ascendentemente por fecha
+				return self.perrosListByTipo[tipo].slice(firstIndex, lastIndex);
 			};
 
 			this.setTotalRegistros = function(cant, tipo){
