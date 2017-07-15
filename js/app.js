@@ -7,7 +7,6 @@ var app = angular.module('perrosApp', [
 	'perrosApp.controllers',
 	'perrosApp.services',
   'perrosApp.factories',
-  'angular.backtop',
   'bw.paging',
   'ui.router'
 ]).

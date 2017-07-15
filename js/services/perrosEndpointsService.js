@@ -78,15 +78,7 @@ angular.module('perrosApp.services', []).
                         callback(null, errores);
                     });
             }
-        };
-
-        perrosService.isUrl = function(url){
-            if(/(ftp|http|https):\/\/(\w+:{0,1}\w*@)?(\S+)(:[0-9]+)?(\/|\/([\w#!:.?+=&%@!\-\/]))?/.test(url)) {
-                return true;
-            } else {
-                return false;
-            }
-        };
+        };       
 
         perrosService.filtrarPerros = function(perro) {
             var dbRef = db.ref("/perros/"+perro.tipo);
@@ -98,6 +90,13 @@ angular.module('perrosApp.services', []).
                 imageUploadFactory.deleteImage(perro.foto_name); // borrar foto asociada
             }
             return db.ref("/perros/"+perro.tipo+"/"+perro.id).remove();
+        };
+
+        perrosService.reportarPerro = function(perro) {
+            var perroJSON = JSON.parse(angular.toJson(perro)); // json simple para guardar en datbase
+            var reportePerroRef = db.ref("/perros/reportados").push();
+            var key = reportePerroRef.key;
+            db.ref("/perros/reportados/"+key).set(perroJSON);
         };
 
         perrosService.toggleFavorite = function(perro){
@@ -112,6 +111,14 @@ angular.module('perrosApp.services', []).
         perrosService.getPerros = function(tipo){
           var dbRef = db.ref("/perros/"+tipo);
           return dbRef.orderByChild("real_date").once("value");
+        };
+
+        perrosService.isUrl = function(url){
+            if(/(ftp|http|https):\/\/(\w+:{0,1}\w*@)?(\S+)(:[0-9]+)?(\/|\/([\w#!:.?+=&%@!\-\/]))?/.test(url)) {
+                return true;
+            } else {
+                return false;
+            }
         };
 
         return perrosService;

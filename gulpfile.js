@@ -55,8 +55,7 @@ gulp.task('minify-js', function() {
       'node_modules/angular-messages/angular-messages.min.js',
       'node_modules/angular-material/angular-material.min.js',
       'node_modules/angular-paging/dist/paging.min.js',
-      'node_modules/moment/min/moment.min.js',
-      'js/backtop.min.js'
+      'node_modules/moment/min/moment.min.js'
     ];
 
     var paths = externalLibraries.concat(localFiles);

@@ -173,9 +173,7 @@ angular.module('perrosApp.controllers', []).
 	  	};
 
 	  	$scope.reportarPerro = function(ev, perro) {
-	  		perro.foto = null;
-	  		perro.reportado = true;
-  			perrosService.actualizarPerro(perro);
+  			perrosService.reportarPerro(perro);
 	  	};
 
 	  	$scope.borrarPerro = function(ev, perro){
