@@ -2,6 +2,10 @@
     <div class="md-toolbar-tools">
         <form name="userForm" ng-cloak>
             <div layout-gt-xs="row">
+                <md-input-container md-no-float class="md-block" flex="25">
+                    <md-icon>pets</md-icon>
+                    <input ng-model="searchModel.nombre" placeholder="Nombre">
+                </md-input-container>
                 <md-input-container md-no-float class="md-block" flex="30">
                     <md-icon>wc</md-icon>
                     <md-select ng-model="searchModel.sexo" placeholder="Sexo">
