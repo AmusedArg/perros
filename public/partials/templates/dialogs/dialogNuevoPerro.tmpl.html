@@ -1,4 +1,4 @@
-<md-dialog capitalize aria-label="Nuevo {{::nuevoPerro.getDescripcionTipoSingular()}}" flex="80" id="dialog-nuevo-perro">
+<md-dialog capitalize aria-label="Nuevo {{::nuevoPerro.getDescripcionTipoSingular()}}" flex="80" flex-xs="100" id="dialog-nuevo-perro">
   <form ng-cloak>
     <md-toolbar>
       <div class="md-toolbar-tools">
@@ -46,21 +46,23 @@
               </md-option>
             </md-select>
           </md-input-container>
-          <md-input-container class="header-checkbox-container" style="margin-left: 7px">
-              <md-checkbox aria-label="Tiene collar" ng-model="nuevoPerro.has_collar" flex>
-                  Collar: <span ng-if="nuevoPerro.has_collar">Si</span><span ng-if="!nuevoPerro.has_collar">No</span>
-              </md-checkbox>
-          </md-input-container>
-          <md-input-container md-no-float class="md-block collar-detalle" flex="25" ng-if="nuevoPerro.has_collar">
-              <md-icon>description</md-icon>
-              <input ng-model="nuevoPerro.collar_detalle" placeholder="Color">
-          </md-input-container>
-          <md-input-container class="md-block" flex-gt-sm="30" flex="100">
-            <label>Fecha</label>
-            <md-datepicker ng-model="nuevoPerro.fecha"></md-datepicker>
-          </md-input-container>
+          </div>
+          <div layout="row" layout-xs="column" ng-cloak style="padding-top:0;">
+            <md-input-container class="header-checkbox-container" style="margin-left: 7px">
+                <md-checkbox aria-label="Tiene collar" ng-model="nuevoPerro.has_collar" flex>
+                    Collar: <span ng-if="nuevoPerro.has_collar">Si</span><span ng-if="!nuevoPerro.has_collar">No</span>
+                </md-checkbox>
+            </md-input-container>
+            <md-input-container md-no-float class="md-block collar-detalle" flex="25" flex-xs="100" ng-if="nuevoPerro.has_collar">
+                <md-icon>description</md-icon>
+                <input ng-model="nuevoPerro.collar_detalle" placeholder="Color">
+            </md-input-container>
+            <md-input-container class="md-block" flex-gt-sm="30" flex-xs="100">
+              <label>Fecha</label>
+              <md-datepicker ng-model="nuevoPerro.fecha"></md-datepicker>
+            </md-input-container>
         </div>
-            <div layout="row" layout-xs="column" ng-cloak style="padding-top:0;">
+        <div layout="row" layout-xs="column" ng-cloak style="padding-top:0;">
             <md-autocomplete
                   id="autocomplete-search"
                 ng-disabled="ctrl.isDisabled"
@@ -81,7 +83,7 @@
                 Ese lugar no existe.
               </md-not-found>
             </md-autocomplete>
-              <md-input-container id="link-publicacion" class="md-block md-icon-float" flex-gt-sm style="margin-top:0px; margin-left: 2em">
+            <md-input-container id="link-publicacion" class="md-block md-icon-float" flex-gt-sm style="margin-top:0px; margin-left: 2em">
               <label>Link de la publicacion</label>
               <md-icon>link</md-icon>
               <input ng-model="nuevoPerro.link_sitio">
@@ -90,7 +92,7 @@
         <div layout-gt-sm="row" ng-show="!uploading && nuevoPerro.foto != 'img/dog.png'" layout-align="center" class="div-image-preview">
           <img src="{{nuevoPerro.foto}}" class="img-preview">
         </div>
-        <div layout-gt-sm="row" ng-show="!uploading" layout-align="center">
+        <div layout-gt-sm="row" ng-show="!uploading" layout-align="center center">
           <input class="ng-hide" id="btn-foto-perro" type="file" accept=".png,.jpeg, .jpg" fileread="nuevoPerro.foto" required/>
           <label for="btn-foto-perro" class="md-button md-raised md-accent"><md-icon>image</md-icon>   
             <span ng-show="nuevoPerro.foto == 'img/dog.png'">Agregar Foto (max: 2MB)</span>

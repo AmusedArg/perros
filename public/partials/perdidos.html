@@ -17,7 +17,9 @@
         <div class="paginator" layout="row" ng-show="perrosList.getPerrosListByTipo(TIPO_PERDIDO).length > 0">
             <div paging page="pagActualPerdidos" page-size="MAX_RESULTS" total="perrosList.registros[TIPO_PERDIDO]" paging-action="goToPage(page, TIPO_PERDIDO);scrollTop();" text-next="Siguiente" text-prev="Anterior" show-prev-next="true" hide-if-empty="true" text-title-page="Pág. {page}" text-title-prev="Ant" text-title-next="Sig"></div> 
         </div>
-        <md-fab-speed-dial ng-hide="!user" md-open="false" md-direction="up" show-xs hide-gt-xs class="md-fling md-fab-bottom-right" style="position:fixed !important;">
+
+        <!-- Mobile speedDial admin -->
+        <md-fab-speed-dial md-open="false" ng-hide="!user" md-direction="up" show-xs show-sm hide-gt-sm class="md-fling md-fab-bottom-right" style="position:fixed !important;">
             <md-fab-trigger>
                 <md-button aria-label="menu" class="md-fab">
                     <md-icon>menu</md-icon>
@@ -33,8 +35,16 @@
                 </md-button>
             </md-fab-actions>
         </md-fab-speed-dial>
-        <md-button aria-label="Nuevo Perro" hide-xs ng-hide="!user" class="btn-agregar-perro md-fab md-fab-bottom-right visible" ng-click="showNuevoPerro($event, TIPO_PERDIDO)" style="position:fixed !important;">
+
+        <!-- Mobile speedDial unathenticated users -->
+        <md-button aria-label="Buscar Perro" ng-hide="user" hide-gt-sm class="md-fab md-fab-bottom-right visible" ng-click="showDialogBuscarPerro($event, TIPO_PERDIDO)" style="position:fixed !important;">
+            <md-icon>search</md-icon>
+        </md-button>
+        
+        <!-- Desktop speedDial admin -->
+        <md-button aria-label="Nuevo Perro" hide-xs hide-sm ng-hide="!user" class="btn-agregar-perro md-fab md-fab-bottom-right visible" ng-click="showNuevoPerro($event, TIPO_PERDIDO)" style="position:fixed !important;">
             <md-icon>add</md-icon>
         </md-button>
+
     </md-content>
 </md-content>
