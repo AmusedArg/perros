@@ -36,12 +36,12 @@
         </md-fab-speed-dial>
 
         <!-- Mobile speedDial unathenticated users -->
-        <md-button aria-label="Buscar Perro" ng-hide="user" hide-gt-sm class="md-fab md-fab-bottom-right visible" ng-click="showDialogBuscarPerro($event, TIPO_ENCONTRADO)" style="position:fixed !important;">
+        <md-button aria-label="Buscar Perro" ng-hide="user" hide-gt-sm class="md-fab md-fab-bottom-right md-primary visible" ng-click="showDialogBuscarPerro($event, TIPO_ENCONTRADO)" style="position:fixed !important;">
             <md-icon>search</md-icon>
         </md-button>
         
         <!-- Desktop speedDial admin -->
-        <md-button aria-label="Nuevo Perro" hide-xs hide-sm ng-hide="!user" class="btn-agregar-perro md-fab md-fab-bottom-right visible" ng-click="showNuevoPerro($event, TIPO_ENCONTRADO)" style="position:fixed !important;">
+        <md-button aria-label="Nuevo Perro" hide-xs hide-sm ng-hide="!user" class="btn-agregar-perro md-fab md-primary md-fab-bottom-right visible" ng-click="showNuevoPerro($event, TIPO_ENCONTRADO)" style="position:fixed !important;">
             <md-icon>add</md-icon>
         </md-button>
     </md-content>

@@ -311,6 +311,9 @@ angular.module('perrosApp.controllers', []).
 	  		if(searchModel.lugar !== null){
 	  			searchLugar = searchModel.lugar.value;
 	  		}
+	  		if(searchModel.nombre === ""){
+	  			searchModel.nombre = null;
+	  		}
 	  		if(searchModel.raza !== null){
 	  			filtro.push('newPerro.raza === searchModel.raza');
 	  		}
