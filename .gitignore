@@ -8,6 +8,7 @@
 
 #EXCLUDE THESE FOLDERS
 node_modules/
+backups/
 
 #EXCLUDE THESE FILES
 firebase.json
