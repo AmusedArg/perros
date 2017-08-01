@@ -324,7 +324,7 @@ angular.module('perrosApp.controllers', []).
 	  			filtro.push('newPerro.sexo === searchModel.sexo');
 	  		}
 	  		if(searchModel.nombre !== null){
-	  			filtro.push('(newPerro.nombre !== null && newPerro.nombre.toLowerCase().indexOf(searchModel.nombre) > 0)');
+	  			filtro.push('(newPerro.nombre !== null && newPerro.nombre.toLowerCase().indexOf(searchModel.nombre) >= 0)');
 	  		}
 
 			return filtro.join(' && ');	  		

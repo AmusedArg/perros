@@ -1,6 +1,6 @@
 {
   "name": "perros_prod",
-  "version": "1.7.10",
+  "version": "1.7.11",
   "description": "Aplicacion para manejo de perros encontrados y perdidos",
   "main": "index.php",
   "dependencies": {
