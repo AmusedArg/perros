@@ -208,6 +208,7 @@ angular.module('perrosApp.controllers', []).
 	  	$scope.buscarPerro = function (perro) {
 	  		if(perro.sexo === ""){perro.sexo=null;}
 	    	if(perro.raza === ""){perro.raza=null;}
+	    	if(perro.collar_detalle === ""){perro.collar_detalle=null;}
 	  		$scope.errorFactory.message = null;
 	  		angular.element(document.querySelector('#loading-spinner')).removeClass('hide');
 			perro.tipo = $scope.navActiveItem;
@@ -322,6 +323,9 @@ angular.module('perrosApp.controllers', []).
 	  		}
 	  		if(searchModel.sexo !== null){
 	  			filtro.push('newPerro.sexo === searchModel.sexo');
+	  		}
+	  		if(searchModel.collar_detalle !== null){
+	  			filtro.push('(newPerro.collar_detalle !== null && newPerro.collar_detalle.indexOf(searchModel.collar_detalle) >= 0)');
 	  		}
 	  		if(searchModel.nombre !== null){
 	  			filtro.push('(newPerro.nombre !== null && newPerro.nombre.toLowerCase().indexOf(searchModel.nombre) >= 0)');
