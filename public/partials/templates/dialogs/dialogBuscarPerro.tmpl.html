@@ -44,6 +44,12 @@
                     </md-input-container>
                 </div>
                 <div flex="100">
+                    <md-input-container md-no-float class="md-block">
+                        <md-icon>pets</md-icon>
+                        <input ng-model="searchModel.collar_detalle" placeholder="Collar">
+                    </md-input-container>
+                </div>
+                <div flex="100">
                     <md-autocomplete
                         ng-disabled="ctrl.isDisabled"
                         md-no-cache="ctrl.noCache"

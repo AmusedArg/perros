@@ -173,7 +173,23 @@ angular.module('perrosApp.controllers', []).
 	  	};
 
 	  	$scope.reportarPerro = function(ev, perro) {
-  			perrosService.reportarPerro(perro);
+	  		var confirm = $mdDialog.prompt()
+		      .title('¿Desea reportar este perro?')
+		      .textContent('Si considera que esta publicacón no debe mostrarse complete esta solicitud.')
+		      .placeholder('Motivo')
+		      .ariaLabel('Motivo')
+		      .initialValue('')
+		      .targetEvent(ev)
+		      .ok('Enviar')
+		      .cancel('Cancelar');
+
+		    $mdDialog.show(confirm).then(function(motivo) {
+		    	perro.motivo_reportado = motivo;
+		    	perro.fecha_reportado = moment().format();
+  				perrosService.reportarPerro(perro);
+		    }, function() {
+		     	// do nothing
+		    });
 	  	};
 
 	  	$scope.borrarPerro = function(ev, perro){
