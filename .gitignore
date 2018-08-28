@@ -16,3 +16,4 @@ database.rules.json
 .firebaserc
 firebaserc
 *.log
+.firebase
